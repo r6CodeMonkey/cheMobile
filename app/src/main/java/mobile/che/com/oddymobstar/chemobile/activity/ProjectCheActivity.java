@@ -11,6 +11,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import factory.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.R;
 
 public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -25,6 +26,9 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        //sweet it works.
+        MessageFactory.getCheMessage("","");
+
     }
 
 
