@@ -1,4 +1,4 @@
-package mobile.che.com.oddymobstar.chemobile.util;
+package mobile.che.com.oddymobstar.chemobile.util.map;
 
 import java.util.ArrayList;
 import java.util.List;

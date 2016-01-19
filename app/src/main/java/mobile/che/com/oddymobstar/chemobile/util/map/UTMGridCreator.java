@@ -1,10 +1,13 @@
-package mobile.che.com.oddymobstar.chemobile.util;
+package mobile.che.com.oddymobstar.chemobile.util.map;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
+import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 
 /**
  * Created by timmytime on 05/05/15.
