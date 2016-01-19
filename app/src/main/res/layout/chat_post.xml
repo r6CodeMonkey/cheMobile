@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:background="@android:color/holo_green_dark"
+    android:layout_height="120dp">
+
+
+    <EditText
+        android:id="@+id/post_text"
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="18dp"
+        android:hint="Enter message"
+        android:maxLength="300"
+        android:gravity="left"
+        android:layout_weight="0.99"
+        android:scrollbars="vertical"
+        android:background="@android:color/white"
+        android:layout_height="100dp" />
+
+    <oddymobstar.util.widget.PostButtons
+        android:layout_width="50dp"
+        android:layout_weight="0.01"
+        android:layout_height="110dp" />
+
+
+</LinearLayout>

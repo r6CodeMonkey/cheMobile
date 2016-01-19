@@ -29,7 +29,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ProjectCheActivity"
+            android:name=".activity.ProjectCheActivity"
             android:label="@string/title_activity_project_che">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
