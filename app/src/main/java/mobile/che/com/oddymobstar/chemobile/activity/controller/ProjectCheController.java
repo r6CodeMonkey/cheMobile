@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.ActivityResultHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.ConfigurationHandler;
@@ -158,9 +159,6 @@ public class ProjectCheController {
         main.bindService(intent, serviceConnection, main.BIND_AUTO_CREATE);
 
         mapHelper.setUpMapIfNeeded();
-
-        main.getSupportFragmentManager().beginTransaction().add(R.id.grid_view_fragment, fragmentHandler.gridViewFragment).addToBackStack(null).commit();
-
 
     }
 

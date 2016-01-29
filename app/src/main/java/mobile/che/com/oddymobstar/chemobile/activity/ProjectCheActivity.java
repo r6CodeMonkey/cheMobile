@@ -35,7 +35,7 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_project_che);
+        setContentView(R.layout.activity_game);
 
         font = Typeface.createFromAsset(
                 this.getAssets(), "fontawesome-webfont.ttf");

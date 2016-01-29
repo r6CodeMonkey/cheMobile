@@ -2,6 +2,7 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
 import android.view.View;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
@@ -21,7 +22,6 @@ public class FragmentHandler {
     public GridFragment gridFrag = new GridFragment();
     public DeviceFragment deviceFragment = new DeviceFragment();
     public ConfigurationFragment confFrag = new ConfigurationFragment();
-    public GridViewFragment gridViewFragment = new GridViewFragment();
 
 
     public FragmentHandler(ProjectCheActivity main, ProjectCheController controller) {
@@ -66,21 +66,7 @@ public class FragmentHandler {
         } catch (Exception e) {
 
         }
-        if (!backPressed) {
-            try {
-                if (controller.mapHandler.CURRENT_GRID_FAB_STATE == MapHandler.OTHER_STATE) {
-                    transaction.hide(gridViewFragment);
-                }
-            } catch (Exception e) {
 
-            }
-        } else {
-            try {
-                transaction.show(gridViewFragment);
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.BASE_STATE;
-            } catch (Exception e) {
-            }
-        }
 
         //what is this for?
         try {

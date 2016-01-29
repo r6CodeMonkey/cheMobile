@@ -2,6 +2,8 @@ package mobile.che.com.oddymobstar.chemobile.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
@@ -12,6 +14,8 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 public class CheService extends IntentService {
 
     private final DBHelper dbHelper = new DBHelper(this);
+    private CheServiceBinder cheServiceBinder = new CheServiceBinder();
+
 
 
     public CheService() {
@@ -21,6 +25,13 @@ public class CheService extends IntentService {
     public void setMessageHandler(MessageHandler messageHandler) {
         dbHelper.setMessageHandler(messageHandler);
     }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return cheServiceBinder;
+    }
+
+
 
     /*
      this is key for testing....need to wire in all the old shit without the old shit.
@@ -39,5 +50,11 @@ public class CheService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
+    }
+
+    public class CheServiceBinder extends Binder {
+        public CheService getCheServiceInstance() {
+            return CheService.this;
+        }
     }
 }
