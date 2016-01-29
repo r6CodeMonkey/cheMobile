@@ -30,23 +30,23 @@ public class MessageHandler extends Handler {
 
 
     public void handleList() {
-       if(controller != null) {
-           if (controller.fragmentHandler.gridFrag != null) {
-               main.runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       controller.fragmentHandler.gridFrag.refreshAdapter();
-                   }
-               });
+        if (controller != null) {
+            if (controller.fragmentHandler.gridFrag != null) {
+                main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.fragmentHandler.gridFrag.refreshAdapter();
+                    }
+                });
 
-           }
-       }
+            }
+        }
     }
 
 
     public void handleUTMChange(String utm) {
 
-        if(controller != null) {
+        if (controller != null) {
 
 
             controller.materialsHandler.setNavConfigValues();
@@ -72,7 +72,7 @@ public class MessageHandler extends Handler {
 
     public void handleSubUTMChange(String subUtm) {
 
-        if(controller != null) {
+        if (controller != null) {
 
             controller.materialsHandler.setNavConfigValues();
 
@@ -109,7 +109,7 @@ public class MessageHandler extends Handler {
     }
 
     public void handleChat(final String type) {
-        if(controller != null) {
+        if (controller != null) {
             if (controller.fragmentHandler.chatFrag != null && controller.fragmentHandler.chatFrag.isVisible()) {
                 main.runOnUiThread(new Runnable() {
                     @Override
@@ -124,7 +124,7 @@ public class MessageHandler extends Handler {
 
     public void handleInvite(final String key, final String title) {
 
-        if(controller != null) {
+        if (controller != null) {
             main.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -144,7 +144,7 @@ public class MessageHandler extends Handler {
 
     public void handleAllianceMember(final AllianceMember allianceMember, final boolean zoomTo) {
 
-        if(controller != null) {
+        if (controller != null) {
 
             Log.d("adding marker", "marker " + allianceMember.getKey() + " lat long is " + allianceMember.getLatLng().toString());
 

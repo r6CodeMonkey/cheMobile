@@ -25,19 +25,15 @@ import mobile.che.com.oddymobstar.chemobile.util.Configuration;
  */
 public class BluetoothManager {
 
+    private final ProjectCheController controller;
     private List<BluetoothDevice> devices;
     private Map<String, Boolean> selectedControl = new HashMap<>();
     private boolean isRunning = false;
     private List<BluetoothDevice> selectedDevices = new ArrayList<>();
     private String deviceName;
-
-
     private String key;
     private Location location;  //i dont need this perse....but message does
     private Context context;
-    private final ProjectCheController controller;
-
-
     private DialogInterface.OnClickListener inviteListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {

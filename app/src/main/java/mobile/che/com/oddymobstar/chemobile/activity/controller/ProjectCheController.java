@@ -34,6 +34,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.ViewListener;
 import mobile.che.com.oddymobstar.chemobile.connect.ConnectivityHandler;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GridDialog;

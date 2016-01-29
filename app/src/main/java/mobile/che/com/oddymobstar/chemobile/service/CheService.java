@@ -3,13 +3,23 @@ package mobile.che.com.oddymobstar.chemobile.service;
 import android.app.IntentService;
 import android.content.Intent;
 
+import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+
 /**
  * Created by timmytime on 29/01/16.
  */
 public class CheService extends IntentService {
 
+    private final DBHelper dbHelper = new DBHelper(this);
+
+
     public CheService() {
         super("CheService");
+    }
+
+    public void setMessageHandler(MessageHandler messageHandler) {
+        dbHelper.setMessageHandler(messageHandler);
     }
 
     /*

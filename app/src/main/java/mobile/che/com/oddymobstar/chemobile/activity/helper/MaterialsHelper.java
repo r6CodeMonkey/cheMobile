@@ -24,6 +24,7 @@ public class MaterialsHelper {
     public static final int SUB_UTM_COLOR = 2;
     public static final int ALLIANCE_COLOR = 3;
     public static final int CHAT_COLOR = 4;
+    private final ProjectCheActivity main;
     public DrawerLayout navDrawer;
     public ActionBarDrawerToggle navToggle;
     public NavigationView navigationView;
@@ -33,7 +34,6 @@ public class MaterialsHelper {
     public RoundedImageView userImageView;
     public UserImage userImage;
     private Context context;
-    private final ProjectCheActivity main;
     private ColorStateList subUtmColorList;
     private ColorStateList utmColorList;
     private ColorStateList allianceColorList;
