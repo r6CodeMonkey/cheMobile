@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import oddymobstar.crazycourier.R;
 
 /**
  * Created by root on 13/04/15.

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 
 /**

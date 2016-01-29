@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">cheMobile</string>
     <string name="title_activity_project_che">ProjectChe</string>
+    <string name="fa_cancel">&#xf00d;</string>
+    <string name="fa_send">&#xf1d8;</string>
+    <string name="fa_trash">&#xf1f8;</string>
+    <string name="fa_globe">&#xf0ac;</string>
+    <string name="fa_user_plus">&#xf234;</string>
+    <string name="fa_wechat">&#xf1d7;</string>
+    <string name="fa_navicon">&#xf0c9;</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="menu_settings">User Settings</string>
+    <string name="menu_utm">UTM</string>
+    <string name="menu_subutm">SubUTM</string>
+    <string name="menu_alliances">Alliances</string>
+    <string name="menu_encryption">Encryption</string>
+
 </resources>

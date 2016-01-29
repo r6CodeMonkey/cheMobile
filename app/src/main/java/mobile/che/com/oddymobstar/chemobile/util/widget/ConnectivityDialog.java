@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import oddymobstar.connect.ConnectivityHandler;
+import mobile.che.com.oddymobstar.chemobile.connect.ConnectivityHandler;
 
 
 /**

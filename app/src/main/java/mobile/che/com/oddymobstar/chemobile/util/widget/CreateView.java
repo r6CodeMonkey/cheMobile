@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import oddymobstar.crazycourier.R;
 
 /**
  * Created by root on 14/04/15.

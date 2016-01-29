@@ -5,9 +5,10 @@ import android.content.Context;
 import android.nfc.NfcManager;
 import android.support.v4.app.FragmentActivity;
 
-import oddymobstar.connect.bluetooth.handler.Bluetooth;
-import oddymobstar.connect.nfc.NFC;
-import oddymobstar.util.widget.ConnectivityDialog;
+import mobile.che.com.oddymobstar.chemobile.connect.bluetooth.handler.Bluetooth;
+import mobile.che.com.oddymobstar.chemobile.connect.nfc.NFC;
+import mobile.che.com.oddymobstar.chemobile.util.widget.ConnectivityDialog;
+
 
 /**
  * Created by root on 25/04/15.

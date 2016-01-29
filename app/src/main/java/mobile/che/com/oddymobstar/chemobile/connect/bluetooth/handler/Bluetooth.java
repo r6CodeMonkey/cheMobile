@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import oddymobstar.activity.handler.DeviceDiscoveryHandler;
-import oddymobstar.connect.ConnectivityInterface;
-import oddymobstar.connect.bluetooth.client.BluetoothClient;
-import oddymobstar.connect.bluetooth.server.BluetoothServer;
-import oddymobstar.util.widget.ConnectivityDialog;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.DeviceDiscoveryHandler;
+import mobile.che.com.oddymobstar.chemobile.connect.ConnectivityInterface;
+import mobile.che.com.oddymobstar.chemobile.connect.bluetooth.client.BluetoothClient;
+import mobile.che.com.oddymobstar.chemobile.connect.bluetooth.server.BluetoothServer;
+import mobile.che.com.oddymobstar.chemobile.util.widget.ConnectivityDialog;
+
 
 /**
  * Created by root on 25/04/15.

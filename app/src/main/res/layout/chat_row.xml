@@ -2,34 +2,34 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <oddymobstar.util.widget.ChatBubbleRight
         android:id="@+id/message_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        app:borderWidth="0dp"
-        app:elevation="10dp"
-        android:singleLine="false"
         android:background="@drawable/speech2"
-        android:layout_alignParentRight="true"
-        android:layout_height="wrap_content" />
+        android:singleLine="false"
+        app:borderWidth="0dp"
+        app:elevation="10dp" />
 
     <oddymobstar.util.widget.ChatBubbleLeft
         android:id="@+id/message_bubble_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:background="@drawable/speech"
         android:singleLine="false"
         app:borderWidth="0dp"
-        app:elevation="10dp"
-        android:background="@drawable/speech"
-        android:layout_alignParentLeft="true"
-        android:layout_height="wrap_content" />
+        app:elevation="10dp" />
 
 
 </RelativeLayout>

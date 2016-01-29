@@ -15,13 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import oddymobstar.activity.controller.DemoActivityController;
-import oddymobstar.fragment.DeviceFragment;
-import oddymobstar.message.in.InAllianceMessage;
-import oddymobstar.message.out.OutAllianceMessage;
-import oddymobstar.message.out.OutCoreMessage;
-import oddymobstar.model.Alliance;
-import oddymobstar.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.fragment.DeviceFragment;
+import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+
 
 /**
  * Created by root on 27/04/15.
@@ -38,7 +35,7 @@ public class BluetoothManager {
     private String key;
     private Location location;  //i dont need this perse....but message does
     private Context context;
-    private DemoActivityController controller;
+    private final ProjectCheController controller;
 
 
     private DialogInterface.OnClickListener inviteListener = new DialogInterface.OnClickListener() {
@@ -104,7 +101,7 @@ public class BluetoothManager {
     };
 
 
-    public BluetoothManager(Context context, DemoActivityController controller, String key) {
+    public BluetoothManager(Context context, ProjectCheController controller, String key) {
         this.context = context;
         this.controller = controller;
         this.key = key;

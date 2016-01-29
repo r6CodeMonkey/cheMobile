@@ -5,8 +5,9 @@ import android.bluetooth.BluetoothSocket;
 import java.io.IOException;
 import java.util.UUID;
 
-import oddymobstar.activity.handler.DeviceDiscoveryHandler;
-import oddymobstar.connect.bluetooth.socket.BluetoothSocketThread;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.DeviceDiscoveryHandler;
+import mobile.che.com.oddymobstar.chemobile.connect.bluetooth.socket.BluetoothSocketThread;
+
 
 /**
  * Created by root on 26/04/15.

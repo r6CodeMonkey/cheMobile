@@ -10,11 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import oddymobstar.activity.handler.DeviceDiscoveryHandler;
-import oddymobstar.message.in.InAllianceMessage;
-import oddymobstar.message.in.InCoreMessage;
-import oddymobstar.message.out.Acknowledge;
-import oddymobstar.message.out.OutCoreMessage;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.DeviceDiscoveryHandler;
+
 
 /**
  * Created by root on 26/04/15.

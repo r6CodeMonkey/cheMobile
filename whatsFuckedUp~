@@ -1,0 +1,67 @@
+note:
+
+what i need to fix are
+cheService
+models
+messages
+
+
+expected broken
+R resources obviously.  as compiler is fucked with what i am doing
+
+upgrade issues
+
+permission checks.  need to build this into utils rather than hack all the places
+
+1: project che -> requires CheService...which is my first new task
+
+handler
+1: ActivityResuyltHandler -> che service + models
+2: ConfigurationHandler -> cheService
+3: Fragment Handler -> R.
+4: map handler -> models
+5: materials handler -> R
+6: Messagae handler -> models
+7: OnOptionItemsSelectedHandler -> R
+8: ViewHandler -> R, models and Che service
+
+helper
+1: LocationHelper -> permission checks......
+2: MapHelper -> R
+3: MaterialsHelper -> R
+
+
+listener
+1: ViewListener -> message model...same shit
+
+adapter
+likely all R...yes
+
+
+connect
+permissions generally. and some models and messages obviously.  needs refactor later on.
+
+DBHelper
+models and messages - i know this anyway
+
+Fragments
+R obviously
+
+widgets
+
+R obviously.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

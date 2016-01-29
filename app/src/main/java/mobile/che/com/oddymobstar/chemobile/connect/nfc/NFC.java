@@ -17,15 +17,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import oddymobstar.activity.DemoActivity;
-import oddymobstar.connect.ConnectivityInterface;
-import oddymobstar.database.DBHelper;
-import oddymobstar.message.in.InAllianceMessage;
-import oddymobstar.message.in.InCoreMessage;
-import oddymobstar.message.out.OutAllianceMessage;
-import oddymobstar.message.out.OutCoreMessage;
-import oddymobstar.model.Alliance;
-import oddymobstar.service.handler.CheService;
+import mobile.che.com.oddymobstar.chemobile.connect.ConnectivityInterface;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+
 
 /**
  * Created by root on 25/04/15.
