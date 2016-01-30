@@ -5,6 +5,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -36,9 +37,11 @@ public class CheServiceSocket {
 
     private final CheService cheService;
     private final Configuration configuration;
+    private final CheMessageHandler cheMessageHandler;
 
-    public CheServiceSocket(CheService cheService, Configuration configuration){
+    public CheServiceSocket(CheService cheService, CheMessageHandler cheMessageHandler, Configuration configuration){
         this.cheService = cheService;
+        this.cheMessageHandler = cheMessageHandler;
         this.configuration = configuration;
     }
 
@@ -111,10 +114,20 @@ public class CheServiceSocket {
 
                         Log.d("the buffer is ", "buffer " + new String(buffer).substring(0, charsRead));
                         //each message we receive should be a JSON.  We need to work out the type.
+                        cheMessageHandler.handle(new CheMessage(object));
+                        
+                        /*
+
+                        now  is not the time to fix this...we need this to handle both Ack and Che Ack messages,,,,,,,and then hand it off.
+
+                        i think im going to die or pass out.  thank fuck im not playing hockey.
+
+                         */
+
                         InCoreMessage coreMessage = new InCoreMessage(object);
 
 
-                        Intent messageIntent = new Intent(DemoActivityController.MESSAGE_INTENT);
+                        Intent messageIntent = new Intent(ProjectCheController.MESSAGE_INTENT);
                         messageIntent.putExtra("message", coreMessage.getJsonObject().toString());
                         LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
                         Log.d("message received", "message received " + coreMessage.getJsonObject().toString());

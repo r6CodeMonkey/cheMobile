@@ -20,12 +20,9 @@ public class CheService extends IntentService {
     private final Configuration configuration = new Configuration(dbHelper.getConfigs());
     private final CheServiceBinder cheServiceBinder = new CheServiceBinder();
     private android.os.Handler handler = new android.os.Handler();
-    private final CheServiceSocket cheServiceSocket = new CheServiceSocket(this, configuration);
+    private final CheMessageHandler cheMessageHandler = new CheMessageHandler(dbHelper);
+    private final CheServiceSocket cheServiceSocket = new CheServiceSocket(this,cheMessageHandler,configuration);
 
-
-    /*
-     ideally should improve the below....but it works.  need a socket class
-     */
 
 
     public CheService() {
