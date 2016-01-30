@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+
+    <GridView
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:id="@+id/grid_view"
+        android:layout_width="match_parent"
+        android:layout_weight="0.8"
+        android:verticalSpacing="5dp"
+        android:horizontalSpacing="5dp"
+        android:numColumns="auto_fit"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+
+    <oddymobstar.util.widget.CreateView
+        android:id="@+id/create_alliance"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        app:borderWidth="0dp"
+        android:layout_height="wrap_content"/>
+
+
+
+</LinearLayout>

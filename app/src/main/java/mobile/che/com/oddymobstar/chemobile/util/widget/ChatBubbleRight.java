@@ -5,6 +5,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import mobile.che.com.oddymobstar.chemobile.R;
+
 
 /**
  * Created by root on 13/04/15.

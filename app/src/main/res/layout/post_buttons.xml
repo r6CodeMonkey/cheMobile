@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@android:color/holo_green_dark"
+    android:layout_height="110dp">
+
+
+    <Button
+        android:id="@+id/post"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:textSize="30dp"
+        android:onClick="sendPost"
+        android:textColor="@android:color/white"
+        android:text="@string/fa_send" />
+
+    <Button
+        android:id="@+id/cancel"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/post"
+        android:layout_marginBottom="5dp"
+        android:textSize="36dp"
+        android:onClick="cancelPost"
+        android:textColor="@android:color/white"
+        android:text="@string/fa_cancel" />
+
+</RelativeLayout>

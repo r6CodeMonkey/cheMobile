@@ -124,7 +124,7 @@ public class MessageHandler extends Handler {
 
     public void handleInvite(final String key, final String title) {
 
-        if (controller != null) {
+     /*   if (controller != null) {
             main.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -138,10 +138,10 @@ public class MessageHandler extends Handler {
                     transaction.commit();
                 }
             });
-        }
+        } */
 
     }
-
+/*
     public void handleAllianceMember(final AllianceMember allianceMember, final boolean zoomTo) {
 
         if (controller != null) {
@@ -176,5 +176,5 @@ public class MessageHandler extends Handler {
             });
         }
 
-    }
+    } */
 }

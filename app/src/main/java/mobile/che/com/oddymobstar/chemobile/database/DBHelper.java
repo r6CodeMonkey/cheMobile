@@ -12,7 +12,9 @@ import java.io.ByteArrayOutputStream;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
+import mobile.che.com.oddymobstar.chemobile.model.Alliance;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
+import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -23,11 +25,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //table names.
     public static final String CONFIG_TABLE = "CONFIG";
-    public static final String GRIDS_TABLE = "GRIDS";
-    public static final String GRID_INFO_TABLE = "GRID_INFO";
     public static final String ALLIANCES_TABLE = "ALLIANCES";
     public static final String ALLIANCE_MEMBERS_TABLE = "ALLIANCE_MEMBERS";
-    public static final String PACKAGES_TABLE = "PACKAGES";
     public static final String MESSAGE_TABLE = "MESSAGES";
     public static final String IMAGE_TABLE = "USER_IMAGES";
     public static final String UTM = "utm";
@@ -47,13 +46,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String USER_IMAGE = "user_image";
     public static final String GRID_KEY = "grid_key";
     public static final String ALLIANCE_KEY = "alliance_key";
-    public static final String PACKAGE_KEY = "package_key";
     public static final String PLAYER_KEY = "player_key";
     public static final String ALLIANCE_NAME = "alliance_name";
     public static final String PLAYER_NAME = "player_name";
-    public static final String PACKAGE_NAME = "package_name";
-    public static final String INFO_KEY = "grid_info_key";
-    public static final String INFO_TYPE = "grid_info_type";
     public static final String MESSAGE_ID = "message_id";
     public static final String MESSAGE_CONTENT = "message_content";
     public static final String MESSAGE_TIME = "message_time";
@@ -65,11 +60,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PROJECTCHE";
     //table creates
     private static final String CREATE_CONFIG = "CREATE TABLE " + CONFIG_TABLE + " (" + CONFIG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + CONFIG_NAME + " VARCHAR2(30)," + CONFIG_VALUE + " VARCHAR2(30), " + CONFIG_MARKUP + " VARCHAR2(50)," + CONFIG_TYPE + " CHAR(1), " + CONFIG_VISIBLE + " CHAR(1))";
-    private static final String CREATE_GRIDS = "CREATE TABLE " + GRIDS_TABLE + " (" + GRID_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10))";
-    private static final String CREATE_GRID_INFO = "CREATE TABLE " + GRID_INFO_TABLE + " (" + GRID_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + INFO_TYPE + " VARCHAR2(30), " + INFO_KEY + " VARCHAR2(30), " + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10))";
-    private static final String CREATE_ALLIANCES = "CREATE TABLE " + ALLIANCES_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + ALLIANCE_NAME + " VARCHAR2(30))";
+     private static final String CREATE_ALLIANCES = "CREATE TABLE " + ALLIANCES_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + ALLIANCE_NAME + " VARCHAR2(30))";
     private static final String CREATE_ALLIANCE_MEMBERS = "CREATE TABLE " + ALLIANCE_MEMBERS_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200)," + PLAYER_KEY + " VARCHAR2(200)," + PLAYER_NAME + " VARCHAR2(30)," + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10)," + SPEED + " NUMBER," + ALTITUDE + " NUMBER)";
-    private static final String CREATE_PACKAGES = "CREATE TABLE " + PACKAGES_TABLE + " (" + PACKAGE_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + PACKAGE_NAME + " VARCHAR2(30))";  //need to flesh this out later
     private static final String CREATE_MESSAGES = "CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + MESSAGE_CONTENT + " VARCHAR2(300), " + MESSAGE_KEY + " VARCHAR2(200)," + MESSAGE_TYPE + " CHAR(1), " + MESSAGE_TIME + " INTEGER," + MY_MESSAGE + " CHAR(1)," + MESSAGE_AUTHOR + " VARCHAR2(200) )";
     private static final String CREATE_USER_IMAGES = "CREATE TABLE " + IMAGE_TABLE + "(" + USER_IMAGE_KEY + " VARCHAR2(200)," + USER_IMAGE + " BLOB)";
 
@@ -128,11 +120,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_CONFIG);
-        db.execSQL(CREATE_GRIDS);
-        db.execSQL(CREATE_GRID_INFO);
         db.execSQL(CREATE_ALLIANCES);
         db.execSQL(CREATE_ALLIANCE_MEMBERS);
-        db.execSQL(CREATE_PACKAGES);
         db.execSQL(CREATE_MESSAGES);
         db.execSQL(CREATE_USER_IMAGES);
 
@@ -225,24 +214,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addGrid(Grid grid) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(GRID_KEY, grid.getKey());
-        values.put(UTM, grid.getUtm());
-        values.put(SUBUTM, grid.getSubUtm());
-
-        db.insert(GRIDS_TABLE, null, values);
-
-    }
-
-    public void addGridInfo() {
-
-
-    }
 
     public void addAlliance(Alliance alliance, boolean invite) {
 
@@ -266,6 +237,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    /*
     public void addAllianceMember(AllianceMember allianceMember) {
 
 
@@ -288,20 +260,9 @@ public class DBHelper extends SQLiteOpenHelper {
         if (messageHandler != null) {
             messageHandler.handleAllianceMember(allianceMember, true);
         }
-    }
+    } */
 
 
-    public void addPackage(Package pack) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(PACKAGE_KEY, pack.getKey());
-        values.put(PACKAGE_NAME, pack.getName());
-
-        db.insert(PACKAGES_TABLE, null, values);
-
-    }
 
     /*
     delete methods..we dont delete configs?
@@ -322,20 +283,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void deleteGrid(Grid grid) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.delete(GRIDS_TABLE, GRID_KEY + " = ?", new String[]{grid.getKey()});
-    }
-
-    public void deleteGridInfo(Grid grid) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.delete(GRID_INFO_TABLE, GRID_KEY + " = ?", new String[]{grid.getKey()});
-
-    }
 
     public void deleteAlliance(Alliance alliance) {
 
@@ -350,11 +297,6 @@ public class DBHelper extends SQLiteOpenHelper {
         //todo
     }
 
-
-    public void deletePackage(oddymobstar.model.Package pack) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-    }
 
     /*
     update methods...no point updating a grid.  most will simply updte user dfined names etc.
@@ -416,9 +358,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateGridItem() {
 
-    }
 
     public void updateAlliance(Alliance alliance) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -429,6 +369,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(ALLIANCES_TABLE, values, ALLIANCE_KEY + " = ?", new String[]{alliance.getKey()});
 
     }
+
+    /*
 
     public void updateAllianceMember(AllianceMember allianceMember) {
 
@@ -452,11 +394,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
     }
+*/
 
-
-    public void updatePackage(Package pack) {
-
-    }
 
 
     /*
@@ -480,21 +419,11 @@ public class DBHelper extends SQLiteOpenHelper {
         return this.getReadableDatabase().rawQuery("SELECT " + CONFIG_ID + " as _id," + CONFIG_ID + "," + CONFIG_NAME + "," + CONFIG_VALUE + "," + CONFIG_MARKUP + "," + CONFIG_VISIBLE + "," + CONFIG_TYPE + " FROM " + CONFIG_TABLE + " WHERE " + CONFIG_TYPE + " =? AND " + CONFIG_VISIBLE + " = 'Y' ORDER BY " + CONFIG_NAME + " ASC", new String[]{String.valueOf(type)});
     }
 
-    public Cursor getGrids() {
-        return this.getReadableDatabase().rawQuery("SELECT " + GRID_KEY + " as _id," + GRID_KEY + "," + UTM + "," + SUBUTM + " FROM " + GRIDS_TABLE + " ORDER BY " + UTM + " ASC", null);
-    }
-
-    public Cursor getGridItems() {
-        return null;
-    }
 
     public Cursor getAlliances() {
         return this.getReadableDatabase().rawQuery("SELECT " + ALLIANCE_KEY + " as _id," + ALLIANCE_KEY + "," + ALLIANCE_NAME + " FROM " + ALLIANCES_TABLE + " ORDER BY " + ALLIANCE_NAME + " ASC", null);
     }
 
-    public Cursor getPackages() {
-        return this.getReadableDatabase().rawQuery("SELECT " + PACKAGE_KEY + " as _id," + PACKAGE_KEY + "," + PACKAGE_NAME + " FROM " + PACKAGES_TABLE + " ORDER BY " + PACKAGE_NAME + " ASC", null);
-    }
 
     public Cursor getAllianceMembers() {
         return this.getReadableDatabase().rawQuery("SELECT " + PLAYER_KEY + " as _id," + PLAYER_KEY + "," + PLAYER_NAME + "," + SPEED + "," + ALTITUDE + "," + LATITUDE + "," + LONGITUDE + "," + UTM + "," + SUBUTM + " FROM " + ALLIANCE_MEMBERS_TABLE, null);
@@ -509,9 +438,6 @@ public class DBHelper extends SQLiteOpenHelper {
     get specific object.  using key.  probably to check it actually exists etc before writing a new
     entry etc in the database table.....unlikely to require other than to check something exists.
      */
-    public Grid getGrid(String key) {
-        return null;
-    }
 
     public Alliance getAlliance(String key) {
 
@@ -531,9 +457,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Package getPackage(String key) {
-        return null;
-    }
 
 
     public UserImage getUserImage(String key) {

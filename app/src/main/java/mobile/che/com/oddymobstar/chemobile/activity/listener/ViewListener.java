@@ -8,6 +8,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
+import mobile.che.com.oddymobstar.chemobile.model.Message;
 
 
 /**

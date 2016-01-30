@@ -10,9 +10,10 @@ import android.view.KeyEvent;
 
 import java.util.List;
 
-import oddymobstar.activity.handler.MapHandler;
-import oddymobstar.util.SubUTM;
-import oddymobstar.util.UTM;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.MapHandler;
+import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
+import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
+
 
 /**
  * Created by timmytime on 18/06/15.

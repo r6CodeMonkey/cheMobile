@@ -18,10 +18,8 @@ import java.security.NoSuchAlgorithmException;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
-import mobile.che.com.oddymobstar.chemobile.connect.bluetooth.handler.Bluetooth;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
-import mobile.che.com.oddymobstar.chemobile.util.widget.ConnectivityDialog;
 
 /**
  * Created by timmytime on 04/12/15.
@@ -47,29 +45,9 @@ public class ActivityResultHandler {
                 }
                 return;
 
-            case Bluetooth.REQUEST_ENABLE_BT:
-                handleBluetooth(requestCode, resultCode, data);
-                return;
         }
     }
 
-    private void handleBluetooth(int requestCode, int resultCode, Intent data) {
-
-        switch (controller.connectivityHandler.getMode()) {
-            case ConnectivityDialog.BLUETOOTH:
-
-                controller.bluetoothReceiver = controller.connectivityHandler.getBluetooth().getReceiver();
-                main.registerReceiver(controller.bluetoothReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-
-                controller.connectivityHandler.getBluetooth().handle(requestCode, resultCode, data);
-                if (resultCode == controller.connectivityHandler.getBluetooth().DISCOVERABLE_SECONDS) {
-                    controller.deviceDiscoveryHandler.init();
-                    controller.connectivityHandler.getBluetooth().getProgress(controller.deviceDiscoveryHandler).show();
-                }
-                break;
-
-        }
-    }
 
     private void handleImage(Intent data) {
         try {
@@ -93,7 +71,7 @@ public class ActivityResultHandler {
                 imageArray = controller.dbHelper.updateUserImage(controller.materialsHelper.userImage);
             }
 
-            try {
+        /*    try {
                 final OutImageMessage outImageMessage = new OutImageMessage(controller.locationListener.getCurrentLocation(), controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue(), controller.uuidGenerator.generateAcknowledgeKey());
                 outImageMessage.setImage(Base64.encodeToString(imageArray, Base64.DEFAULT));
 
@@ -109,7 +87,7 @@ public class ActivityResultHandler {
 
             } catch (NoSuchAlgorithmException nsae) {
 
-            }
+            } */
 
             //need to review this too.! bitmap.recycle();
 

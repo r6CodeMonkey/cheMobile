@@ -14,9 +14,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import message.Acknowledge;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import util.Tags;
 
 /**
  * Created by timmytime on 29/01/16.
@@ -43,6 +46,14 @@ public class CheServiceSocket {
         this.cheService = cheService;
         this.cheMessageHandler = cheMessageHandler;
         this.configuration = configuration;
+
+        this.cheMessageHandler.addCallback(new AcknowledgeHandler.CheCallbackInterface() {
+            @Override
+            public void send(CheMessage cheMessage) {
+                writeToSocket(cheMessage, false);
+            }
+        });
+
     }
 
 
@@ -66,132 +77,98 @@ public class CheServiceSocket {
             int charsRead = 0;
 
             while ((charsRead = dIn.read(buffer)) != -1) {
-                try {
-                    //we need to grab each core message out.
-                    int openBracket = partialOpenBracket > 0 ? partialOpenBracket : 0;
-                    int closeBracket = partialCloseBracket > 0 ? partialCloseBracket : 0;
-                    partialOpenBracket = 0;
-                    partialCloseBracket = 0;
 
-                    //for the given line we need to read all of it
-                    char[] lineRead = new String(buffer).substring(0, charsRead).toCharArray();
-                    boolean objectsToRead = true;
-                    int charPos = 0;
+                //we need to grab each core message out.
+                int openBracket = partialOpenBracket > 0 ? partialOpenBracket : 0;
+                int closeBracket = partialCloseBracket > 0 ? partialCloseBracket : 0;
+                partialOpenBracket = 0;
+                partialCloseBracket = 0;
 
-                    while (objectsToRead) {
+                //for the given line we need to read all of it
+                char[] lineRead = new String(buffer).substring(0, charsRead).toCharArray();
+                boolean objectsToRead = true;
+                int charPos = 0;
 
-                        boolean objectFound = false;
-                        String object = partialObject.trim().isEmpty() ? "" : partialObject;
-                        partialObject = "";
+                while (objectsToRead) {
+
+                    boolean objectFound = false;
+                    String object = partialObject.trim().isEmpty() ? "" : partialObject;
+                    partialObject = "";
 
 
-                        for (int i = charPos; i < lineRead.length && !objectFound; i++) {
-                            if (lineRead[i] == '{') {
-                                openBracket++;
-                            }
-                            if (lineRead[i] == '}') {
-                                closeBracket++;
-                            }
-
-                            object = object + lineRead[i];
-
-                            if (openBracket == closeBracket) {
-                                objectFound = true;
-                                charPos = i + 1;
-                            }
-
-                            if (i == lineRead.length - 1) {
-                                objectsToRead = false;
-                            }
-                            //if we are partial we need to carry on.
-                            if (i == lineRead.length - 1 && !objectFound) {
-                                partialObject = object;
-                                partialOpenBracket = openBracket;
-                                partialCloseBracket = closeBracket;
-                            }
-
+                    for (int i = charPos; i < lineRead.length && !objectFound; i++) {
+                        if (lineRead[i] == '{') {
+                            openBracket++;
+                        }
+                        if (lineRead[i] == '}') {
+                            closeBracket++;
                         }
 
-                        Log.d("the buffer is ", "buffer " + new String(buffer).substring(0, charsRead));
-                        //each message we receive should be a JSON.  We need to work out the type.
-                        cheMessageHandler.handle(new CheMessage(object));
-                        
-                        /*
+                        object = object + lineRead[i];
 
-                        now  is not the time to fix this...we need this to handle both Ack and Che Ack messages,,,,,,,and then hand it off.
-
-                        i think im going to die or pass out.  thank fuck im not playing hockey.
-
-                         */
-
-                        InCoreMessage coreMessage = new InCoreMessage(object);
-
-
-                        Intent messageIntent = new Intent(ProjectCheController.MESSAGE_INTENT);
-                        messageIntent.putExtra("message", coreMessage.getJsonObject().toString());
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent);
-                        Log.d("message received", "message received " + coreMessage.getJsonObject().toString());
-                        //at this point we could have more than 1 core message here.
-
-
-                        Acknowledge ack = null;
-
-                        //what are we?
-                        if (!coreMessage.getJsonObject().isNull(InCoreMessage.ACKNOWLEDGE)) {
-
-                            ack = new Acknowledge(coreMessage.getJsonObject().getJSONObject(InCoreMessage.ACKNOWLEDGE));
-
-                            /*
-                            acknowledges either tell us of a fail (we can log it etc) or tell us of a success and generally a UUID.
-                           */
-
-                            if (ack.getState().equals(InCoreMessage.ERROR)) {
-                                Log.d("ack error", "error information is " + ack.getInfo());
-                            } else {
-                                if (ack.getInfo().equals(InCoreMessage.ACTIVE)) {
-                                    //we need to wake up our write thread.
-                                    if (write != null) {
-
-                                        Log.d("ack error", "trying to wake up thread");
-
-                                        if (connect != null) {
-                                            connect.interrupt();
-                                        }
-
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                synchronized (write) {
-                                                    write.notify();
-                                                }
-                                            }
-                                        }).start();
-
-                                    }
-                                }
-
-                            }
-
+                        if (openBracket == closeBracket) {
+                            objectFound = true;
+                            charPos = i + 1;
                         }
 
-                        messageHandler.handleMessage(coreMessage, ack);
+                        if (i == lineRead.length - 1) {
+                            objectsToRead = false;
+                        }
+                        //if we are partial we need to carry on.
+                        if (i == lineRead.length - 1 && !objectFound) {
+                            partialObject = object;
+                            partialOpenBracket = openBracket;
+                            partialCloseBracket = closeBracket;
+                        }
 
                     }
 
+                    try {
+                        //each message we receive should be a JSON.  We need to work out the type.
+                        JSONObject jsonObject = new JSONObject(object);
 
-                } catch (JSONException jse) {
-                    Log.d("json exception", "json exception " + jse.toString());
+                        //test for ack..
+                        if (!jsonObject.isNull(Tags.ACKNOWLEDGE)) {
+                            Acknowledge acknowledge = new Acknowledge(object);
+
+                            if (acknowledge.getState().equals(Tags.ERROR)) {
+                                Log.d("acknowledge error", "server error " + acknowledge.getValue());
+                            } else if (acknowledge.getState().equals(Tags.ACTIVE)) {
+                                if (write != null) {
+
+                                    Log.d("active", "trying to wake up thread");
+
+                                    if (connect != null) {
+                                        connect.interrupt();
+                                    }
+
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            synchronized (write) {
+                                                write.notify();
+                                            }
+                                        }
+                                    }).start();
+
+                                }
+                            } else if (acknowledge.getState().equals(Tags.UUID)){
+                                cheMessageHandler.handleNewPlayer(acknowledge);
+                            }
+
+                        } else {
+                            cheMessageHandler.handle(new CheMessage(object));
+                        }
+                    } catch (JSONException jse) {
+                        Log.d("json exception", "json exception " + jse.toString());
+                    }
                 }
 
             }
 
-
         } catch (IOException e) {
-
             Log.d("socket listen", "socket listen error " + e.toString());
-
         }
-
 
     }
 
@@ -248,8 +225,8 @@ public class CheServiceSocket {
                 Log.d("wait", "wait " + e.toString());
             }
 
-            for (OutCoreMessage coreMessage : messageBuffer) {
-                writeToSocket(coreMessage);
+            for (CheMessage coreMessage : messageBuffer) {
+                writeToSocket(coreMessage, true);
             }
 
             messageBuffer.clear();
@@ -262,22 +239,22 @@ public class CheServiceSocket {
 
     }
 
-    public void writeToSocket(final CheMessage cheMessage) {
-
+    public void writeToSocket(final CheMessage cheMessage, boolean logAck) {
 
         try {
-
-            messageHandler.getSentAcks().put(coreMessage.getMessage().getJSONObject(OutCoreMessage.CORE_OBJECT).getString(OutCoreMessage.ACK_ID), coreMessage);
-            if (coreMessage.isPost()) {
+           if(logAck){
+               cheMessageHandler.getSentAcks().put(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey(), cheMessage);
+           }
+         /*   if (coreMessage.isPost()) {
                 messageHandler.getSentPosts().put(coreMessage.getMessage().getJSONObject(OutCoreMessage.CORE_OBJECT).getString(OutCoreMessage.ACK_ID), coreMessage);
             }
-
-            dOut.write(coreMessage.getMessage().toString().getBytes("UTF-8"));
+*/
+            dOut.write(cheMessage.toString().getBytes("UTF-8"));
 
 
         } catch (Exception e) {
-            Log.d("socket exception", "socket " + e.toString() + coreMessage.getMessage());
-            messageBuffer.add(coreMessage);
+            Log.d("socket exception", "socket " + e.toString() + cheMessage.toString());
+            messageBuffer.add(cheMessage);
 
             connect = new Thread(new Runnable() {
                 @Override

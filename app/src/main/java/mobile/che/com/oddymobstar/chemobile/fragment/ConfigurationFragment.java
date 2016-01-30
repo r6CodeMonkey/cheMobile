@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.ConfigurationHandler;
 import mobile.che.com.oddymobstar.chemobile.adapter.ConfigurationAdapter;
 

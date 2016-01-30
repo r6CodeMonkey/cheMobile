@@ -7,6 +7,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
@@ -112,6 +113,10 @@ public class CheService extends IntentService {
         });
 
         cheServiceSocket.connect.start();
+    }
+
+    public void writeToSocket(CheMessage cheMessage){
+        cheServiceSocket.writeToSocket(cheMessage, true);
     }
 
 

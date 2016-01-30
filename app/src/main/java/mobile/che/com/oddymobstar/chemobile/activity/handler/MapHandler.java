@@ -169,7 +169,7 @@ public class MapHandler {
 
     public void addOthers() {
         //we now need to add any of our alliance members in...
-        Cursor allianceMembers = controller.dbHelper.getAllianceMembers();
+  /*      Cursor allianceMembers = controller.dbHelper.getAllianceMembers();
 
         while (allianceMembers.moveToNext()) {
             AllianceMember allianceMember = new AllianceMember(allianceMembers);
@@ -181,7 +181,7 @@ public class MapHandler {
 
         }
 
-        allianceMembers.close();
+        allianceMembers.close(); */
     }
 
     public void handleCamera(LatLng currentLatLng, float tilt, float bearing, float zoom) {

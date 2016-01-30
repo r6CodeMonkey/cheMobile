@@ -17,6 +17,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import factory.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
+import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 
 public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -41,10 +43,10 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
                 this.getAssets(), "fontawesome-webfont.ttf");
 
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        UTM.createUTMRegions();
+        SubUTM.createSubUtms();
+
+        controller.onCreate();
         //sweet it works.  this was simply a java8 test on a resource..remove.
         MessageFactory.getCheMessage("", "");
 
@@ -112,10 +114,6 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
         controller.viewHandler.messageCoverage();
     }
 
-
-    public void allianceInvite(View view) {
-        controller.viewHandler.allianceInvite(false);
-    }
 
     public void sendPost(View view) {
         controller.viewHandler.sendPost();

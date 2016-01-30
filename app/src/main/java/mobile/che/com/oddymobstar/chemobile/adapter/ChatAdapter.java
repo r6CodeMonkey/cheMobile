@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleLeft;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleRight;

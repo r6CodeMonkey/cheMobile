@@ -15,11 +15,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.ActivityResultHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.ConfigurationHandler;
-import mobile.che.com.oddymobstar.chemobile.activity.handler.DeviceDiscoveryHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.FragmentHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MapHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MaterialsHandler;
@@ -33,7 +31,6 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.ViewListener;
-import mobile.che.com.oddymobstar.chemobile.connect.ConnectivityHandler;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
@@ -63,14 +60,12 @@ public class ProjectCheController {
     public LocationHelper locationHelper;
     //handlers
     public MessageHandler messageHandler;
-    public ConnectivityHandler connectivityHandler;
     public MaterialsHandler materialsHandler;
     public MapHandler mapHandler;
     public ConfigurationHandler configurationHandler;
     public ViewHandler viewHandler;
     public ActivityResultHandler activityResultHandler;
     public OnOptionsItemSelectedHandler onOptionsItemSelectedHandler;
-    public DeviceDiscoveryHandler deviceDiscoveryHandler;
     public FragmentHandler fragmentHandler;
     //listeners
     public MaterialsListener materialsListener;
@@ -110,13 +105,11 @@ public class ProjectCheController {
         configuration = new Configuration(dbHelper.getConfigs());
         messageHandler = new MessageHandler(main, this);
         uuidGenerator = new UUIDGenerator(configuration.getConfig(Configuration.UUID_ALGORITHM).getValue());
-        connectivityHandler = new ConnectivityHandler(main, BLUETOOTH_UUID);
         configurationHandler = new ConfigurationHandler(this);
         viewHandler = new ViewHandler(main, this);
         viewListener = new ViewListener(main, this);
         activityResultHandler = new ActivityResultHandler(main, this);
         onOptionsItemSelectedHandler = new OnOptionsItemSelectedHandler(main, this);
-        deviceDiscoveryHandler = new DeviceDiscoveryHandler(main, this);
 
         dbHelper.setMessageHandler(messageHandler);
 

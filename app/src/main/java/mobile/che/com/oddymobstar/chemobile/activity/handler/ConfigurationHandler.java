@@ -45,7 +45,6 @@ public class ConfigurationHandler extends Handler {
         }
 
         controller.mapHelper.initLocationUpdates();
-        controller.cheService.resetLocationUpdates();
     }
 
     public void handleHideUser(boolean hide) {

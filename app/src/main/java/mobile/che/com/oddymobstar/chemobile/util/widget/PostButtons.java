@@ -6,8 +6,9 @@ import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import oddymobstar.activity.DemoActivity;
-import oddymobstar.crazycourier.R;
+import mobile.che.com.oddymobstar.chemobile.R;
+import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+
 
 /**
  * Created by root on 13/04/15.
@@ -24,9 +25,9 @@ public class PostButtons extends RelativeLayout {
         if (!this.isInEditMode()) {
 
             Button tv = (Button) findViewById(R.id.cancel);
-            tv.setTypeface(DemoActivity.getFont());
+            tv.setTypeface(ProjectCheActivity.getFont());
             tv = (Button) findViewById(R.id.post);
-            tv.setTypeface(DemoActivity.getFont());
+            tv.setTypeface(ProjectCheActivity.getFont());
         }
 
     }

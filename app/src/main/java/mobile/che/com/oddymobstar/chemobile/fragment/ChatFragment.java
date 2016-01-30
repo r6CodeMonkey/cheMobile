@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.adapter.ChatAdapter;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ChatPost;

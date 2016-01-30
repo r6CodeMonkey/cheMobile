@@ -7,7 +7,6 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
-import mobile.che.com.oddymobstar.chemobile.fragment.DeviceFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
 
 
@@ -20,7 +19,6 @@ public class FragmentHandler {
     private final ProjectCheController controller;
     public ChatFragment chatFrag = new ChatFragment();
     public GridFragment gridFrag = new GridFragment();
-    public DeviceFragment deviceFragment = new DeviceFragment();
     public ConfigurationFragment confFrag = new ConfigurationFragment();
 
 

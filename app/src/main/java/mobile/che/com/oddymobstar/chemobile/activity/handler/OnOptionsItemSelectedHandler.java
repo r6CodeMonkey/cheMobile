@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.Polygon;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
@@ -57,14 +58,14 @@ public class OnOptionsItemSelectedHandler {
                 controller.fragmentHandler.removeFragments(false);
                 handleAlliance();
                 break;
-            case R.id.bluetooth_receive:
+          /*  case R.id.bluetooth_receive:
                 //same mechanism for discovery.
                 controller.viewHandler.allianceInvite(true);
                 break;
             case R.id.bluetooth_send:
                 //same mechanism for discovery.
                 controller.viewHandler.allianceInvite(false);
-                break;
+                break; */
             case R.id.utm:
                 controller.fragmentHandler.removeFragments(false);
                 handleUTM();
@@ -111,11 +112,11 @@ public class OnOptionsItemSelectedHandler {
         controller.mapHandler.animateToGrid(controller.mapHelper.getMyUTM(), MapHandler.UTM_ZOOM);
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
 
-        try {
+      /*  try {
             transaction.show(controller.fragmentHandler.gridViewFragment);
         } catch (Exception e) {
 
-        }
+        } */
 
         transaction.commit();
     }
@@ -139,12 +140,12 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
         controller.mapHandler.animateToGrid(controller.mapHelper.getMySubUTM(), MapHandler.SUB_UTM_ZOOM);
 
-        try {
+/*        try {
             //
             transaction.show(controller.fragmentHandler.gridViewFragment);
         } catch (Exception e) {
 
-        }
+        } */
 
         transaction.commit();
 

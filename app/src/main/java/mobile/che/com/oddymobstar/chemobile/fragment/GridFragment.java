@@ -13,6 +13,7 @@ import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.adapter.CoreAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
