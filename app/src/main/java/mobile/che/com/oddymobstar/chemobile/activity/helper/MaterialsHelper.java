@@ -30,7 +30,6 @@ public class MaterialsHelper {
     public ActionBarDrawerToggle navToggle;
     public NavigationView navigationView;
     public Toolbar navToolbar;
-    public Toolbar hiddenToolbar;
     public FloatingActionButton floatingActionButton;
     public RoundedImageView userImageView;
     public UserImage userImage;
@@ -90,6 +89,7 @@ public class MaterialsHelper {
         navDrawer.setElevation(16.0f);
 
         navToolbar = (Toolbar) main.findViewById(R.id.toolbar);
+        main.setSupportActionBar(navToolbar);
 
 
         navToggle = new ActionBarDrawerToggle(
@@ -113,19 +113,17 @@ public class MaterialsHelper {
                 main.invalidateOptionsMenu();
             }
         };
-
-
         navDrawer.setDrawerListener(navToggle);
+        navToggle.syncState();
 
 
-        //  toolbar.setLogo(R.drawable.ic_drawer);
-        main.setSupportActionBar(navToolbar);
+
         main.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         main.getSupportActionBar().setHomeButtonEnabled(true);
         main.getSupportActionBar().setElevation(12.0f);
 
 
-        navigationView = (NavigationView) main.findViewById(R.id.left_drawer);
+        navigationView = (NavigationView) main.findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -144,13 +142,9 @@ public class MaterialsHelper {
 
         floatingActionButton.setOnClickListener(fabListener);
 
-        hiddenToolbar = (Toolbar) main.findViewById(R.id.hidden_toolbar);
-        hiddenToolbar.setVisibility(View.INVISIBLE);
 
-        hiddenToolbar.setNavigationIcon(context.getDrawable(R.drawable.ic_search_white_24dp));
-
-        userImageView = (RoundedImageView) navigationView.findViewById(R.id.user_image);
-        userImageView.setOnTouchListener(imageListener);
+     //   userImageView = (RoundedImageView) navigationView.findViewById(R.id.user_image);
+     //   userImageView.setOnTouchListener(imageListener);
 
     }
 

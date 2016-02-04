@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -117,6 +118,7 @@ public class ProjectCheController {
         materialsHandler = new MaterialsHandler(main, this);
         materialsListener = new MaterialsListener(main, this);
 
+        Log.d("setup", "setup materials");
 
         materialsHelper.setUpMaterials(
                 materialsListener.getFABListener(),

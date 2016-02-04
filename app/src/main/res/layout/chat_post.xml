@@ -22,7 +22,7 @@
         android:scrollbars="vertical"
         android:textSize="18dp" />
 
-    <oddymobstar.util.widget.PostButtons
+    <mobile.che.com.oddymobstar.chemobile.util.widget.PostButtons
         android:layout_width="50dp"
         android:layout_height="110dp"
         android:layout_weight="0.01" />

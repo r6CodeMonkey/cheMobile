@@ -18,11 +18,11 @@ import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 public class CheService extends IntentService {
 
     private final DBHelper dbHelper = new DBHelper(this);
-    private final Configuration configuration = new Configuration(dbHelper.getConfigs());
+    private Configuration configuration;
     private final CheServiceBinder cheServiceBinder = new CheServiceBinder();
     private android.os.Handler handler = new android.os.Handler();
     private final CheMessageHandler cheMessageHandler = new CheMessageHandler(dbHelper);
-    private final CheServiceSocket cheServiceSocket = new CheServiceSocket(this,cheMessageHandler,configuration);
+    private CheServiceSocket cheServiceSocket;
 
 
 
@@ -32,6 +32,9 @@ public class CheService extends IntentService {
 
     @Override
     public void onCreate() {
+        configuration = new Configuration(dbHelper.getConfigs());
+        cheServiceSocket = new CheServiceSocket(this,cheMessageHandler,configuration);
+
         if (cheServiceSocket.connect == null) {
             //st up our socket.
             cheServiceSocket.connect = new Thread(new Runnable() {

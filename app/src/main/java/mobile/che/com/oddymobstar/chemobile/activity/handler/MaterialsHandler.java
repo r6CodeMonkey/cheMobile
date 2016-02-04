@@ -266,7 +266,7 @@ public class MaterialsHandler {
                 item.setTitle(main.getResources().getString(R.string.menu_encryption) + " - " + controller.configuration.getConfig(Configuration.SSL_ALGORITHM).getValue());
 
                 TextView textView = (TextView) controller.materialsHelper.navigationView.findViewById(R.id.nav_header);
-                textView.setText(controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue());
+//                textView.setText(controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue());
 
                 if (controller.materialsHelper.userImage != null) {
                     if (controller.materialsHelper.userImage.getUserImage() != null) {

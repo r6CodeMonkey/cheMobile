@@ -26,12 +26,13 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyBEfS7UnTUYaChhdMEKECoHr27BxZcPtTI" />
 
         <activity
             android:name=".activity.ProjectCheActivity"
             android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_project_che">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

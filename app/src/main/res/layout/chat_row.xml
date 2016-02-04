@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <oddymobstar.util.widget.ChatBubbleRight
+    <mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleRight
         android:id="@+id/message_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,9 +17,9 @@
         android:background="@drawable/speech2"
         android:singleLine="false"
         app:borderWidth="0dp"
-        app:elevation="10dp" />
+        android:elevation="10dp" />
 
-    <oddymobstar.util.widget.ChatBubbleLeft
+    <mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleLeft
         android:id="@+id/message_bubble_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
         android:background="@drawable/speech"
         android:singleLine="false"
         app:borderWidth="0dp"
-        app:elevation="10dp" />
+        android:elevation="10dp" />
 
 
 </RelativeLayout>

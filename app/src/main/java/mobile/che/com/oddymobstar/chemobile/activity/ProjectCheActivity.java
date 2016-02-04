@@ -3,6 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheContro
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 
-public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ProjectCheActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     public static final Long TWO_MINUTES = 120000l;
     private static Typeface font = null;
@@ -47,9 +48,7 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
         SubUTM.createSubUtms();
 
         controller.onCreate();
-        //sweet it works.  this was simply a java8 test on a resource..remove.
-        MessageFactory.getCheMessage("", "");
-
+    //sweet you wasting you own time..hence removed
     }
 
     @Override
@@ -72,6 +71,11 @@ public class ProjectCheActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onOptionsItemSelected(MenuItem item) {
         controller.onOptionsItemSelected(item);
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return true;
     }
 
     @Override
