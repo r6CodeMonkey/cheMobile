@@ -1,5 +1,8 @@
 package mobile.che.com.oddymobstar.chemobile.activity;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,6 +32,8 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
 
     //will get removed.. lots of work to do.
     private GoogleMap mMap;
+    public String googleAccountName = "";
+
 
     public static Typeface getFont() {
         return font;
@@ -40,6 +45,19 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+
+        AccountManager manager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
+        for(Account account : manager.getAccounts()){
+            if(account.type.equalsIgnoreCase("com.google")){
+               try {
+                   googleAccountName = account.name.split("@")[0];
+               }catch(Exception e){
+                   googleAccountName = account.name;
+               }
+            }
+        }
+
+
         font = Typeface.createFromAsset(
                 this.getAssets(), "fontawesome-webfont.ttf");
 
@@ -48,7 +66,7 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
         SubUTM.createSubUtms();
 
         controller.onCreate();
-    //sweet you wasting you own time..hence removed
+
     }
 
     @Override
@@ -59,7 +77,8 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        controller.onBackPressed();
+        super.onBackPressed();
+        //controller.onBackPressed();
     }
 
     @Override

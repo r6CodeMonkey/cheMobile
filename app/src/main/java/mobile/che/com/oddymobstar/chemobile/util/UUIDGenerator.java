@@ -23,5 +23,9 @@ public class UUIDGenerator {
         return (MessageDigest.getInstance(algorithm).digest("bluetooth connection client basically needs its own UUID so this will be ".getBytes())).toString();
     }
 
+    public static String generateKey() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("MD5").digest((UUID.randomUUID().toString() + System.currentTimeMillis()).toString().getBytes()).toString();
+    }
+
 
 }

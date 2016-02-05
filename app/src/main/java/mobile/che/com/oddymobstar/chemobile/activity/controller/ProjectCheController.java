@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.activity.controller;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,7 +15,9 @@ import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -33,6 +37,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.ViewListener;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
@@ -82,14 +87,18 @@ public class ProjectCheController {
 
     public ProjectCheController(ProjectCheActivity main) {
         this.main = main;
-
     }
 
     public void onCreate() {
+
         dbHelper = new DBHelper(main);
+
 
         if (!dbHelper.hasPreLoad()) {
             dbHelper.addBaseConfiguration();
+            Config config = dbHelper.getConfig(Configuration.PLAYER_NAME);
+            config.setValue(main.googleAccountName);
+            dbHelper.updateConfig(config);
         }
 
         //really for testing...
@@ -118,19 +127,21 @@ public class ProjectCheController {
         materialsHandler = new MaterialsHandler(main, this);
         materialsListener = new MaterialsListener(main, this);
 
-        Log.d("setup", "setup materials");
+        materialsHelper.userImage = dbHelper.getUserImage(configuration.getConfig(Configuration.PLAYER_KEY).getValue());
+        materialsHelper.playerKeyString = dbHelper.getConfig(Configuration.PLAYER_KEY).getValue();
 
         materialsHelper.setUpMaterials(
                 materialsListener.getFABListener(),
                 materialsListener.getImageListener());
 
-        materialsHelper.userImage = dbHelper.getUserImage(configuration.getConfig(Configuration.PLAYER_KEY).getValue());
         materialsHandler.setNavConfigValues();
 
         locationManager = (LocationManager) main.getSystemService(Context.LOCATION_SERVICE);
         mapHandler = new MapHandler(main, this);
         mapHelper = new MapHelper(main, this);
         locationHelper = new LocationHelper(this);
+
+
 
         serviceConnection = new ServiceConnection() {
             @Override
@@ -206,7 +217,7 @@ public class ProjectCheController {
 
         LocalBroadcastManager.getInstance(main).unregisterReceiver(messageReceiver);
 
-
+        //have removed all of this.
         if (bluetoothReceiver != null) {
             try {
                 main.unregisterReceiver(bluetoothReceiver);
@@ -225,6 +236,7 @@ public class ProjectCheController {
 
     public void onBackPressed() {
 
+       // fragmentHandler.removeFragments(true);
     }
 
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -264,15 +265,6 @@ public class MaterialsHandler {
 
                 item = controller.materialsHelper.navigationView.getMenu().findItem(R.id.encrypt);
                 item.setTitle(main.getResources().getString(R.string.menu_encryption) + " - " + controller.configuration.getConfig(Configuration.SSL_ALGORITHM).getValue());
-
-                TextView textView = (TextView) controller.materialsHelper.navigationView.findViewById(R.id.nav_header);
-//                textView.setText(controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue());
-
-                if (controller.materialsHelper.userImage != null) {
-                    if (controller.materialsHelper.userImage.getUserImage() != null) {
-                        controller.materialsHelper.userImageView.setImageBitmap(controller.materialsHelper.userImage.getUserImage());
-                    }
-                }
 
                 //  gridFrag.refreshAdapter();  //dont really need this...to check its for alliances..
             }

@@ -21,6 +21,8 @@ public class Configuration implements Serializable {
     public final static String URL = "URL";
 
     public final static String PLAYER_KEY = "PLAYER_KEY";
+    public final static String PLAYER_NAME = "PLAYER_NAME";
+
 
     public final static String UUID_ALGORITHM = "UUID_ALGO";
     public final static String SSL_ALGORITHM = "SSL_ALGO";

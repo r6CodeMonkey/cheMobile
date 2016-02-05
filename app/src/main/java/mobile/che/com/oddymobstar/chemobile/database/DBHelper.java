@@ -143,6 +143,8 @@ public class DBHelper extends SQLiteOpenHelper {
         addConfig(config);
         config = new Config(Configuration.PLAYER_KEY, "", "Unique Identifier", Config.BASE, true);
         addConfig(config);
+        config = new Config(Configuration.PLAYER_NAME, "", "Player Name", Config.BASE, true);
+        addConfig(config);
         config = new Config(Configuration.CURRENT_UTM, "", "Universal Transverse Mercator", Config.BASE, true);
         addConfig(config);
         config = new Config(Configuration.CURRENT_SUBUTM, "", "Custom SubUTM grid", Config.BASE, true);

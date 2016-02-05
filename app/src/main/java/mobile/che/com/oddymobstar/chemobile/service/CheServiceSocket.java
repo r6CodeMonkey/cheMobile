@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class CheServiceSocket {
 
     public final List<CheMessage> messageBuffer = new ArrayList<>();
 
+
+    //we need our own player
+    private final CheService cheService;
+    private final Configuration configuration;
+    private final CheMessageHandler cheMessageHandler;
     //socket fuckery,  should look at bootstrap but it works.
     public Thread write;
     public Thread connect;
@@ -38,11 +44,7 @@ public class CheServiceSocket {
     public DataOutputStream dOut = null;
     public DataInputStream dIn = null;
 
-    private final CheService cheService;
-    private final Configuration configuration;
-    private final CheMessageHandler cheMessageHandler;
-
-    public CheServiceSocket(CheService cheService, CheMessageHandler cheMessageHandler, Configuration configuration){
+    public CheServiceSocket(CheService cheService, CheMessageHandler cheMessageHandler, Configuration configuration) {
         this.cheService = cheService;
         this.cheMessageHandler = cheMessageHandler;
         this.configuration = configuration;
@@ -54,8 +56,8 @@ public class CheServiceSocket {
             }
         });
 
-    }
 
+    }
 
 
     private void socketListen() {
@@ -127,43 +129,77 @@ public class CheServiceSocket {
                         //each message we receive should be a JSON.  We need to work out the type.
                         JSONObject jsonObject = new JSONObject(object);
 
+                        Log.d("socket listen", "we seem to have an object " + jsonObject.toString());
                         //test for ack..
                         if (!jsonObject.isNull(Tags.ACKNOWLEDGE)) {
+
+                            Log.d("socket listen", "we have an ack"); // also need to remove it from buffer at some point.
+
                             Acknowledge acknowledge = new Acknowledge(object);
+                            cheMessageHandler.getSentAcks().remove(acknowledge.getKey());
 
-                            if (acknowledge.getState().equals(Tags.ERROR)) {
-                                Log.d("acknowledge error", "server error " + acknowledge.getValue());
-                            } else if (acknowledge.getState().equals(Tags.ACTIVE)) {
-                                if (write != null) {
+                            switch (acknowledge.getState()) {
 
-                                    Log.d("active", "trying to wake up thread");
+                                case Tags.ACCEPT:
+                                    Log.d("accept", "we are accept");
+                                    switch (acknowledge.getValue()) {
+                                        case Tags.ERROR:
+                                            Log.d("ack error", "ack error " + acknowledge.toString());
+                                            break;
+                                        case Tags.ACTIVE:
+                                            Log.d("active", "we are active");
+                                            if (cheMessageHandler.isNewPlayer()) {
+                                                Log.d("socket listen", "create message to get che id");
+                                                writeToSocket(cheMessageHandler.createNewPlayer(), true);
 
-                                    if (connect != null) {
-                                        connect.interrupt();
-                                    }
-
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            synchronized (write) {
-                                                write.notify();
                                             }
-                                        }
-                                    }).start();
 
-                                }
-                            } else if (acknowledge.getState().equals(Tags.UUID)){
-                                cheMessageHandler.handleNewPlayer(acknowledge);
+                                            if (write != null) {
+
+
+                                                if (connect != null) {
+                                                    connect.interrupt();
+                                                }
+
+                                                new Thread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        synchronized (write) {
+                                                            write.notify();
+                                                        }
+                                                    }
+                                                }).start();
+
+
+                                            }
+                                            break;
+                                        default:
+                                            //its nothing currently.
+                                            break;
+                                    }
+                                    break;
+                                case Tags.UUID:
+                                    Log.d("uuid", "we are uuid");
+                                    cheMessageHandler.handleNewPlayer(acknowledge);
+                                    break;
+                                default:
+                                    break;
+
                             }
 
                         } else {
+                            Log.d("che message", "we have a che message");
+
                             cheMessageHandler.handle(new CheMessage(object));
                         }
-                    } catch (JSONException jse) {
-                        Log.d("json exception", "json exception " + jse.toString());
-                    }
-                }
 
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.d("security exception", "security exception " + e.toString());
+                    } catch (JSONException e) {
+                        Log.d("json exception", "json exception " + e.toString());
+                    }
+
+                }
             }
 
         } catch (IOException e) {
@@ -242,13 +278,14 @@ public class CheServiceSocket {
     public void writeToSocket(final CheMessage cheMessage, boolean logAck) {
 
         try {
-           if(logAck){
-               cheMessageHandler.getSentAcks().put(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey(), cheMessage);
-           }
+            if (logAck) {
+                cheMessageHandler.getSentAcks().put(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey(), cheMessage);
+            }
          /*   if (coreMessage.isPost()) {
                 messageHandler.getSentPosts().put(coreMessage.getMessage().getJSONObject(OutCoreMessage.CORE_OBJECT).getString(OutCoreMessage.ACK_ID), coreMessage);
             }
 */
+            Log.d("write to socket", "message " + cheMessage.toString());
             dOut.write(cheMessage.toString().getBytes("UTF-8"));
 
 
@@ -274,8 +311,6 @@ public class CheServiceSocket {
       (due to network signal etc).
      */
     public void connectSocket() {
-
-
         try {
             socket = new Socket(configuration.getConfig(Configuration.URL).getValue(), Integer.parseInt(configuration.getConfig(Configuration.PORT).getValue()));
             socket.setKeepAlive(true);

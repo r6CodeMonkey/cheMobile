@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -33,6 +34,9 @@ public class MaterialsHelper {
     public FloatingActionButton floatingActionButton;
     public RoundedImageView userImageView;
     public UserImage userImage;
+    public TextView playerName;
+    public TextView playerKey;
+    public String playerKeyString = "";
     private Context context;
     private ColorStateList subUtmColorList;
     private ColorStateList utmColorList;
@@ -142,9 +146,21 @@ public class MaterialsHelper {
 
         floatingActionButton.setOnClickListener(fabListener);
 
+        playerName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.player_name);
+        playerKey = (TextView) navigationView.getHeaderView(0).findViewById(R.id.player_key);
 
-     //   userImageView = (RoundedImageView) navigationView.findViewById(R.id.user_image);
-     //   userImageView.setOnTouchListener(imageListener);
+        userImageView = (RoundedImageView) navigationView.getHeaderView(0).findViewById(R.id.user_image);
+        userImageView.setOnTouchListener(imageListener);
+
+        playerName.setText(main.googleAccountName);
+        playerKey.setText(playerKeyString);
+
+
+        if (userImage != null) {
+            if (userImage.getUserImage() != null) {
+                userImageView.setImageBitmap(userImage.getUserImage());
+            }
+        }
 
     }
 
