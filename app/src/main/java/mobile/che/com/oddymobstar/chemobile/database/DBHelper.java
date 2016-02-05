@@ -145,9 +145,13 @@ public class DBHelper extends SQLiteOpenHelper {
         addConfig(config);
         config = new Config(Configuration.PLAYER_NAME, "", "Player Name", Config.BASE, true);
         addConfig(config);
-        config = new Config(Configuration.CURRENT_UTM, "", "Universal Transverse Mercator", Config.BASE, true);
+        config = new Config(Configuration.CURRENT_UTM_LAT, "", "Universal Transverse Mercator LatCode", Config.BASE, true);
         addConfig(config);
-        config = new Config(Configuration.CURRENT_SUBUTM, "", "Custom SubUTM grid", Config.BASE, true);
+        config = new Config(Configuration.CURRENT_SUBUTM_LAT, "", "Custom SubUTM grid LatCode", Config.BASE, true);
+        addConfig(config);
+        config = new Config(Configuration.CURRENT_UTM_LONG, "", "Universal Transverse Mercator LongCode", Config.BASE, true);
+        addConfig(config);
+        config = new Config(Configuration.CURRENT_SUBUTM_LONG, "", "Custom SubUTM grid LongCode", Config.BASE, true);
         addConfig(config);
         config = new Config(Configuration.GPS_UPDATE_INTERVAL, String.valueOf(ProjectCheActivity.TWO_MINUTES), "GPS Update Interval", Config.USER, true);
         addConfig(config);
@@ -331,7 +335,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Config oldValues = getConfig(config.getName());
 
-        if (config.getName().equals(Configuration.CURRENT_UTM)) {
+        if (config.getName().equals(Configuration.CURRENT_UTM_LAT)) {
             //check if we have changed...
             if (!oldValues.getValue().equals(config.getValue())) {
                 changedUTM = true;
@@ -339,7 +343,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }
 
-        if (config.getName().equals(Configuration.CURRENT_SUBUTM)) {
+        if (config.getName().equals(Configuration.CURRENT_SUBUTM_LAT)) {
+            if (!oldValues.getValue().equals(config.getValue())) {
+                changedSubUTM = true;
+            }
+
+        }
+
+        if (config.getName().equals(Configuration.CURRENT_UTM_LONG)) {
+            //check if we have changed...
+            if (!oldValues.getValue().equals(config.getValue())) {
+                changedUTM = true;
+            }
+
+        }
+
+        if (config.getName().equals(Configuration.CURRENT_SUBUTM_LONG)) {
             if (!oldValues.getValue().equals(config.getValue())) {
                 changedSubUTM = true;
             }

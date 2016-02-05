@@ -27,8 +27,10 @@ public class Configuration implements Serializable {
     public final static String UUID_ALGORITHM = "UUID_ALGO";
     public final static String SSL_ALGORITHM = "SSL_ALGO";
 
-    public final static String CURRENT_UTM = "CURRENT_UTM";
-    public final static String CURRENT_SUBUTM = "CURRENT_SUBUTM";
+    public final static String CURRENT_UTM_LONG = "CURRENT_UTM_LONG";
+    public final static String CURRENT_SUBUTM_LONG = "CURRENT_SUBUTM_LONG";
+    public final static String CURRENT_UTM_LAT = "CURRENT_UTM_LAT";
+    public final static String CURRENT_SUBUTM_LAT = "CURRENT_SUBUTM_LAT";
 
     //need to actuall glamourize this so its in minutes, not milliseconds.
     public final static String GPS_UPDATE_INTERVAL = "GPS_UPDATE_INTERVAL";

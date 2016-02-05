@@ -2,6 +2,8 @@ package mobile.che.com.oddymobstar.chemobile.service.handler;
 
 import org.json.JSONException;
 
+import java.security.NoSuchAlgorithmException;
+
 import message.CheMessage;
 
 /**
@@ -9,5 +11,5 @@ import message.CheMessage;
  */
 public interface MessageHandlerInterface {
 
-    void handle(CheMessage cheMessage) throws JSONException;
+    void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException;
 }

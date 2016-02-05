@@ -40,6 +40,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GridDialog;
 
@@ -60,6 +61,7 @@ public class ProjectCheController {
     public DBHelper dbHelper;
     public CheService cheService;
     public ServiceConnection serviceConnection;
+    public MessageFactory messageFactory;
     //helpers
     public MaterialsHelper materialsHelper;
     public MapHelper mapHelper;
@@ -92,6 +94,7 @@ public class ProjectCheController {
     public void onCreate() {
 
         dbHelper = new DBHelper(main);
+        messageFactory = new MessageFactory(dbHelper);
 
 
         if (!dbHelper.hasPreLoad()) {

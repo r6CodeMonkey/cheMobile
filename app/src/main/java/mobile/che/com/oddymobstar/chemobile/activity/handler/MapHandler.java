@@ -199,8 +199,8 @@ public class MapHandler {
 
     public void setSelectedGrid() {
         selectedGrid = MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.SUBUTM_FAB_STATE ?
-                controller.configuration.getConfig(Configuration.CURRENT_SUBUTM).getValue() :
-                MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.UTM_FAB_STATE ? UTM.getUTMRegion(controller.configuration.getConfig(Configuration.CURRENT_UTM).getValue()) : "";
+                controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue() :
+                MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.UTM_FAB_STATE ? UTM.getUTMRegion(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue()) : "";
 
     }
 

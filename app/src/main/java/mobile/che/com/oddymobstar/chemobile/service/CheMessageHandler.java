@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +22,7 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.GridHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MissileHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
 import util.Tags;
 
@@ -31,6 +34,8 @@ public class CheMessageHandler extends MessageHandler{
     //track everything.
     private final Map<String, CheMessage> sentAcks = new HashMap<>();
 
+    private MessageFactory messageFactory;
+
 
     private final AcknowledgeHandler acknowledgeHandler;
     private final AllianceHandler allianceHandler;
@@ -41,11 +46,14 @@ public class CheMessageHandler extends MessageHandler{
     public CheMessageHandler(DBHelper dbHelper) {
         super(dbHelper);
 
-        acknowledgeHandler = new AcknowledgeHandler(dbHelper);
+        messageFactory = new MessageFactory(dbHelper);
+
+        acknowledgeHandler = new AcknowledgeHandler(dbHelper, messageFactory);
         allianceHandler = new AllianceHandler(dbHelper);
         gameObjectHandler = new GameObjectHandler(dbHelper);
         gridHandler = new GridHandler(dbHelper);
         missileHandler = new MissileHandler(dbHelper);
+
     }
 
     public void addCallback(AcknowledgeHandler.CheCallbackInterface callback){
@@ -61,8 +69,9 @@ public class CheMessageHandler extends MessageHandler{
         dbHelper.updateConfig(config);
     }
 
-    public void handle(CheMessage cheMessage) throws JSONException{
+    public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
 
+        Log.d("handle", "handle che");
         //we always handle this.  we need to send the response back as well.
         acknowledgeHandler.handle(cheMessage);
 
@@ -70,18 +79,22 @@ public class CheMessageHandler extends MessageHandler{
         simply a case of testing if we have the object
          */
         if(cheMessage.containsMessage(Tags.GAME_OBJECT)){
+            Log.d("handle", "handle game object");
             gameObjectHandler.handle(cheMessage);
         }
 
         if(cheMessage.containsMessage(Tags.MISSILE)){
+            Log.d("handle", "handle missile");
             missileHandler.handle(cheMessage);
         }
 
         if(cheMessage.containsMessage(Tags.ALLIANCE)){
+            Log.d("handle", "handle alliance");
             allianceHandler.handle(cheMessage);
         }
 
         if(cheMessage.containsMessage(Tags.UTM_LOCATION)){
+            Log.d("handle", "handle utm location");
             gridHandler.handle(cheMessage);
         }
 
@@ -92,38 +105,10 @@ public class CheMessageHandler extends MessageHandler{
     }
 
     public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
-        CheMessage cheMessage = new CheMessage();
-        cheMessage.create();
+        CheMessage cheMessage = messageFactory.createCheMessage();
 
-        Player player = new Player();
-        player.create();
-        player.setName(dbHelper.getConfig(Configuration.PLAYER_NAME).getValue());
-
-        UTMLocation utmLocation = new UTMLocation();
-        utmLocation.create();
-        utmLocation.setLatitude(0.0);
-        utmLocation.setLongitude(0.0);
-        utmLocation.setAltitude(0.0);
-        utmLocation.setSpeed(0.0);
-        utmLocation.setState("");
-        utmLocation.setValue("");
-
-        UTM utm = new UTM();
-        utm.create();
-        utm.setUTMLatGrid("");
-        utm.setUTMLongGrid("");
-
-        utmLocation.setUTM(utm);
-        utmLocation.setSubUTM(utm);
-
-        player.setUTMLocation(utmLocation);
-
-        Acknowledge acknowledge = new Acknowledge();
-        acknowledge.create();
-        acknowledge.setKey(UUIDGenerator.generateKey());
-
-        cheMessage.setMessage(Tags.PLAYER, player);
-        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
+        cheMessage.setMessage(Tags.ACKNOWLEDGE,  messageFactory.createAcknowledge());
 
         return cheMessage;
     }
