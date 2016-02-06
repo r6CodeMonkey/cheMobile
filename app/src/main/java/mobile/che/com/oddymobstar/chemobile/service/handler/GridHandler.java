@@ -42,19 +42,23 @@ public class GridHandler extends MessageHandler{
         utmLatChanged = dbHelper.updateConfig(utmLat);
 
         Config subUtmLat = dbHelper.getConfig(Configuration.CURRENT_SUBUTM_LAT);
-        utmLat.setValue(utmLocation.getSubUTM().getUTMLatGrid());
+        subUtmLat.setValue(utmLocation.getSubUTM().getUTMLatGrid());
         Log.d("utm", utmLocation.getSubUTM().getUTMLatGrid());
 
         Config subUtmLong = dbHelper.getConfig(Configuration.CURRENT_SUBUTM_LONG);
-        utmLong.setValue(utmLocation.getSubUTM().getUTMLongGrid());
+        subUtmLong.setValue(utmLocation.getSubUTM().getUTMLongGrid());
         Log.d("utm", utmLocation.getSubUTM().getUTMLongGrid());
 
         subUtmLatChanged =  dbHelper.updateConfig(subUtmLat);
         subUtmLongChanged = dbHelper.updateConfig(subUtmLong);
 
-        dbHelper.handleUTMChange(utmLongChanged||utmLatChanged, subUtmLatChanged||subUtmLongChanged,
-                utmLocation.getUTM().getUTMLatGrid()+utmLocation.getUTM().getUTMLongGrid(),
-                utmLocation.getSubUTM().getUTMLatGrid()+utmLocation.getSubUTM().getUTMLongGrid() );
+        dbHelper.handleUTMChange(utmLongChanged || utmLatChanged, subUtmLatChanged || subUtmLongChanged,
+                utmLocation.getUTM().getUTMLatGrid() + utmLocation.getUTM().getUTMLongGrid(),
+                utmLocation.getSubUTM().getUTMLatGrid() + utmLocation.getSubUTM().getUTMLongGrid() );
+
+
+
+
 
     }
 }
