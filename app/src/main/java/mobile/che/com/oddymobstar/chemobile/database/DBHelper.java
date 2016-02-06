@@ -326,59 +326,39 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void updateConfig(Config config) {
+    public boolean updateConfig(Config config) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        boolean changedUTM = false;
-        boolean changedSubUTM = false;
+        boolean changed = false;
 
         Config oldValues = getConfig(config.getName());
 
-        if (config.getName().equals(Configuration.CURRENT_UTM_LAT)) {
-            //check if we have changed...
-            if (!oldValues.getValue().equals(config.getValue())) {
-                changedUTM = true;
+             if (!oldValues.getValue().equals(config.getValue())) {
+                 changed = true;
             }
 
-        }
-
-        if (config.getName().equals(Configuration.CURRENT_SUBUTM_LAT)) {
-            if (!oldValues.getValue().equals(config.getValue())) {
-                changedSubUTM = true;
-            }
-
-        }
-
-        if (config.getName().equals(Configuration.CURRENT_UTM_LONG)) {
-            //check if we have changed...
-            if (!oldValues.getValue().equals(config.getValue())) {
-                changedUTM = true;
-            }
-
-        }
-
-        if (config.getName().equals(Configuration.CURRENT_SUBUTM_LONG)) {
-            if (!oldValues.getValue().equals(config.getValue())) {
-                changedSubUTM = true;
-            }
-
-        }
 
         values.put(CONFIG_VALUE, config.getValue());
 
         db.update(CONFIG_TABLE, values, CONFIG_ID + " = ?", new String[]{String.valueOf(config.getId())});
 
 
+        return changed;
+    }
+
+
+    public void handleUTMChange(boolean utmChanged, boolean subUtmChanged, String utm, String subUtm){
+
         if (messageHandler != null) {
-            if (changedUTM) {
-                messageHandler.handleUTMChange(config.getValue());
-            } else if (changedSubUTM) {
-                messageHandler.handleSubUTMChange(config.getValue());
+            if (utmChanged) {
+                messageHandler.handleUTMChange(utm);
+            }
+            if (subUtmChanged) {
+                messageHandler.handleSubUTMChange(subUtm);
             }
         }
     }
-
 
 
     public void updateAlliance(Alliance alliance) {

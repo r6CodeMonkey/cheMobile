@@ -32,16 +32,17 @@ public class UTM {
     private static Map<String, String> regionCentre = new HashMap<>();
 
 
-    private int utmLong;
+    private String utmLong = "";
     private String utmLat = "";
 
-    public UTM(String utm) {
 
+    public UTM(String utm){
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(utm);
 
+
         while (matcher.find()) {
-            utmLong = Integer.valueOf(matcher.group());
+            utmLong = matcher.group();
         }
 
         pattern = Pattern.compile("[A-Z]");
@@ -50,6 +51,13 @@ public class UTM {
         while (matcher.find()) {
             utmLat = matcher.group();
         }
+    }
+
+    public UTM(String utmLat, String utmLong) {
+
+        this.utmLat = utmLat;
+        this.utmLong = utmLong;
+
 
 
     }
@@ -179,7 +187,7 @@ public class UTM {
 
     public static void main(String[] args) {
 
-        UTM utm = new UTM("E31");
+        UTM utm = new UTM("E","31");
 
         System.out.println(utm.getUtmLat());
         System.out.println(utm.getUtmLong());
@@ -187,7 +195,7 @@ public class UTM {
 
     }
 
-    public int getUtmLong() {
+    public String getUtmLong() {
         return utmLong;
     }
 

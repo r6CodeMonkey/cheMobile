@@ -68,8 +68,8 @@ public class UTMGridCreator {
         PolygonOptions options = new PolygonOptions();
 
 
-        double long1 = ((utm.getUtmLong() * LONG_DEGREES) - LONG_DEGREES) - LONG_OFFSET;
-        double long2 = (utm.getUtmLong() * LONG_DEGREES) - LONG_OFFSET;
+        double long1 = ((Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_DEGREES) - LONG_OFFSET;
+        double long2 = ( Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_OFFSET;
         double lat1 = (((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_DEGREES) - LAT_OFFSET;
         double lat2 = ((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_OFFSET;
 
@@ -97,7 +97,7 @@ public class UTMGridCreator {
         LatLng latLng1 = utm.getPoints().get(0);
 
 
-        double utmlong = subUTM.getSubUtmLong() * LONG_SUB_DEG;
+        double utmlong = Integer.valueOf(subUTM.getSubUtmLong()) * LONG_SUB_DEG;
         double utmLat = ((latValues.indexOf(subUTM.getSubLatString())) + ((subUTM.getSubLatInt() - 1) * latValues.size())) * LAT_SUB_DEG;
 
 

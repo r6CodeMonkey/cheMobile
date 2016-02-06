@@ -94,7 +94,7 @@ public class CheMessageHandler extends MessageHandler{
         }
 
         if(cheMessage.containsMessage(Tags.UTM_LOCATION)){
-            Log.d("handle", "handle utm location");
+            Log.d("handle", "handle utm location "+cheMessage.toString());
             gridHandler.handle(cheMessage);
         }
 
@@ -109,6 +109,8 @@ public class CheMessageHandler extends MessageHandler{
 
         cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
         cheMessage.setMessage(Tags.ACKNOWLEDGE,  messageFactory.createAcknowledge());
+
+        Log.d("new player message ", "is "+cheMessage.toString());
 
         return cheMessage;
     }

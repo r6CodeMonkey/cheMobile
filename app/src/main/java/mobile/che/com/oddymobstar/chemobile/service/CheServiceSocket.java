@@ -17,6 +17,7 @@ import java.util.List;
 
 import message.Acknowledge;
 import message.CheMessage;
+import message.CoreMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
@@ -279,6 +280,7 @@ public class CheServiceSocket {
 
         try {
             if (logAck) {
+
                 cheMessageHandler.getSentAcks().put(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey(), cheMessage);
             }
          /*   if (coreMessage.isPost()) {
