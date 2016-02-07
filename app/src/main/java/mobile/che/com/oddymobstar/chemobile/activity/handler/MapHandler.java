@@ -1,6 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.view.View;
 
@@ -153,7 +152,8 @@ public class MapHandler {
     }
 
     public void addUser(LatLng latLng) {
-        if (controller.materialsHelper.userImage != null) {
+        //review this at some point.  really probably do not want images as it will just get slow and cluttered.
+       /* if (controller.materialsHelper.userImage != null) {
             if (controller.materialsHelper.userImage.getUserImage() != null) {
                 Bitmap bitmap = controller.materialsHelper.userImage.getUserImage().copy(Bitmap.Config.ARGB_8888, true);
 
@@ -162,9 +162,9 @@ public class MapHandler {
 
                 markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me").icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(roundBitmap, 354, 354, false))).flat(false)));
             }
-        } else {
+        } else { */
             markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me")));
-        }
+     //   }
     }
 
     public void addOthers() {
@@ -199,8 +199,8 @@ public class MapHandler {
 
     public void setSelectedGrid() {
         selectedGrid = MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.SUBUTM_FAB_STATE ?
-                controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue() :
-                MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.UTM_FAB_STATE ? UTM.getUTMRegion(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue()) : "";
+                controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue() + controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue() :
+                MapHandler.CURRENT_GRID_FAB_STATE == MapHandler.UTM_FAB_STATE ? UTM.getUTMRegion(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue() + controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue()) : "";
 
     }
 

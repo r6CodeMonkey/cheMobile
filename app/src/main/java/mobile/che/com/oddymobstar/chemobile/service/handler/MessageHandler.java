@@ -9,7 +9,7 @@ public abstract class MessageHandler implements MessageHandlerInterface {
 
     protected final DBHelper dbHelper;
 
-    public MessageHandler(DBHelper dbHelper){
+    public MessageHandler(DBHelper dbHelper) {
         this.dbHelper = dbHelper;
     }
 }

@@ -8,7 +8,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 /**
  * Created by timmytime on 30/01/16.
  */
-public class MissileHandler extends MessageHandler{
+public class MissileHandler extends MessageHandler {
     public MissileHandler(DBHelper dbHelper) {
         super(dbHelper);
     }

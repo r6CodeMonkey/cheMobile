@@ -17,7 +17,6 @@ import java.util.List;
 
 import message.Acknowledge;
 import message.CheMessage;
-import message.CoreMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;

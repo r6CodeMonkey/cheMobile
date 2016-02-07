@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -249,6 +247,10 @@ public class MaterialsHandler {
 
     }
 
+    public void handlePlayerKey(String key){
+        controller.materialsHelper.playerKey.setText(key);
+    }
+
 
     public void setNavConfigValues() {
 
@@ -258,10 +260,10 @@ public class MaterialsHandler {
             public void run() {
 
                 MenuItem item = controller.materialsHelper.navigationView.getMenu().findItem(R.id.utm);
-                item.setTitle(main.getResources().getString(R.string.menu_utm) + " - " + controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue());
+                item.setTitle(main.getResources().getString(R.string.menu_utm) + " - " + controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue() + controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue());
 
                 item = controller.materialsHelper.navigationView.getMenu().findItem(R.id.sub_utm);
-                item.setTitle(main.getResources().getString(R.string.menu_subutm) + " - " + controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue()+controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue());
+                item.setTitle(main.getResources().getString(R.string.menu_subutm) + " - " + controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue() + controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue());
 
                 item = controller.materialsHelper.navigationView.getMenu().findItem(R.id.encrypt);
                 item.setTitle(main.getResources().getString(R.string.menu_encryption) + " - " + controller.configuration.getConfig(Configuration.SSL_ALGORITHM).getValue());

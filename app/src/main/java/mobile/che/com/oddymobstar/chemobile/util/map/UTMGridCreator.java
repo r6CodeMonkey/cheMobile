@@ -69,7 +69,7 @@ public class UTMGridCreator {
 
 
         double long1 = ((Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_DEGREES) - LONG_OFFSET;
-        double long2 = ( Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_OFFSET;
+        double long2 = (Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_OFFSET;
         double lat1 = (((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_DEGREES) - LAT_OFFSET;
         double lat2 = ((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_OFFSET;
 

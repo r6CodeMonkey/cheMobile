@@ -90,10 +90,10 @@ public class MapHelper {
         }
 
         if (!controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue().trim().isEmpty()) {
-            utmOptions = UTMGridCreator.getUTMGrid(new UTM(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue(),controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue())).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
+            utmOptions = UTMGridCreator.getUTMGrid(new UTM(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue(), controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue())).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
             myUTM = map.addPolygon(utmOptions);
 
-            PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(new SubUTM(controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue(),controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue()), utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
+            PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(new SubUTM(controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue(), controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue()), utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
             mySubUTM = map.addPolygon(subUtmOptions);
 
         }

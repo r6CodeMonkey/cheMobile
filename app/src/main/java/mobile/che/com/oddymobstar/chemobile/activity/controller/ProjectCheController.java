@@ -1,7 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.activity.controller;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,10 +12,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -145,7 +140,6 @@ public class ProjectCheController {
         locationHelper = new LocationHelper(this);
 
 
-
         serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
@@ -238,8 +232,7 @@ public class ProjectCheController {
 
 
     public void onBackPressed() {
-
-       // fragmentHandler.removeFragments(true);
+         fragmentHandler.removeFragments(true);
     }
 
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {

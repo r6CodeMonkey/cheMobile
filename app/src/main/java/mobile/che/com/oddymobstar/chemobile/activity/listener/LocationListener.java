@@ -1,18 +1,13 @@
 package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.security.NoSuchAlgorithmException;
 
-import message.CheMessage;
-import message.Player;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -48,11 +43,11 @@ public class LocationListener implements android.location.LocationListener {
         Log.d("location changed", "location changed");
         LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-               try {
-                    controller.cheService.writeToSocket(controller.messageFactory.locationChanged(location));
-                } catch (NoSuchAlgorithmException e) {
-                    Log.d("security exception", "security exception "+e.toString());
-                }
+        try {
+            controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(location));
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("security exception", "security exception " + e.toString());
+        }
 
 
         if (controller.mapHandler.getMarkerMap().containsKey("Me")) {

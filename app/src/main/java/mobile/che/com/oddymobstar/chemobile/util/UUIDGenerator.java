@@ -15,16 +15,16 @@ public class UUIDGenerator {
         this.algorithm = algorithm;
     }
 
+    public static String generateKey() throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("MD5").digest((UUID.randomUUID().toString() + System.currentTimeMillis()).toString().getBytes()).toString();
+    }
+
     public String generateAcknowledgeKey() throws NoSuchAlgorithmException {
         return MessageDigest.getInstance(algorithm).digest((UUID.randomUUID().toString() + System.currentTimeMillis()).toString().getBytes()).toString();
     }
 
     public String generateBluetoothUUID() throws NoSuchAlgorithmException {
         return (MessageDigest.getInstance(algorithm).digest("bluetooth connection client basically needs its own UUID so this will be ".getBytes())).toString();
-    }
-
-    public static String generateKey() throws NoSuchAlgorithmException {
-        return MessageDigest.getInstance("MD5").digest((UUID.randomUUID().toString() + System.currentTimeMillis()).toString().getBytes()).toString();
     }
 
 

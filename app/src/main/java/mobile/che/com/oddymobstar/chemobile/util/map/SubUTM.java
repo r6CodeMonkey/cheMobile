@@ -20,19 +20,44 @@ public class SubUTM {
     private int subLatInt;
 
 
-    public SubUTM(String subUtm){
+    public SubUTM(String subUtm) {
         process(subUtm);
 
     }
 
     public SubUTM(String subUtmLat, String subUtmLong) {
-        process(subUtmLat+subUtmLong);
+        process(subUtmLat + subUtmLong);
 
     }
 
-    private void process(String subUtm){
+    public static void createSubUtms() {
+        for (int indexCounter = 1; indexCounter <= 8; indexCounter++) {
+            for (String val : UTMGridCreator.latValues) {
+                for (int i = 0; i < 60; i++) {
+                    subUtmList.add(indexCounter + val + i);
+                }
+            }
+        }
 
-        Log.d("subutm", "value is "+subUtm);
+    }
+
+    public static List<String> getSubUtmList() {
+        return subUtmList;
+    }
+
+    public static void main(String[] args) {
+
+        SubUTM subUTM = new SubUTM("19", "V20");
+
+        System.out.println(subUTM.getSubUtmLat());
+        System.out.println(subUTM.getSubUtmLong());
+
+
+    }
+
+    private void process(String subUtm) {
+
+        Log.d("subutm", "value is " + subUtm);
         //its in form....lat => Number + Letter,,,
         //               long => Number
         //no regex this time...find occurence of letter..
@@ -53,31 +78,6 @@ public class SubUTM {
         subUtmLong = subUtm.substring(index + 1);
     }
 
-    public static void createSubUtms() {
-        for (int indexCounter = 1; indexCounter <= 8; indexCounter++) {
-            for (String val : UTMGridCreator.latValues) {
-                for (int i = 0; i < 60; i++) {
-                    subUtmList.add(indexCounter + val + i);
-                }
-            }
-        }
-
-    }
-
-    public static List<String> getSubUtmList() {
-        return subUtmList;
-    }
-
-    public static void main(String[] args) {
-
-        SubUTM subUTM = new SubUTM("19","V20");
-
-        System.out.println(subUTM.getSubUtmLat());
-        System.out.println(subUTM.getSubUtmLong());
-
-
-    }
-
     public String getSubUtmLat() {
         return subUtmLat;
     }
@@ -89,7 +89,6 @@ public class SubUTM {
     public String getSubLatString() {
         return subLatString;
     }
-
 
 
     public String getSubUtmLong() {

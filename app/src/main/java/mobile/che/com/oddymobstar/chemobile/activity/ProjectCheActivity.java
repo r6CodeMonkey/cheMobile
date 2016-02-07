@@ -14,11 +14,9 @@ import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import factory.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
@@ -28,12 +26,10 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
 
     public static final Long TWO_MINUTES = 120000l;
     private static Typeface font = null;
+    public String googleAccountName = "";
     private ProjectCheController controller = new ProjectCheController(this);
-
     //will get removed.. lots of work to do.
     private GoogleMap mMap;
-    public String googleAccountName = "";
-
 
     public static Typeface getFont() {
         return font;
@@ -47,13 +43,13 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
 
 
         AccountManager manager = (AccountManager) getSystemService(Context.ACCOUNT_SERVICE);
-        for(Account account : manager.getAccounts()){
-            if(account.type.equalsIgnoreCase("com.google")){
-               try {
-                   googleAccountName = account.name.split("@")[0];
-               }catch(Exception e){
-                   googleAccountName = account.name;
-               }
+        for (Account account : manager.getAccounts()) {
+            if (account.type.equalsIgnoreCase("com.google")) {
+                try {
+                    googleAccountName = account.name.split("@")[0];
+                } catch (Exception e) {
+                    googleAccountName = account.name;
+                }
             }
         }
 
@@ -78,7 +74,7 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //controller.onBackPressed();
+        controller.onBackPressed();
     }
 
     @Override

@@ -16,7 +16,7 @@
         android:transcriptMode="alwaysScroll"
         android:layout_height="wrap_content" />
 
-    <oddymobstar.util.widget.ChatPost
+    <mobile.che.com.oddymobstar.chemobile.util.widget.ChatPost
         android:id="@+id/chat_post"
         android:layout_width="fill_parent"
         app:borderWidth="0dp"

@@ -5,7 +5,7 @@ import message.CoreMessage;
 /**
  * Created by timmytime on 30/01/16.
  */
-public class Missile implements CheModelInterface{
+public class Missile implements CheModelInterface {
     @Override
     public void create(CoreMessage coreMessage) {
 

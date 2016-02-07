@@ -60,7 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PROJECTCHE";
     //table creates
     private static final String CREATE_CONFIG = "CREATE TABLE " + CONFIG_TABLE + " (" + CONFIG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + CONFIG_NAME + " VARCHAR2(30)," + CONFIG_VALUE + " VARCHAR2(30), " + CONFIG_MARKUP + " VARCHAR2(50)," + CONFIG_TYPE + " CHAR(1), " + CONFIG_VISIBLE + " CHAR(1))";
-     private static final String CREATE_ALLIANCES = "CREATE TABLE " + ALLIANCES_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + ALLIANCE_NAME + " VARCHAR2(30))";
+    private static final String CREATE_ALLIANCES = "CREATE TABLE " + ALLIANCES_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + ALLIANCE_NAME + " VARCHAR2(30))";
     private static final String CREATE_ALLIANCE_MEMBERS = "CREATE TABLE " + ALLIANCE_MEMBERS_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200)," + PLAYER_KEY + " VARCHAR2(200)," + PLAYER_NAME + " VARCHAR2(30)," + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10)," + SPEED + " NUMBER," + ALTITUDE + " NUMBER)";
     private static final String CREATE_MESSAGES = "CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + MESSAGE_CONTENT + " VARCHAR2(300), " + MESSAGE_KEY + " VARCHAR2(200)," + MESSAGE_TYPE + " CHAR(1), " + MESSAGE_TIME + " INTEGER," + MY_MESSAGE + " CHAR(1)," + MESSAGE_AUTHOR + " VARCHAR2(200) )";
     private static final String CREATE_USER_IMAGES = "CREATE TABLE " + IMAGE_TABLE + "(" + USER_IMAGE_KEY + " VARCHAR2(200)," + USER_IMAGE + " BLOB)";
@@ -289,7 +289,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-
     public void deleteAlliance(Alliance alliance) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -334,9 +333,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Config oldValues = getConfig(config.getName());
 
-             if (!oldValues.getValue().equals(config.getValue())) {
-                 changed = true;
-            }
+        if (!oldValues.getValue().equals(config.getValue())) {
+            changed = true;
+        }
 
 
         values.put(CONFIG_VALUE, config.getValue());
@@ -347,8 +346,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return changed;
     }
 
+    public void handleNewPlayer(String key){
+        if(messageHandler != null){
+            messageHandler.handlePlayerKey(key);
+        }
+    }
 
-    public void handleUTMChange(boolean utmChanged, boolean subUtmChanged, String utm, String subUtm){
+
+    public void handleUTMChange(boolean utmChanged, boolean subUtmChanged, String utm, String subUtm) {
 
         if (messageHandler != null) {
             if (utmChanged) {
@@ -457,7 +462,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return returnAlliance;
 
     }
-
 
 
     public UserImage getUserImage(String key) {

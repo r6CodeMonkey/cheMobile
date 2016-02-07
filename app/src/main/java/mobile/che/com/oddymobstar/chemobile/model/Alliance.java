@@ -9,7 +9,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 /**
  * Created by root on 25/02/15.
  */
-public class Alliance implements CheModelInterface{
+public class Alliance implements CheModelInterface {
 
     private String key = "";
     private String name = "";

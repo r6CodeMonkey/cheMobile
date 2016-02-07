@@ -1,6 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 
@@ -8,7 +7,10 @@ import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
 
+import message.Acknowledge;
+import message.Alliance;
 import message.CheMessage;
+import message.Player;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
@@ -16,7 +18,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
-import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import util.Tags;
 
 
 /**
@@ -44,31 +46,29 @@ public class ViewHandler {
     }
 
 
-
-
     public void sendPost() {
         if (controller.fragmentHandler.chatFrag.getHiddenChatPost().isPostValid()) {
-       //     try {
+            //     try {
 
-                CheMessage cheMessage = null;
+            CheMessage cheMessage = null;
 
-                switch (controller.fragmentHandler.gridFrag.getType()) {
-
-
-                    case GridFragment.MY_ALLIANCES:
-
-                        //create a message for the alliance....
-               //         coreMessage = new OutAllianceMessage(controller.locationListener.getCurrentLocation(), controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue(), controller.uuidGenerator.generateAcknowledgeKey());
-               //         ((OutAllianceMessage) coreMessage).setAlliance(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()), OutCoreMessage.PUBLISH, OutCoreMessage.GLOBAL, controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost());
-                        break;
-
-                }
-
-                //need to animate...but
-                controller.materialsHandler.handleChatFAB(controller.fragmentHandler.chatFrag, false);
+            switch (controller.fragmentHandler.gridFrag.getType()) {
 
 
-                controller.cheService.writeToSocket(cheMessage);
+                case GridFragment.MY_ALLIANCES:
+
+                    //create a message for the alliance....
+                    //         coreMessage = new OutAllianceMessage(controller.locationListener.getCurrentLocation(), controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue(), controller.uuidGenerator.generateAcknowledgeKey());
+                    //         ((OutAllianceMessage) coreMessage).setAlliance(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()), OutCoreMessage.PUBLISH, OutCoreMessage.GLOBAL, controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost());
+                    break;
+
+            }
+
+            //need to animate...but
+            controller.materialsHandler.handleChatFAB(controller.fragmentHandler.chatFrag, false);
+
+
+            controller.cheService.writeToSocket(cheMessage);
 
        /*     } catch (NoSuchAlgorithmException nse) {
 
@@ -94,29 +94,19 @@ public class ViewHandler {
             case GridFragment.MY_ALLIANCES:
 
                 if (!createText.trim().isEmpty()) {
+                    try {
 
-                 //   try {
-                        //LatLng latLng, String uid, String ackId, String type
-                     //   Alliance alliance = new Alliance();
-                     //   alliance.setName(createText);
-
-
-                    //    OutAllianceMessage allianceMessage = new OutAllianceMessage(controller.locationListener.getCurrentLocation(), controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue(), controller.uuidGenerator.generateAcknowledgeKey());
-                     //   allianceMessage.setAlliance(alliance, OutAllianceMessage.CREATE, OutAllianceMessage.GLOBAL, "");
-
-                        CheMessage cheMessage = new CheMessage();
-                        controller.cheService.writeToSocket(cheMessage);
-
+                         controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
 
                         //need to animate...but
                         controller.materialsHandler.handleAllianceFAB(controller.fragmentHandler.gridFrag, false);
 
 
-                  /*  } catch (NoSuchAlgorithmException nsae) {
-                        Log.d("security", "security " + nsae.toString());
-                    } catch (JSONException jse) {
-                        Log.d("json", "json " + jse.toString());
-                    } */
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.d("security exception", "security exception " + e.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 break;

@@ -21,7 +21,7 @@
         android:gravity="center"
         android:layout_height="wrap_content" />
 
-    <oddymobstar.util.widget.CreateView
+    <mobile.che.com.oddymobstar.chemobile.util.widget.CreateView
         android:id="@+id/create_alliance"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

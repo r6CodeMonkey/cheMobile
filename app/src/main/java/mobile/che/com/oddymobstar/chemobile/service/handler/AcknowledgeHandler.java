@@ -14,19 +14,14 @@ import util.Tags;
  */
 public class AcknowledgeHandler extends MessageHandler {
 
-    public interface CheCallbackInterface {
-        void send(CheMessage cheMessage);
-    }
-
-    private CheCallbackInterface cheCallback;
     private final MessageFactory messageFactory;
-
+    private CheCallbackInterface cheCallback;
     public AcknowledgeHandler(DBHelper dbHelper, MessageFactory messageFactory) {
         super(dbHelper);
         this.messageFactory = messageFactory;
     }
 
-    public void addCheCallback(CheCallbackInterface cheCallback){
+    public void addCheCallback(CheCallbackInterface cheCallback) {
         this.cheCallback = cheCallback;
     }
 
@@ -36,6 +31,10 @@ public class AcknowledgeHandler extends MessageHandler {
         cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
 
         cheCallback.send(cheMessage);
+    }
+
+    public interface CheCallbackInterface {
+        void send(CheMessage cheMessage);
     }
 
 

@@ -8,6 +8,7 @@ import message.CoreMessage;
 public interface CheModelInterface {
 
     //we dont want the mobile variants on the core schema (re android cursors) and we dont want the schema models here (re java8 syntax)
-     void create(CoreMessage coreMessage);
-     CoreMessage getMessage();
+    void create(CoreMessage coreMessage);
+
+    CoreMessage getMessage();
 }

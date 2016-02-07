@@ -36,7 +36,7 @@ public class UTM {
     private String utmLat = "";
 
 
-    public UTM(String utm){
+    public UTM(String utm) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(utm);
 
@@ -57,7 +57,6 @@ public class UTM {
 
         this.utmLat = utmLat;
         this.utmLong = utmLong;
-
 
 
     }
@@ -187,7 +186,7 @@ public class UTM {
 
     public static void main(String[] args) {
 
-        UTM utm = new UTM("E","31");
+        UTM utm = new UTM("E", "31");
 
         System.out.println(utm.getUtmLat());
         System.out.println(utm.getUtmLong());

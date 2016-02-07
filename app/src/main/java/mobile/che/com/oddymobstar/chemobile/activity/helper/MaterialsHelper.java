@@ -90,7 +90,7 @@ public class MaterialsHelper {
 
     public void setUpMaterials(View.OnClickListener fabListener, View.OnTouchListener imageListener) {
         navDrawer = (DrawerLayout) main.findViewById(R.id.drawer_layout);
-        navDrawer.setElevation(16.0f);
+       // navDrawer.setElevation(16.0f);
 
         navToolbar = (Toolbar) main.findViewById(R.id.toolbar);
         main.setSupportActionBar(navToolbar);
@@ -119,7 +119,6 @@ public class MaterialsHelper {
         };
         navDrawer.setDrawerListener(navToggle);
         navToggle.syncState();
-
 
 
         main.getSupportActionBar().setDisplayHomeAsUpEnabled(true);

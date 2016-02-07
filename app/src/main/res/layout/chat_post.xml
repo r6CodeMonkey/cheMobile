@@ -8,11 +8,9 @@
     <EditText
         android:id="@+id/post_text"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
         android:layout_weight="0.99"
         android:background="@android:color/white"
         android:gravity="left"

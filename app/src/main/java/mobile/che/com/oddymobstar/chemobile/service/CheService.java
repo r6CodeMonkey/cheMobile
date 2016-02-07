@@ -10,7 +10,6 @@ import android.util.Log;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
-import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
 /**
@@ -19,12 +18,11 @@ import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 public class CheService extends IntentService {
 
     private final DBHelper dbHelper = new DBHelper(this);
-    private Configuration configuration;
     private final CheServiceBinder cheServiceBinder = new CheServiceBinder();
-    private android.os.Handler handler = new android.os.Handler();
     private final CheMessageHandler cheMessageHandler = new CheMessageHandler(dbHelper);
+    private Configuration configuration;
+    private android.os.Handler handler = new android.os.Handler();
     private CheServiceSocket cheServiceSocket;
-
 
 
     public CheService() {
@@ -34,7 +32,7 @@ public class CheService extends IntentService {
     @Override
     public void onCreate() {
         configuration = new Configuration(dbHelper.getConfigs());
-        cheServiceSocket = new CheServiceSocket(this,cheMessageHandler,configuration);
+        cheServiceSocket = new CheServiceSocket(this, cheMessageHandler, configuration);
 
         if (cheServiceSocket.connect == null) {
             //st up our socket.
@@ -104,8 +102,6 @@ public class CheService extends IntentService {
     }
 
 
-
-
     public void clearBacklog() {
         cheServiceSocket.messageBuffer.clear();
     }
@@ -121,12 +117,11 @@ public class CheService extends IntentService {
         cheServiceSocket.connect.start();
     }
 
-    public void writeToSocket(CheMessage cheMessage){
-        Log.d("service", "write to service with "+cheMessage.toString());
+    public void writeToSocket(CheMessage cheMessage) {
+        Log.d("service", "write to service with " + cheMessage.toString());
 
         cheServiceSocket.writeToSocket(cheMessage, true);
     }
-
 
 
     @Override
@@ -142,7 +137,6 @@ public class CheService extends IntentService {
         return START_STICKY;
         //  return super.onStartCommand(intent,flags,startId);
     }
-
 
 
     @Override

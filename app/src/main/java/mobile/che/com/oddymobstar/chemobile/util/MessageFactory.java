@@ -7,8 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 import message.Acknowledge;
+import message.Alliance;
 import message.CheMessage;
 import message.Player;
 import message.UTM;
@@ -31,7 +34,7 @@ public class MessageFactory {
         CheMessage cheMessage = new CheMessage();
         cheMessage.create();
 
-        Log.d("message factory", "che message "+cheMessage.toString());
+        Log.d("message factory", "che message " + cheMessage.toString());
 
         return cheMessage;
     }
@@ -51,7 +54,8 @@ public class MessageFactory {
         utm.setUTMLatGrid(dbHelper.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue());
         utm.setUTMLongGrid(dbHelper.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue());
 
-        return utm;}
+        return utm;
+    }
 
     private UTMLocation createUTMLocation(Location location) {
         UTMLocation utmLocation = new UTMLocation();
@@ -127,8 +131,23 @@ public class MessageFactory {
         return player;
     }
 
+    public Alliance createAlliance(String name, String key) throws NoSuchAlgorithmException {
+        Alliance alliance = new Alliance();
+        alliance.create();
 
-    public CheMessage locationChanged(Location location) throws NoSuchAlgorithmException {
+        alliance.setKey(key);
+        alliance.setName(name);
+
+        List<Player> allianceMembers = new ArrayList<>();
+        allianceMembers.add(createPlayer());
+
+        alliance.setMembers(allianceMembers);
+
+        return alliance;
+    }
+
+
+    public CheMessage locationChangedMessage(Location location) throws NoSuchAlgorithmException {
 
         CheMessage cheMessage = createCheMessage();
         cheMessage.setMessage(Tags.PLAYER, createPlayer(location));
@@ -139,4 +158,23 @@ public class MessageFactory {
 
         return cheMessage;
     }
+
+    public CheMessage newAllianceMessage(String name, Location location) throws NoSuchAlgorithmException, JSONException {
+
+        CheMessage cheMessage = createCheMessage();
+        Alliance alliance = createAlliance(name, "");
+        alliance.setState(Tags.ALLIANCE_CREATE);
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        cheMessage.setMessage(Tags.ALLIANCE, alliance);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+
+        Log.d("message factory", "new alliance " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
+
 }

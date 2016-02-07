@@ -1,19 +1,13 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.util.Log;
-
-import org.json.JSONException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
