@@ -85,7 +85,7 @@ public class CheMessageHandler extends MessageHandler {
         }
 
         if (cheMessage.containsMessage(Tags.ALLIANCE)) {
-            Log.d("handle", "handle alliance "+cheMessage.toString());
+            Log.d("handle", "handle alliance " + cheMessage.toString());
             allianceHandler.handle(cheMessage);
         }
 

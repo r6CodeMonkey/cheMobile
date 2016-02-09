@@ -29,5 +29,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.+'
     compile 'com.android.support:recyclerview-v7:23.1.+'
     compile 'org.json:json:20151123'
+    compile 'org.rajawali3d:rajawali:1.0.294-SNAPSHOT@aar'
     compile files('libs/schema-1.0-SNAPSHOT.jar')
 }

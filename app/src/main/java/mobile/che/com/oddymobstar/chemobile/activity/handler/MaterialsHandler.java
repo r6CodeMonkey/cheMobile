@@ -247,7 +247,7 @@ public class MaterialsHandler {
 
     }
 
-    public void handlePlayerKey(String key){
+    public void handlePlayerKey(String key) {
         controller.materialsHelper.playerKey.setText(key);
     }
 

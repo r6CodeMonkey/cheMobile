@@ -25,7 +25,7 @@ import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
 public class CoreAdapter extends CursorAdapter implements SectionIndexer {
 
     private Context context;
-    private int layout = R.layout.core_list_item;
+    private int layout = R.layout.alliance_list_item;
     private int source;
 
     private SparseIntArray sectionMap = new SparseIntArray();
@@ -59,7 +59,7 @@ public class CoreAdapter extends CursorAdapter implements SectionIndexer {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView tv = (TextView) view.findViewById(R.id.core_item_name);
+        TextView tv = (TextView) view.findViewById(R.id.alliance_item_name);
 
         switch (source) {
 

@@ -232,7 +232,7 @@ public class ProjectCheController {
 
 
     public void onBackPressed() {
-         fragmentHandler.removeFragments(true);
+        fragmentHandler.removeFragments(true);
     }
 
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {

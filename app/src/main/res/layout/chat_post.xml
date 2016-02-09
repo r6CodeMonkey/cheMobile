@@ -11,7 +11,7 @@
         android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_weight="0.99"
         android:background="@android:color/white"
         android:gravity="left"
@@ -23,7 +23,7 @@
 
     <mobile.che.com.oddymobstar.chemobile.util.widget.PostButtons
         android:layout_width="50dp"
-        android:layout_height="110dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.01" />
 
 

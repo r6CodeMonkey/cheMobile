@@ -4,7 +4,6 @@ import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -190,7 +189,6 @@ public class MessageFactory {
 
         return cheMessage;
     }
-
 
 
 }

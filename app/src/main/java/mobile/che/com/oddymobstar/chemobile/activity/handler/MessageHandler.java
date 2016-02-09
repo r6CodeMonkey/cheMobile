@@ -41,8 +41,8 @@ public class MessageHandler extends Handler {
         }
     }
 
-    public void handlePlayerKey(String key){
-        if(controller != null){
+    public void handlePlayerKey(String key) {
+        if (controller != null) {
             controller.materialsHandler.handlePlayerKey(key);
         }
     }

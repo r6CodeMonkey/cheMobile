@@ -346,8 +346,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return changed;
     }
 
-    public void handleNewPlayer(String key){
-        if(messageHandler != null){
+    public void handleNewPlayer(String key) {
+        if (messageHandler != null) {
             messageHandler.handlePlayerKey(key);
         }
     }

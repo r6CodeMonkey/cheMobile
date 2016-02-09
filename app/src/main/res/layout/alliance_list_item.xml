@@ -19,13 +19,16 @@
         card_view:cardElevation="5dp">
 
         <TextView
-            android:id="@+id/core_item_name"
+            android:id="@+id/alliance_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
+            android:layout_alignParentTop="true"
             android:textColor="@android:color/black"
             android:textSize="28dp"
             android:textStyle="bold" />
+
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

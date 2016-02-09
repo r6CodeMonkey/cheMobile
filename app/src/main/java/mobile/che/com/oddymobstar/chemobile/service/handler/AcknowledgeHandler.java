@@ -16,6 +16,7 @@ public class AcknowledgeHandler extends MessageHandler {
 
     private final MessageFactory messageFactory;
     private CheCallbackInterface cheCallback;
+
     public AcknowledgeHandler(DBHelper dbHelper, MessageFactory messageFactory) {
         super(dbHelper);
         this.messageFactory = messageFactory;

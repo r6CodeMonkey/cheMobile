@@ -1,10 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="90dp"
     android:background="@android:color/holo_red_dark"
-    android:orientation="horizontal"
-    app:borderWidth="0dp">
+    android:orientation="horizontal">
 
 
     <EditText
@@ -12,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
-        android:layout_weight="0.8"
+        android:layout_weight="0.99"
         android:background="@android:color/white"
         android:hint="Type to create"
         android:maxLength="30"
@@ -23,10 +22,12 @@
         android:id="@+id/list_create"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:onClick="createButton"
         android:text="@string/fa_send"
+        android:layout_weight="0.01"
         android:textColor="@android:color/white"
         android:textSize="30dp" />
+
 
 </LinearLayout>

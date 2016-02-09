@@ -1,7 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
-import android.util.Log;
-
 import org.json.JSONException;
 
 import message.Alliance;
@@ -25,21 +23,21 @@ public class AllianceHandler extends MessageHandler {
     @Override
     public void handle(CheMessage cheMessage) throws JSONException {
 
-        Alliance alliance = (Alliance)cheMessage.getMessage(Tags.ALLIANCE);
+        Alliance alliance = (Alliance) cheMessage.getMessage(Tags.ALLIANCE);
 
-        switch (alliance.getState()){
+        switch (alliance.getState()) {
             case Tags.ALLIANCE_CREATE:
                 //we can add our alliance.
-               switch(alliance.getValue()){
-                   case Tags.SUCCESS:
-                       mobile.che.com.oddymobstar.chemobile.model.Alliance newAlliance = new mobile.che.com.oddymobstar.chemobile.model.Alliance();
-                       newAlliance.setKey(alliance.getKey());
-                       newAlliance.setName(alliance.getName());
-                       dbHelper.addAlliance(newAlliance, false);
-                       break;
-                   case Tags.ERROR:
-                       break;
-               }
+                switch (alliance.getValue()) {
+                    case Tags.SUCCESS:
+                        mobile.che.com.oddymobstar.chemobile.model.Alliance newAlliance = new mobile.che.com.oddymobstar.chemobile.model.Alliance();
+                        newAlliance.setKey(alliance.getKey());
+                        newAlliance.setName(alliance.getName());
+                        dbHelper.addAlliance(newAlliance, false);
+                        break;
+                    case Tags.ERROR:
+                        break;
+                }
                 break;
             case Tags.ALLIANCE_INVITE:
                 break;
@@ -48,7 +46,7 @@ public class AllianceHandler extends MessageHandler {
             case Tags.ALLIANCE_LEAVE:
                 break;
             case Tags.ALLIANCE_POST:
-                Player player = (Player)cheMessage.getMessage(Tags.PLAYER);
+                Player player = (Player) cheMessage.getMessage(Tags.PLAYER);
                 long time = cheMessage.getTime();
 
                 Message message = new Message();

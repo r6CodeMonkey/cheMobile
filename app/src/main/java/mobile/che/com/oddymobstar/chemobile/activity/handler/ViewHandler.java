@@ -7,10 +7,7 @@ import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
 
-import message.Acknowledge;
-import message.Alliance;
 import message.CheMessage;
-import message.Player;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
@@ -18,7 +15,6 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
-import util.Tags;
 
 
 /**
@@ -68,8 +64,9 @@ public class ViewHandler {
                         cancelPost();
 
                     } catch (NoSuchAlgorithmException e) {
-                        Log.d("security exception", "security exception "+e.toString());
-                    }        break;
+                        Log.d("security exception", "security exception " + e.toString());
+                    }
+                    break;
 
             }
 
@@ -93,7 +90,7 @@ public class ViewHandler {
                 if (!createText.trim().isEmpty()) {
                     try {
 
-                         controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
+                        controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
 
                         //need to animate...but
                         controller.materialsHandler.handleAllianceFAB(controller.fragmentHandler.gridFrag, false);

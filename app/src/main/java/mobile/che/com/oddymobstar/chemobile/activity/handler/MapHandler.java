@@ -1,10 +1,8 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
-import android.graphics.Bitmap;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -18,7 +16,6 @@ import java.util.Map;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
-import mobile.che.com.oddymobstar.chemobile.util.graphics.RoundedImageView;
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
@@ -163,8 +160,8 @@ public class MapHandler {
                 markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me").icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(roundBitmap, 354, 354, false))).flat(false)));
             }
         } else { */
-            markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me")));
-     //   }
+        markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me")));
+        //   }
     }
 
     public void addOthers() {

@@ -1,13 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <group android:checkableBehavior="single">
     <item
+        android:id="@+id/alliance_control"
+        android:title="Alliances">
+        <menu>
+    <item
         android:id="@+id/alliances"
         android:icon="@drawable/ic_people_black_24dp"
-        android:title="Alliances"></item>
+        android:title="My Alliances"></item>
     <item
         android:id="@+id/invite"
         android:icon="@drawable/ic_person_add_black_24dp"
         android:title="Invite"></item>
+        </menu>
+    </item>
 
     <item
         android:id="@+id/connect"

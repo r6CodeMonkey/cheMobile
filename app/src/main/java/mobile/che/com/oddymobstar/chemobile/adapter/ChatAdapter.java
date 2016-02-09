@@ -25,10 +25,9 @@ import mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleRight;
  */
 public class ChatAdapter extends CursorAdapter {
 
+    private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, ''yy  HH:mm");
     private Context context;
     private int layout = R.layout.chat_row;
-    private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, ''yy  HH:mm");
-
     private Map<Integer, View> viewMap = new HashMap<>();
 
 
