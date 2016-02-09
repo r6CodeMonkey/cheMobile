@@ -11,6 +11,7 @@
         android:layout_height="85dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="0.99"
         android:background="@android:color/white"
         android:gravity="left"

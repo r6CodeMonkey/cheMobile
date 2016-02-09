@@ -176,5 +176,21 @@ public class MessageFactory {
         return cheMessage;
     }
 
+    public CheMessage allianceChatPostMessage(mobile.che.com.oddymobstar.chemobile.model.Alliance alliance, String message, Location location) throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+        Alliance allianceMessage = createAlliance(alliance.getName(), alliance.getKey());
+        allianceMessage.setState(Tags.ALLIANCE_POST);
+        allianceMessage.setValue(message);
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.ALLIANCE, allianceMessage);
+
+        return cheMessage;
+    }
+
+
 
 }

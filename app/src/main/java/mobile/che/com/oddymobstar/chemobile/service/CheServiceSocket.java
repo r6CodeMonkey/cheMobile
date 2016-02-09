@@ -52,6 +52,7 @@ public class CheServiceSocket {
         this.cheMessageHandler.addCallback(new AcknowledgeHandler.CheCallbackInterface() {
             @Override
             public void send(CheMessage cheMessage) {
+                Log.d("callback", "sending ack callback");
                 writeToSocket(cheMessage, false);
             }
         });

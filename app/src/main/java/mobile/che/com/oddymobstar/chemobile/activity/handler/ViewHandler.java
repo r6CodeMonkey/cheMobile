@@ -57,25 +57,22 @@ public class ViewHandler {
 
                 case GridFragment.MY_ALLIANCES:
 
-                    //create a message for the alliance....
-                    //         coreMessage = new OutAllianceMessage(controller.locationListener.getCurrentLocation(), controller.configuration.getConfig(Configuration.PLAYER_KEY).getValue(), controller.uuidGenerator.generateAcknowledgeKey());
-                    //         ((OutAllianceMessage) coreMessage).setAlliance(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()), OutCoreMessage.PUBLISH, OutCoreMessage.GLOBAL, controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost());
-                    break;
+                    try {
+                        cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
+                                controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost(),
+                                controller.locationListener.getCurrentLocation());
+                        //need to animate...but
+                        controller.materialsHandler.handleChatFAB(controller.fragmentHandler.chatFrag, false);
+                        controller.cheService.writeToSocket(cheMessage);
+
+                        cancelPost();
+
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.d("security exception", "security exception "+e.toString());
+                    }        break;
 
             }
 
-            //need to animate...but
-            controller.materialsHandler.handleChatFAB(controller.fragmentHandler.chatFrag, false);
-
-
-            controller.cheService.writeToSocket(cheMessage);
-
-       /*     } catch (NoSuchAlgorithmException nse) {
-
-            } catch (JSONException jse) {
-            } */
-
-            cancelPost();
         } else {
             //find out if this every works! it was not cause of my bug
             controller.fragmentHandler.removeFragments(false);

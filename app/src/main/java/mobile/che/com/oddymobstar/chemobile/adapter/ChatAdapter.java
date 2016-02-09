@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class ChatAdapter extends CursorAdapter {
 
     private Context context;
     private int layout = R.layout.chat_row;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, ''yy  HH:mm");
 
     private Map<Integer, View> viewMap = new HashMap<>();
 
@@ -65,7 +67,7 @@ public class ChatAdapter extends CursorAdapter {
             tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
             Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_TIME)));
             tv = (TextView) bubbleLeft.findViewById(R.id.datetime);
-            tv.setText(date.toString());
+            tv.setText(sdf.format(date));
             tv = (TextView) bubbleLeft.findViewById(R.id.from);
             tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_AUTHOR)));
 
@@ -79,8 +81,9 @@ public class ChatAdapter extends CursorAdapter {
             TextView tv = (TextView) bubbleRight.findViewById(R.id.message);
             tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
             Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_TIME)));
+
             tv = (TextView) bubbleRight.findViewById(R.id.datetime);
-            tv.setText(date.toString());
+            tv.setText(sdf.format(date));
             tv = (TextView) bubbleRight.findViewById(R.id.from);
             tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_AUTHOR)));
 

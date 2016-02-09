@@ -1,10 +1,15 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import message.Alliance;
 import message.CheMessage;
+import message.Player;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.model.Message;
+import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import util.Tags;
 
 /**
@@ -43,6 +48,19 @@ public class AllianceHandler extends MessageHandler {
             case Tags.ALLIANCE_LEAVE:
                 break;
             case Tags.ALLIANCE_POST:
+                Player player = (Player)cheMessage.getMessage(Tags.PLAYER);
+                long time = cheMessage.getTime();
+
+                Message message = new Message();
+                message.setAuthor(player.getName());
+                message.setMessageKey(alliance.getKey());
+                message.setTime(time);
+                message.setMessage(alliance.getValue());
+                message.setMessageType(Message.ALLIANCE_MESSAGE); //sort of pointless
+                message.setMyMessage(player.getKey().equals(dbHelper.getConfig(Configuration.PLAYER_KEY).getValue()) ? "Y" : "N");
+
+                dbHelper.addMessage(message);
+
                 break;
         }
 
