@@ -16,29 +16,27 @@ import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
-import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
-
 
 /**
- * Created by root on 27/02/15.
+ * Created by timmytime on 11/02/16.
  */
-public class CoreAdapter extends CursorAdapter implements SectionIndexer {
+public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
 
     private final Context context;
-    private final int layout = R.layout.alliance_list_item;
-    private final int source;
+    private final int layout = R.layout.game_list_item;
+    private final int type;
 
     private SparseIntArray sectionMap = new SparseIntArray();
     private SparseIntArray positionMap = new SparseIntArray();
 
 
-    public CoreAdapter(Context context, Cursor cursor, boolean autoRequery, int source) {
-        super(context, cursor, autoRequery);
-
-        this.source = source;
+    public GameItemAdapter(Context context, Cursor c, boolean autoRequery, int type) {
+        super(context, c, autoRequery);
         this.context = context;
-
+        this.type = type;
     }
+
+
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -58,48 +56,13 @@ public class CoreAdapter extends CursorAdapter implements SectionIndexer {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-
-        TextView tv = (TextView) view.findViewById(R.id.alliance_item_name);
-
-        switch (source) {
-
-            case AllianceGridFragment.MY_ALLIANCES:
-                tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.ALLIANCE_NAME)));
-                break;
-        }
-
-
-    }
-
-    /*
-      fast index scroller
-     */
-
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        // TODO Auto-generated method stub
-        if (sectionMap.indexOfKey(sectionIndex) != -1) {
-            return sectionMap.get(sectionIndex);
-        } else {
-            return 0;
-        }
-
-    }
-
-    @Override
-    public int getSectionForPosition(int position) {
-        // TODO Auto-generated method stub
-        if (positionMap.indexOfKey(position) != -1) {
-
-            return positionMap.get(position);
-        } else {
-            return 0;
-        }
+        TextView tv = (TextView) view.findViewById(R.id.game_item_name);
+        //in reality, its going to be the type name + key....
+        tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
     }
 
     @Override
     public Object[] getSections() {
-
         Cursor c = this.getCursor();
 
         List<String> sections = new ArrayList<>();
@@ -113,7 +76,7 @@ public class CoreAdapter extends CursorAdapter implements SectionIndexer {
         while (c.moveToNext()) {
 
             try {
-                current = c.getString(c.getColumnIndexOrThrow(DBHelper.ALLIANCE_NAME))
+                current = c.getString(c.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY))
                         .substring(0, 1);
             } catch (Exception e) {
             }
@@ -136,5 +99,22 @@ public class CoreAdapter extends CursorAdapter implements SectionIndexer {
         return sections.toArray(t);
     }
 
+    @Override
+    public int getPositionForSection(int sectionIndex) {
+        if (sectionMap.indexOfKey(sectionIndex) != -1) {
+            return sectionMap.get(sectionIndex);
+        } else {
+            return 0;
+        }
+    }
 
+    @Override
+    public int getSectionForPosition(int position) {
+        if (positionMap.indexOfKey(position) != -1) {
+
+            return positionMap.get(position);
+        } else {
+            return 0;
+        }
+    }
 }

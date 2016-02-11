@@ -17,6 +17,8 @@ public class MaterialsListener {
     public static final int ALLIANCE_FAB = 0;
     public static final int CHAT_FAB = 1;
     public static final int GRID_FAB = 2;
+    public static final int GAME_FAB = 3;
+
     public static final int USER_IMAGE_RESULT_CODE = 1001;
     public static int FAB_MODE = ALLIANCE_FAB;
 
@@ -42,6 +44,8 @@ public class MaterialsListener {
                         break;
                     case GRID_FAB:
                         controller.materialsHandler.handleSearchFab();
+                        break;
+                    case GAME_FAB:
                         break;
                 }
 

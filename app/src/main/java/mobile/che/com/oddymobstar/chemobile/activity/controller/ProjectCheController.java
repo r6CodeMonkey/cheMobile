@@ -91,6 +91,8 @@ public class ProjectCheController {
         dbHelper = new DBHelper(main);
         messageFactory = new MessageFactory(dbHelper);
 
+        dbHelper.developStub();
+
 
         if (!dbHelper.hasPreLoad()) {
             dbHelper.addBaseConfiguration();

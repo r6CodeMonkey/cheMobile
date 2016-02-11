@@ -34,9 +34,5 @@ public class AcknowledgeHandler extends MessageHandler {
         cheCallback.send(cheMessage);
     }
 
-    public interface CheCallbackInterface {
-        void send(CheMessage cheMessage);
-    }
-
 
 }

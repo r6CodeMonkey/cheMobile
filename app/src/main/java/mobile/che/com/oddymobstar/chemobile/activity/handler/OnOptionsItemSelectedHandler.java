@@ -11,7 +11,8 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
-import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -66,6 +67,31 @@ public class OnOptionsItemSelectedHandler {
                 //same mechanism for discovery.
                 controller.viewHandler.allianceInvite(false);
                 break; */
+            case R.id.game_land:
+                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+                controller.fragmentHandler.removeFragments(false);
+                handleGame(GameObjectGridFragment.LAND, "Land");
+                break;
+            case R.id.game_sea:
+                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+                controller.fragmentHandler.removeFragments(false);
+                handleGame(GameObjectGridFragment.SEA, "Sea");
+                break;
+            case R.id.game_airborne:
+                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+                controller.fragmentHandler.removeFragments(false);
+                handleGame(GameObjectGridFragment.AIR, "Airborne");
+                break;
+            case R.id.game_missiles:
+                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+                controller.fragmentHandler.removeFragments(false);
+                handleGame(GameObjectGridFragment.MISSILE, "Missiles");
+                break;
+            case R.id.game_infastructure:
+                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+                controller.fragmentHandler.removeFragments(false);
+                handleGame(GameObjectGridFragment.INFASTRUCTURE, "Infrastructure");
+                break;
             case R.id.utm:
                 controller.fragmentHandler.removeFragments(false);
                 handleUTM();
@@ -162,11 +188,27 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsListener.FAB_MODE = MaterialsListener.ALLIANCE_FAB;
         controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_red_dark), main.getResources().getString(R.string.menu_alliances));
 
-        controller.fragmentHandler.gridFrag.init(GridFragment.MY_ALLIANCES, controller.viewListener.getListClickListener());
+        controller.fragmentHandler.gridFrag.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gridFrag);
         transaction.addToBackStack(null);
         transaction.commit();
 
+    }
+
+    private void handleGame(int type, String title){
+        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+        controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
+
+        controller.materialsHandler.handleFABChange(MaterialsHelper.GAME_COLOR, R.drawable.ic_monetization_on_white_24dp, View.VISIBLE);
+
+        controller.materialsListener.FAB_MODE = MaterialsListener.GAME_FAB;
+        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_blue_bright), title);
+
+        controller.fragmentHandler.gridFrag.init(type, controller.viewListener.getListClickListener());
+        transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void handleSettings() {

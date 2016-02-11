@@ -15,7 +15,7 @@ import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
-import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ChatPost;
 import mobile.che.com.oddymobstar.chemobile.util.widget.CreateView;
@@ -140,7 +140,7 @@ public class MaterialsHandler {
     }
 
 
-    public void handleAllianceFAB(GridFragment gridFrag, final boolean hide) {
+    public void handleAllianceFAB(AllianceGridFragment gridFrag, final boolean hide) {
 
         final CreateView hiddenCreateView = gridFrag.getHiddenCreateView();
 

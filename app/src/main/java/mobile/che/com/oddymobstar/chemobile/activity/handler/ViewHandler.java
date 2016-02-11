@@ -13,7 +13,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
-import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 
 
@@ -51,7 +51,7 @@ public class ViewHandler {
             switch (controller.fragmentHandler.gridFrag.getType()) {
 
 
-                case GridFragment.MY_ALLIANCES:
+                case AllianceGridFragment.MY_ALLIANCES:
 
                     try {
                         cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
@@ -85,7 +85,7 @@ public class ViewHandler {
 
         switch (controller.fragmentHandler.gridFrag.getType()) {
 
-            case GridFragment.MY_ALLIANCES:
+            case AllianceGridFragment.MY_ALLIANCES:
 
                 if (!createText.trim().isEmpty()) {
                     try {

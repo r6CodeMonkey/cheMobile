@@ -26,6 +26,7 @@ public class MaterialsHelper {
     public static final int SUB_UTM_COLOR = 2;
     public static final int ALLIANCE_COLOR = 3;
     public static final int CHAT_COLOR = 4;
+    public static final int GAME_COLOR = 5;
     private final ProjectCheActivity main;
     public DrawerLayout navDrawer;
     public ActionBarDrawerToggle navToggle;
@@ -38,10 +39,11 @@ public class MaterialsHelper {
     public TextView playerKey;
     public String playerKeyString = "";
     private Context context;
-    private ColorStateList subUtmColorList;
-    private ColorStateList utmColorList;
-    private ColorStateList allianceColorList;
-    private ColorStateList chatColorList;
+    private final ColorStateList subUtmColorList;
+    private final ColorStateList utmColorList;
+    private final ColorStateList allianceColorList;
+    private final ColorStateList chatColorList;
+    private final ColorStateList gameColorList;
 
 
     public MaterialsHelper(ProjectCheActivity main) {
@@ -52,7 +54,7 @@ public class MaterialsHelper {
         utmColorList = createColorStateList(android.R.color.holo_purple);
         allianceColorList = createColorStateList(android.R.color.holo_red_dark);
         chatColorList = createColorStateList(android.R.color.holo_green_dark);
-
+        gameColorList = createColorStateList(android.R.color.holo_blue_bright);
     }
 
     public ColorStateList getColorStateList(int which) {
@@ -66,6 +68,8 @@ public class MaterialsHelper {
                 return allianceColorList;
             case CHAT_COLOR:
                 return chatColorList;
+            case GAME_COLOR:
+                return gameColorList;
             default:
                 return utmColorList;
 

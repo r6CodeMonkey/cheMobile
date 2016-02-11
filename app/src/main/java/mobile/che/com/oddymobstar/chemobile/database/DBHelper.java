@@ -14,6 +14,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.model.Alliance;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
@@ -29,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String ALLIANCE_MEMBERS_TABLE = "ALLIANCE_MEMBERS";
     public static final String MESSAGE_TABLE = "MESSAGES";
     public static final String IMAGE_TABLE = "USER_IMAGES";
+    public static final String GAME_OBJECTS_TABLE = "GAME_OBJECTS";
     public static final String UTM = "utm";
     public static final String SUBUTM = "subutm";
     //column tags
@@ -56,6 +58,20 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String MESSAGE_TYPE = "message_type";
     public static final String MY_MESSAGE = "my_message";
     public static final String MESSAGE_AUTHOR = "message_author";
+    public static final String GAME_OBJECT_KEY = "game_object_key"; //testing hardcode, ultimately they come from server.
+    public static final String GAME_OBJECT_TYPE = "game_object_type";
+    public static final String GAME_OBJECT_SUBTYPE = "game_object_subtype";
+    public static final String GAME_OBJECT_LAT = "game_object_lat";
+    public static final String GAME_OBJECT_LONG = "game_object_long";
+    public static final String GAME_OBJECT_UTM_LAT = "game_object_utm_lat";
+    public static final String GAME_OBJECT_UTM_LONG = "game_object_utm_long";
+    public static final String GAME_OBJECT_SUBUTM_LAT = "game_object_subutm_lat";
+    public static final String GAME_OBJECT_SUBUTM_LONG = "game_object_subutm_long";
+
+    //going to also need a player points table, well on server too...not now.
+
+
+
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "PROJECTCHE";
     //table creates
@@ -64,7 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_ALLIANCE_MEMBERS = "CREATE TABLE " + ALLIANCE_MEMBERS_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200)," + PLAYER_KEY + " VARCHAR2(200)," + PLAYER_NAME + " VARCHAR2(30)," + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10)," + SPEED + " NUMBER," + ALTITUDE + " NUMBER)";
     private static final String CREATE_MESSAGES = "CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + MESSAGE_CONTENT + " VARCHAR2(300), " + MESSAGE_KEY + " VARCHAR2(200)," + MESSAGE_TYPE + " CHAR(1), " + MESSAGE_TIME + " INTEGER," + MY_MESSAGE + " CHAR(1)," + MESSAGE_AUTHOR + " VARCHAR2(200) )";
     private static final String CREATE_USER_IMAGES = "CREATE TABLE " + IMAGE_TABLE + "(" + USER_IMAGE_KEY + " VARCHAR2(200)," + USER_IMAGE + " BLOB)";
-
+    private static final String CREATE_GAME_OBJECTS = "CREATE TABLE "+GAME_OBJECTS_TABLE+"("+GAME_OBJECT_KEY+" VARCHAR2(200),"+GAME_OBJECT_TYPE+" INTEGER, "+GAME_OBJECT_SUBTYPE+" INTEGER,"+GAME_OBJECT_LAT+" NUMBER, "+GAME_OBJECT_LONG+" NUMBER, "+GAME_OBJECT_UTM_LAT+" VARCHAR2(10), "+GAME_OBJECT_UTM_LONG+" VARCHAR2(10), "+GAME_OBJECT_SUBUTM_LAT+" VARCHAR2(10), "+GAME_OBJECT_SUBUTM_LONG+" VARCHAR2(10))";
     //static db instance.
     private static DBHelper dbHelper = null;
     /*
@@ -124,7 +140,16 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ALLIANCE_MEMBERS);
         db.execSQL(CREATE_MESSAGES);
         db.execSQL(CREATE_USER_IMAGES);
+        db.execSQL(CREATE_GAME_OBJECTS);
 
+    }
+
+    /*
+    to update without updating.
+     */
+    public void developStub(){
+        this.getWritableDatabase().execSQL("DROP TABLE "+GAME_OBJECTS_TABLE);
+        this.getWritableDatabase().execSQL(CREATE_GAME_OBJECTS);
     }
 
     @Override
@@ -243,6 +268,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void addGameObject(GameObject gameObject){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(GAME_OBJECT_KEY, gameObject.getKey());
+        values.put(GAME_OBJECT_TYPE, gameObject.getType());
+        values.put(GAME_OBJECT_SUBTYPE, gameObject.getSubType());
+        values.put(GAME_OBJECT_LAT, gameObject.getLatitude());
+        values.put(GAME_OBJECT_LONG, gameObject.getLongitude());
+        values.put(GAME_OBJECT_UTM_LAT, gameObject.getUtmLat());
+        values.put(GAME_OBJECT_UTM_LONG, gameObject.getUtmLong());
+        values.put(GAME_OBJECT_SUBUTM_LAT, gameObject.getSubUtmLat());
+        values.put(GAME_OBJECT_SUBUTM_LONG, gameObject.getSubUtmLong());
+
+        db.insert(GAME_OBJECTS_TABLE, null, values);
+
+        if(messageHandler != null){
+          //TODO...ie update the list...well force it to reload.  messageHandler.handleGameObject();
+        }
+    }
+
     /*
     public void addAllianceMember(AllianceMember allianceMember) {
 
@@ -302,6 +349,13 @@ public class DBHelper extends SQLiteOpenHelper {
         //todo
     }
 
+    public void deleteGameObject(GameObject gameObject){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(GAME_OBJECTS_TABLE, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
+
+    }
+
 
     /*
     update methods...no point updating a grid.  most will simply updte user dfined names etc.
@@ -346,6 +400,33 @@ public class DBHelper extends SQLiteOpenHelper {
         return changed;
     }
 
+    public void updateAlliance(Alliance alliance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(ALLIANCE_NAME, alliance.getName());
+
+        db.update(ALLIANCES_TABLE, values, ALLIANCE_KEY + " = ?", new String[]{alliance.getKey()});
+
+    }
+
+
+    public void updateGameObject(GameObject gameObject){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(GAME_OBJECT_LAT, gameObject.getLatitude());
+        values.put(GAME_OBJECT_LONG, gameObject.getLongitude());
+        values.put(GAME_OBJECT_UTM_LAT, gameObject.getUtmLat());
+        values.put(GAME_OBJECT_UTM_LONG, gameObject.getUtmLong());
+        values.put(GAME_OBJECT_SUBUTM_LAT, gameObject.getSubUtmLat());
+        values.put(GAME_OBJECT_SUBUTM_LONG, gameObject.getSubUtmLong());
+
+        db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
+    }
+
+
+
     public void handleNewPlayer(String key) {
         if (messageHandler != null) {
             messageHandler.handlePlayerKey(key);
@@ -366,15 +447,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void updateAlliance(Alliance alliance) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(ALLIANCE_NAME, alliance.getName());
-
-        db.update(ALLIANCES_TABLE, values, ALLIANCE_KEY + " = ?", new String[]{alliance.getKey()});
-
-    }
 
     /*
 
@@ -407,6 +479,11 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
     we need to get our display lists
      */
+
+    public Cursor getGameObjects(int type){
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE +","+GAME_OBJECT_SUBTYPE+ "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + ","+GAME_OBJECT_UTM_LONG+","+GAME_OBJECT_SUBUTM_LAT+","+GAME_OBJECT_SUBUTM_LONG +" FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? ORDER BY " + GAME_OBJECT_KEY + " ASC", new String[]{ String.valueOf(type)});
+    }
+
 
     public Cursor getMessages(String messageType, String messageKey) {
         return this.getReadableDatabase().rawQuery("SELECT " + MESSAGE_ID + " as _id," + MESSAGE_ID + "," + MESSAGE_CONTENT + "," + MESSAGE_TIME + "," + MY_MESSAGE + "," + MESSAGE_AUTHOR + " FROM " + MESSAGE_TABLE + " WHERE " + MESSAGE_TYPE + "=? AND " + MESSAGE_KEY + "=? ORDER BY " + MESSAGE_TIME + " ASC", new String[]{messageType, messageKey});

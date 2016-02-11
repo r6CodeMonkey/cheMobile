@@ -28,7 +28,7 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
     private static Typeface font = null;
     public String googleAccountName = "";
     private ProjectCheController controller = new ProjectCheController(this);
-  
+
     public static Typeface getFont() {
         return font;
     }

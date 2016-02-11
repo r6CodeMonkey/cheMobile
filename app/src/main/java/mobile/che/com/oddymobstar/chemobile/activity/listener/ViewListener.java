@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
-import mobile.che.com.oddymobstar.chemobile.fragment.GridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 
 
@@ -42,7 +42,7 @@ public class ViewListener {
 
                 String key = "";
                 switch (controller.fragmentHandler.gridFrag.getType()) {
-                    case GridFragment.MY_ALLIANCES:
+                    case AllianceGridFragment.MY_ALLIANCES:
                         key = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.ALLIANCE_KEY));
                         String title = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.ALLIANCE_NAME));
                         controller.fragmentHandler.chatFrag.setCursor(controller.dbHelper.getMessages(Message.ALLIANCE_MESSAGE, key), key, title);

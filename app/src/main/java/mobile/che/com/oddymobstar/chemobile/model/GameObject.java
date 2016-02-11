@@ -1,11 +1,39 @@
 package mobile.che.com.oddymobstar.chemobile.model;
 
+import android.database.Cursor;
+
 import message.CoreMessage;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 
 /**
  * Created by timmytime on 30/01/16.
  */
 public class GameObject implements CheModelInterface {
+
+    private String utmLat, utmLong, subUtmLat, subUtmLong, key;
+    private double latitude, longitude;
+    private int type, subType;
+
+
+
+    public GameObject(){
+
+    }
+
+    public GameObject(Cursor cursor){
+
+        setKey(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+        setType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)));
+        setSubType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)));
+        setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)));
+        setLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)));
+        setUtmLat(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)));
+        setUtmLong(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)));
+        setSubUtmLat(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)));
+        setSubUtmLong(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)));
+
+    }
+
     @Override
     public void create(CoreMessage coreMessage) {
 
@@ -15,4 +43,81 @@ public class GameObject implements CheModelInterface {
     public CoreMessage getMessage() {
         return null;
     }
+
+
+
+
+    public String getUtmLat() {
+        return utmLat;
+    }
+
+    public String getUtmLong() {
+        return utmLong;
+    }
+
+    public String getSubUtmLat() {
+        return subUtmLat;
+    }
+
+    public String getSubUtmLong() {
+        return subUtmLong;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public int getType(){
+        return type;
+    }
+
+    public int getSubType(){
+        return subType;
+    }
+
+    public void setUtmLat(String utmLat) {
+        this.utmLat = utmLat;
+    }
+
+    public void setUtmLong(String utmLong) {
+        this.utmLong = utmLong;
+    }
+
+    public void setSubUtmLat(String subUtmLat) {
+        this.subUtmLat = subUtmLat;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setSubUtmLong(String subUtmLong) {
+        this.subUtmLong = subUtmLong;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
+
+    public void setSubType(int subType){
+        this.subType = subType;
+    }
+
+
 }

@@ -14,6 +14,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AllianceHandler;
+import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface;
 import mobile.che.com.oddymobstar.chemobile.service.handler.GameObjectHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.GridHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MessageHandler;
@@ -35,6 +36,7 @@ public class CheMessageHandler extends MessageHandler {
     private final GridHandler gridHandler;
     private final MissileHandler missileHandler;
     private MessageFactory messageFactory;
+    private CheCallbackInterface callback;
 
     public CheMessageHandler(DBHelper dbHelper) {
         super(dbHelper);
@@ -49,8 +51,10 @@ public class CheMessageHandler extends MessageHandler {
 
     }
 
-    public void addCallback(AcknowledgeHandler.CheCallbackInterface callback) {
+    public void addCallback(CheCallbackInterface callback) {
         acknowledgeHandler.addCheCallback(callback);
+     //   gameObjectHandler.addCheCallback(callback);
+        this.callback = callback;
     }
 
     public Map<String, CheMessage> getSentAcks() {
@@ -63,6 +67,29 @@ public class CheMessageHandler extends MessageHandler {
         config.setValue(acknowledge.getValue());
         dbHelper.updateConfig(config);
         dbHelper.handleNewPlayer(acknowledge.getValue());
+
+        /*
+        bi below.
+
+        tech logic.  we need to create a message per type and call it back with relevant data.  message factory time....
+         */
+
+
+        /*
+          as a new player we are now going to purchase our free items.  possibly not here...but its the confirmed point,  so add a handler.
+
+          player gets
+          * garrison
+          * 2 outposts
+          * 2 satellite
+          * 2 tanks
+          * 2 atv
+          * 2 mini drones
+          * 50 g2g
+          * 50 gta
+          * 10 groundmines
+         */
+
     }
 
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {

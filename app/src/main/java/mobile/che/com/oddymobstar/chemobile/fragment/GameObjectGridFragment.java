@@ -8,47 +8,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import mobile.che.com.oddymobstar.chemobile.R;
-import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.adapter.CoreAdapter;
+import mobile.che.com.oddymobstar.chemobile.adapter.GameItemAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
-import mobile.che.com.oddymobstar.chemobile.util.widget.CreateView;
-
 
 /**
- * Created by root on 14/04/15.
+ * Created by timmytime on 11/02/16.
  */
-public class GridFragment extends Fragment {
+public class GameObjectGridFragment extends Fragment {
 
 
-    /*
-      can contain...Alliances or Topics.
-     */
-    public static final int MY_ALLIANCES = 0;
+    public static final int LAND = 0;
+    public static final int SEA = 1;
+    public static final int AIR = 2;
+    public static final int MISSILE = 3;
+    public static final int INFASTRUCTURE = 4;
 
 
-    private int type = MY_ALLIANCES;
+    private int type = LAND;
 
 
     private AdapterView.OnItemClickListener onClickListener = null;
     private CursorAdapter adapter = null;
+
     private DBHelper dbHelper;
     private GridView gridView;
 
-    private CreateView hiddenCreateView;
 
-
-    public GridFragment() {
+    public GameObjectGridFragment(){
         setRetainInstance(true);
-    }
-
-    public int getType() {
-        return type;
     }
 
     public void init(int type, AdapterView.OnItemClickListener onClickListener) {
@@ -59,8 +52,7 @@ public class GridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.list_fragment, container, false);
-
+        View view = inflater.inflate(R.layout.game_list_fragment, container, false);
 
         if (dbHelper == null) {
             dbHelper = DBHelper.getInstance(getActivity());
@@ -70,49 +62,24 @@ public class GridFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.grid_view);
         gridView.setOnItemClickListener(onClickListener);
 
-        //  gridView.setFastScrollEnabled(true);
-        //  gridView.setFastScrollAlwaysVisible(true);
-
         gridView.setAdapter(adapter);
 
-        hiddenCreateView = (CreateView) view.findViewById(R.id.create_alliance);
-        hiddenCreateView.setVisibility(View.GONE);
-        hiddenCreateView.setElevation(16);
-
-        Button button = (Button) hiddenCreateView.findViewById(R.id.list_create);
-        button.setTypeface(ProjectCheActivity.getFont());
-
-
         new LoadCursors().execute("");
-
 
         return view;
     }
 
     private Cursor getCursor(int type) {
-
-        switch (type) {
-            case MY_ALLIANCES:
-                return dbHelper.getAlliances();
-        }
-        return null;
+        return dbHelper.getGameObjects(type);
     }
 
     private CursorAdapter getCursorAdapter(int type, Cursor cursor) {
-
-        return new CoreAdapter(getActivity(), cursor, true, type);
-
+        return new GameItemAdapter(getActivity(), cursor, true, type);
     }
 
     public void refreshAdapter() {
         if (adapter != null) {
-            switch (type) {
-                case MY_ALLIANCES:
-                    adapter.changeCursor(dbHelper.getAlliances());
-                    break;
-            }
-
-
+            adapter.changeCursor(dbHelper.getGameObjects(type));
         }
     }
 
@@ -134,9 +101,6 @@ public class GridFragment extends Fragment {
         }
     }
 
-    public CreateView getHiddenCreateView() {
-        return hiddenCreateView;
-    }
 
     private class LoadCursors extends AsyncTask<String, Void, String> {
 

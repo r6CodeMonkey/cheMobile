@@ -16,17 +16,29 @@
     </item>
 
     <item
-        android:id="@+id/connect"
-        android:title="Connect">
+        android:id="@+id/game"
+        android:title="Game">
         <menu>
             <item
-                android:title="Send"
-                android:id="@+id/bluetooth_send"
-                android:icon="@drawable/ic_bluetooth_searching_black_24dp"/>
+                android:title="Land"
+                android:id="@+id/game_land"
+                android:icon="@drawable/ic_directions_car_black_24dp"/>
             <item
-                android:title="Receive"
-                android:id="@+id/bluetooth_receive"
-                android:icon="@drawable/ic_bluetooth_connected_black_24dp"/>
+                android:title="Airborne"
+                android:id="@+id/game_airborne"
+                android:icon="@drawable/ic_flight_black_24dp"/>
+            <item
+                android:title="Sea"
+                android:id="@+id/game_sea"
+                android:icon="@drawable/ic_directions_boat_black_24dp"/>
+            <item
+                android:title="Missiles"
+                android:id="@+id/game_missiles"
+                android:icon="@drawable/ic_flare_black_24dp"/>
+            <item
+                android:title="Infrastructure"
+                android:id="@+id/game_infastructure"
+                android:icon="@drawable/ic_account_balance_black_24dp"/>
         </menu>
 
     </item>

@@ -10,9 +10,15 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
  */
 public class GameObjectHandler extends MessageHandler {
 
+    private CheCallbackInterface cheCallback;
 
     public GameObjectHandler(DBHelper dbHelper) {
         super(dbHelper);
+    }
+
+//probably not required anyway leave here.
+    public void addCheCallback(CheCallbackInterface cheCallback) {
+        this.cheCallback = cheCallback;
     }
 
     @Override
