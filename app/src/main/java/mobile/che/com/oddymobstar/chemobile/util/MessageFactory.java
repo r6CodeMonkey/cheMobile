@@ -99,7 +99,7 @@ public class MessageFactory {
         return player;
     }
 
-    private message.GameObject createNewGameObject(GameObject gameObject){
+    private message.GameObject createNewGameObject(GameObject gameObject) {
 
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();

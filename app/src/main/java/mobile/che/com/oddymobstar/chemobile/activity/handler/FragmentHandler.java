@@ -5,9 +5,9 @@ import android.view.View;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
-import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 
 
@@ -60,10 +60,10 @@ public class FragmentHandler {
 
         }
 
-        try{
+        try {
             gameFrag.clearAdapter();
             transaction.remove(gameFrag);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

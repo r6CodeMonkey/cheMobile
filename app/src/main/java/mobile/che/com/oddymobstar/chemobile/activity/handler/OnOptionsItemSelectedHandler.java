@@ -195,7 +195,7 @@ public class OnOptionsItemSelectedHandler {
 
     }
 
-    private void handleGame(int type, String title){
+    private void handleGame(int type, String title) {
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);

@@ -16,7 +16,7 @@ public class GameObjectHandler extends MessageHandler {
         super(dbHelper);
     }
 
-//probably not required anyway leave here.
+    //probably not required anyway leave here.
     public void addCheCallback(CheCallbackInterface cheCallback) {
         this.cheCallback = cheCallback;
     }

@@ -11,9 +11,6 @@ import java.util.Map;
 import message.Acknowledge;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
-import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
-import mobile.che.com.oddymobstar.chemobile.model.Config;
-import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AllianceHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface;
@@ -24,7 +21,6 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.MissileHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.PlayerHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
-import util.GameObjectTypes;
 import util.Tags;
 
 /**
@@ -41,7 +37,6 @@ public class CheMessageHandler extends MessageHandler {
     private final GridHandler gridHandler;
     private final MissileHandler missileHandler;
     private MessageFactory messageFactory;
-    private CheCallbackInterface callback;
 
     public CheMessageHandler(DBHelper dbHelper) {
         super(dbHelper);
@@ -60,8 +55,7 @@ public class CheMessageHandler extends MessageHandler {
     public void addCallback(CheCallbackInterface callback) {
         acknowledgeHandler.addCheCallback(callback);
         playerHandler.addCheCallback(callback);
-     //   gameObjectHandler.addCheCallback(callback);
-        this.callback = callback;
+        //   gameObjectHandler.addCheCallback(callback);
     }
 
     public Map<String, CheMessage> getSentAcks() {
@@ -70,7 +64,7 @@ public class CheMessageHandler extends MessageHandler {
 
 
     public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {
-          playerHandler.handleNewPlayer(acknowledge);
+        playerHandler.handleNewPlayer(acknowledge);
     }
 
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
@@ -109,14 +103,7 @@ public class CheMessageHandler extends MessageHandler {
     }
 
     public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
-        CheMessage cheMessage = messageFactory.createCheMessage();
-
-        cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
-        cheMessage.setMessage(Tags.ACKNOWLEDGE, messageFactory.createAcknowledge());
-
-        Log.d("new player message ", "is " + cheMessage.toString());
-
-        return cheMessage;
+        return playerHandler.createNewPlayer();
     }
 
 

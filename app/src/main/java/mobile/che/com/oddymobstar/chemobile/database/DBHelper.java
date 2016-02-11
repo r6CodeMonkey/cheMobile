@@ -71,7 +71,6 @@ public class DBHelper extends SQLiteOpenHelper {
     //going to also need a player points table, well on server too...not now.
 
 
-
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "PROJECTCHE";
     //table creates
@@ -80,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_ALLIANCE_MEMBERS = "CREATE TABLE " + ALLIANCE_MEMBERS_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200)," + PLAYER_KEY + " VARCHAR2(200)," + PLAYER_NAME + " VARCHAR2(30)," + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10)," + SPEED + " NUMBER," + ALTITUDE + " NUMBER)";
     private static final String CREATE_MESSAGES = "CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + MESSAGE_CONTENT + " VARCHAR2(300), " + MESSAGE_KEY + " VARCHAR2(200)," + MESSAGE_TYPE + " CHAR(1), " + MESSAGE_TIME + " INTEGER," + MY_MESSAGE + " CHAR(1)," + MESSAGE_AUTHOR + " VARCHAR2(200) )";
     private static final String CREATE_USER_IMAGES = "CREATE TABLE " + IMAGE_TABLE + "(" + USER_IMAGE_KEY + " VARCHAR2(200)," + USER_IMAGE + " BLOB)";
-    private static final String CREATE_GAME_OBJECTS = "CREATE TABLE "+GAME_OBJECTS_TABLE+"("+GAME_OBJECT_KEY+" VARCHAR2(200),"+GAME_OBJECT_TYPE+" INTEGER, "+GAME_OBJECT_SUBTYPE+" INTEGER,"+GAME_OBJECT_LAT+" NUMBER, "+GAME_OBJECT_LONG+" NUMBER, "+GAME_OBJECT_UTM_LAT+" VARCHAR2(10), "+GAME_OBJECT_UTM_LONG+" VARCHAR2(10), "+GAME_OBJECT_SUBUTM_LAT+" VARCHAR2(10), "+GAME_OBJECT_SUBUTM_LONG+" VARCHAR2(10))";
+    private static final String CREATE_GAME_OBJECTS = "CREATE TABLE " + GAME_OBJECTS_TABLE + "(" + GAME_OBJECT_KEY + " VARCHAR2(200)," + GAME_OBJECT_TYPE + " INTEGER, " + GAME_OBJECT_SUBTYPE + " INTEGER," + GAME_OBJECT_LAT + " NUMBER, " + GAME_OBJECT_LONG + " NUMBER, " + GAME_OBJECT_UTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_UTM_LONG + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LONG + " VARCHAR2(10))";
     //static db instance.
     private static DBHelper dbHelper = null;
     /*
@@ -147,8 +146,8 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
     to update without updating.
      */
-    public void developStub(){
-        this.getWritableDatabase().execSQL("DROP TABLE "+GAME_OBJECTS_TABLE);
+    public void developStub() {
+        this.getWritableDatabase().execSQL("DROP TABLE " + GAME_OBJECTS_TABLE);
         this.getWritableDatabase().execSQL(CREATE_GAME_OBJECTS);
     }
 
@@ -268,7 +267,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addGameObject(GameObject gameObject){
+    public void addGameObject(GameObject gameObject) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -285,8 +284,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.insert(GAME_OBJECTS_TABLE, null, values);
 
-        if(messageHandler != null){
-          //TODO...ie update the list...well force it to reload.  messageHandler.handleGameObject();
+        if (messageHandler != null) {
+            //TODO...ie update the list...well force it to reload.  messageHandler.handleGameObject();
         }
     }
 
@@ -349,7 +348,7 @@ public class DBHelper extends SQLiteOpenHelper {
         //todo
     }
 
-    public void deleteGameObject(GameObject gameObject){
+    public void deleteGameObject(GameObject gameObject) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(GAME_OBJECTS_TABLE, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
@@ -411,7 +410,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void updateGameObject(GameObject gameObject){
+    public void updateGameObject(GameObject gameObject) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -424,7 +423,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
     }
-
 
 
     public void handleNewPlayer(String key) {
@@ -480,8 +478,8 @@ public class DBHelper extends SQLiteOpenHelper {
     we need to get our display lists
      */
 
-    public Cursor getGameObjects(int type){
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE +","+GAME_OBJECT_SUBTYPE+ "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + ","+GAME_OBJECT_UTM_LONG+","+GAME_OBJECT_SUBUTM_LAT+","+GAME_OBJECT_SUBUTM_LONG +" FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? ORDER BY " + GAME_OBJECT_KEY + " ASC", new String[]{ String.valueOf(type)});
+    public Cursor getGameObjects(int type) {
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? ORDER BY " + GAME_OBJECT_KEY + " ASC", new String[]{String.valueOf(type)});
     }
 
 

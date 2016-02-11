@@ -15,12 +15,11 @@ public class GameObject implements CheModelInterface {
     private int type, subType;
 
 
-
-    public GameObject(){
+    public GameObject() {
 
     }
 
-    public GameObject(Cursor cursor){
+    public GameObject(Cursor cursor) {
 
         setKey(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
         setType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)));
@@ -45,77 +44,75 @@ public class GameObject implements CheModelInterface {
     }
 
 
-
-
     public String getUtmLat() {
         return utmLat;
-    }
-
-    public String getUtmLong() {
-        return utmLong;
-    }
-
-    public String getSubUtmLat() {
-        return subUtmLat;
-    }
-
-    public String getSubUtmLong() {
-        return subUtmLong;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public int getType(){
-        return type;
-    }
-
-    public int getSubType(){
-        return subType;
     }
 
     public void setUtmLat(String utmLat) {
         this.utmLat = utmLat;
     }
 
+    public String getUtmLong() {
+        return utmLong;
+    }
+
     public void setUtmLong(String utmLong) {
         this.utmLong = utmLong;
+    }
+
+    public String getSubUtmLat() {
+        return subUtmLat;
     }
 
     public void setSubUtmLat(String subUtmLat) {
         this.subUtmLat = subUtmLat;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public String getSubUtmLong() {
+        return subUtmLong;
     }
 
     public void setSubUtmLong(String subUtmLong) {
         this.subUtmLong = subUtmLong;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public void setType(int type){
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
         this.type = type;
     }
 
-    public void setSubType(int subType){
+    public int getSubType() {
+        return subType;
+    }
+
+    public void setSubType(int subType) {
         this.subType = subType;
     }
 

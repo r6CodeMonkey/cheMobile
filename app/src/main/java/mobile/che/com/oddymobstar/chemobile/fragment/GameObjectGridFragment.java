@@ -13,7 +13,6 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import mobile.che.com.oddymobstar.chemobile.R;
-import mobile.che.com.oddymobstar.chemobile.adapter.CoreAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameItemAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 
@@ -40,7 +39,7 @@ public class GameObjectGridFragment extends Fragment {
     private GridView gridView;
 
 
-    public GameObjectGridFragment(){
+    public GameObjectGridFragment() {
         setRetainInstance(true);
     }
 

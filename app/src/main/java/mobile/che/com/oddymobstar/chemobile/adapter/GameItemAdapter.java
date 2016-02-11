@@ -37,7 +37,6 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
     }
 
 
-
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         LayoutInflater inflator = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);

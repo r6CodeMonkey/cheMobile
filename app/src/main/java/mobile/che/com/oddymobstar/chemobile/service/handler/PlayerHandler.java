@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -13,11 +15,12 @@ import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import util.GameObjectTypes;
+import util.Tags;
 
 /**
  * Created by timmytime on 11/02/16.
  */
-public class PlayerHandler extends  MessageHandler {
+public class PlayerHandler extends MessageHandler {
 
     private final MessageFactory messageFactory;
     private CheCallbackInterface cheCallback;
@@ -32,11 +35,21 @@ public class PlayerHandler extends  MessageHandler {
         this.cheCallback = cheCallback;
     }
 
+    public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
+        CheMessage cheMessage = messageFactory.createCheMessage();
+
+        cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, messageFactory.createAcknowledge());
+
+        Log.d("new player message ", "is " + cheMessage.toString());
+
+        return cheMessage;
+    }
 
 
     @Override
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
-      //null
+        //null
     }
 
     public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {
@@ -77,7 +90,7 @@ public class PlayerHandler extends  MessageHandler {
         cheCallback.send(messageFactory.purchaseGameObject(gameObject));
 
         //outposts, sats, tanks, atv, minidrones
-        for(int i=0;i<2;i++){
+        for (int i = 0; i < 2; i++) {
             gameObject = new GameObject();
             gameObject.setType(GameObjectGridFragment.LAND);
             gameObject.setSubType(GameObjectTypes.TANK);
@@ -95,7 +108,7 @@ public class PlayerHandler extends  MessageHandler {
 
         }
         //g2g, gta
-        for(int i=0;i<50;i++){
+        for (int i = 0; i < 50; i++) {
             gameObject = new GameObject();
             gameObject.setType(GameObjectGridFragment.MISSILE);
             gameObject.setSubType(GameObjectTypes.G2G);
@@ -106,7 +119,7 @@ public class PlayerHandler extends  MessageHandler {
             cheCallback.send(messageFactory.purchaseGameObject(gameObject));
         }
         //groundmines
-        for(int i=0;i<10;i++){
+        for (int i = 0; i < 10; i++) {
             gameObject = new GameObject();
             gameObject.setType(GameObjectGridFragment.MISSILE);
             gameObject.setSubType(GameObjectTypes.GROUND_MINE);

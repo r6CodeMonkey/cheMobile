@@ -28,6 +28,11 @@ public class MaterialsHelper {
     public static final int CHAT_COLOR = 4;
     public static final int GAME_COLOR = 5;
     private final ProjectCheActivity main;
+    private final ColorStateList subUtmColorList;
+    private final ColorStateList utmColorList;
+    private final ColorStateList allianceColorList;
+    private final ColorStateList chatColorList;
+    private final ColorStateList gameColorList;
     public DrawerLayout navDrawer;
     public ActionBarDrawerToggle navToggle;
     public NavigationView navigationView;
@@ -39,11 +44,6 @@ public class MaterialsHelper {
     public TextView playerKey;
     public String playerKeyString = "";
     private Context context;
-    private final ColorStateList subUtmColorList;
-    private final ColorStateList utmColorList;
-    private final ColorStateList allianceColorList;
-    private final ColorStateList chatColorList;
-    private final ColorStateList gameColorList;
 
 
     public MaterialsHelper(ProjectCheActivity main) {
