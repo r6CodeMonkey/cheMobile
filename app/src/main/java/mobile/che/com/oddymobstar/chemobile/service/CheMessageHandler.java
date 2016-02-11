@@ -21,6 +21,7 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.GameObjectHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.GridHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MissileHandler;
+import mobile.che.com.oddymobstar.chemobile.service.handler.PlayerHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import util.GameObjectTypes;
@@ -34,6 +35,7 @@ public class CheMessageHandler extends MessageHandler {
     //track everything.
     private final Map<String, CheMessage> sentAcks = new HashMap<>();
     private final AcknowledgeHandler acknowledgeHandler;
+    private final PlayerHandler playerHandler;
     private final AllianceHandler allianceHandler;
     private final GameObjectHandler gameObjectHandler;
     private final GridHandler gridHandler;
@@ -47,6 +49,7 @@ public class CheMessageHandler extends MessageHandler {
         messageFactory = new MessageFactory(dbHelper);
 
         acknowledgeHandler = new AcknowledgeHandler(dbHelper, messageFactory);
+        playerHandler = new PlayerHandler(dbHelper, messageFactory);
         allianceHandler = new AllianceHandler(dbHelper);
         gameObjectHandler = new GameObjectHandler(dbHelper);
         gridHandler = new GridHandler(dbHelper);
@@ -56,6 +59,7 @@ public class CheMessageHandler extends MessageHandler {
 
     public void addCallback(CheCallbackInterface callback) {
         acknowledgeHandler.addCheCallback(callback);
+        playerHandler.addCheCallback(callback);
      //   gameObjectHandler.addCheCallback(callback);
         this.callback = callback;
     }
@@ -66,76 +70,7 @@ public class CheMessageHandler extends MessageHandler {
 
 
     public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {
-        Config config = dbHelper.getConfig(Configuration.PLAYER_KEY);
-        config.setValue(acknowledge.getValue());
-        dbHelper.updateConfig(config);
-        dbHelper.handleNewPlayer(acknowledge.getValue());
-
-        /*
-        bi below.
-
-
-
-          as a new player we are now going to purchase our free items.  possibly not here...but its the confirmed point,  so add a handler.
-
-          player gets
-          * garrison
-          * 2 outposts
-          * 2 satellite
-          * 2 tanks
-          * 2 atv
-          * 2 mini drones
-          * 50 g2g
-          * 50 gta
-          * 10 groundmines
-
-
-
-        tech logic.  we need to create a message per type and call it back with relevant data.  message factory time....
-         */
-        //garrison
-        GameObject gameObject = new GameObject();
-        gameObject.setType(GameObjectGridFragment.INFASTRUCTURE);
-        gameObject.setSubType(GameObjectTypes.GARRISON);
-        callback.send(messageFactory.purchaseGameObject(gameObject));
-
-        //outposts, sats, tanks, atv, minidrones
-        for(int i=0;i<2;i++){
-            gameObject = new GameObject();
-            gameObject.setType(GameObjectGridFragment.LAND);
-            gameObject.setSubType(GameObjectTypes.TANK);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-            gameObject = new GameObject();
-            gameObject.setType(GameObjectGridFragment.LAND);
-            gameObject.setSubType(GameObjectTypes.SATELLITE);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-            gameObject.setType(GameObjectGridFragment.LAND);
-            gameObject.setSubType(GameObjectTypes.RV);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-            gameObject.setType(GameObjectGridFragment.AIR);
-            gameObject.setSubType(GameObjectTypes.MINI_DRONE);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-
-        }
-        //g2g, gta
-        for(int i=0;i<50;i++){
-            gameObject = new GameObject();
-            gameObject.setType(GameObjectGridFragment.MISSILE);
-            gameObject.setSubType(GameObjectTypes.G2G);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-            gameObject = new GameObject();
-            gameObject.setType(GameObjectGridFragment.MISSILE);
-            gameObject.setSubType(GameObjectTypes.G2A);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-        }
-        //groundmines
-        for(int i=0;i<10;i++){
-            gameObject = new GameObject();
-            gameObject.setType(GameObjectGridFragment.MISSILE);
-            gameObject.setSubType(GameObjectTypes.GROUND_MINE);
-            callback.send(messageFactory.purchaseGameObject(gameObject));
-        }
-
+          playerHandler.handleNewPlayer(acknowledge);
     }
 
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
