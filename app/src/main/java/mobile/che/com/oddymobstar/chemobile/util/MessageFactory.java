@@ -16,6 +16,7 @@ import message.Player;
 import message.UTM;
 import message.UTMLocation;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import util.Tags;
 
 /**
@@ -96,6 +97,19 @@ public class MessageFactory {
         Log.d("message factory", "player " + player.toString());
 
         return player;
+    }
+
+    private message.GameObject createNewGameObject(GameObject gameObject){
+
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.PURCHASE);
+        gameObject.setType(gameObject.getType());
+        gameObject.setSubType(gameObject.getSubType());
+        //basically fuck the other values on create...
+
+        return gameObjectMessage;
     }
 
     public Player createPlayer() {
@@ -186,6 +200,23 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.ALLIANCE, allianceMessage);
+
+        return cheMessage;
+    }
+
+    /*
+      need a purchase message (well a free one as the paid one maybe a bit different,..probably not but needs to go via playstore on ack
+     */
+    public CheMessage purchaseGameObject(GameObject gameObject) throws NoSuchAlgorithmException {
+
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer();
+        Acknowledge acknowledge = createAcknowledge();
+        message.GameObject gameObjectMessage = createNewGameObject(gameObject);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
         return cheMessage;
     }

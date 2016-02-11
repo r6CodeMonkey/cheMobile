@@ -19,6 +19,7 @@ import message.Acknowledge;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
+import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import util.Tags;
 
@@ -49,7 +50,7 @@ public class CheServiceSocket {
         this.cheMessageHandler = cheMessageHandler;
         this.configuration = configuration;
 
-        this.cheMessageHandler.addCallback(new AcknowledgeHandler.CheCallbackInterface() {
+        this.cheMessageHandler.addCallback(new CheCallbackInterface() {
             @Override
             public void send(CheMessage cheMessage) {
                 Log.d("callback", "sending ack callback");

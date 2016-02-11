@@ -11,7 +11,9 @@ import java.util.Map;
 import message.Acknowledge;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AcknowledgeHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.AllianceHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface;
@@ -21,6 +23,7 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.MessageHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MissileHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
+import util.GameObjectTypes;
 import util.Tags;
 
 /**
@@ -62,7 +65,7 @@ public class CheMessageHandler extends MessageHandler {
     }
 
 
-    public void handleNewPlayer(Acknowledge acknowledge) throws JSONException {
+    public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {
         Config config = dbHelper.getConfig(Configuration.PLAYER_KEY);
         config.setValue(acknowledge.getValue());
         dbHelper.updateConfig(config);
@@ -71,11 +74,8 @@ public class CheMessageHandler extends MessageHandler {
         /*
         bi below.
 
-        tech logic.  we need to create a message per type and call it back with relevant data.  message factory time....
-         */
 
 
-        /*
           as a new player we are now going to purchase our free items.  possibly not here...but its the confirmed point,  so add a handler.
 
           player gets
@@ -88,7 +88,53 @@ public class CheMessageHandler extends MessageHandler {
           * 50 g2g
           * 50 gta
           * 10 groundmines
+
+
+
+        tech logic.  we need to create a message per type and call it back with relevant data.  message factory time....
          */
+        //garrison
+        GameObject gameObject = new GameObject();
+        gameObject.setType(GameObjectGridFragment.INFASTRUCTURE);
+        gameObject.setSubType(GameObjectTypes.GARRISON);
+        callback.send(messageFactory.purchaseGameObject(gameObject));
+
+        //outposts, sats, tanks, atv, minidrones
+        for(int i=0;i<2;i++){
+            gameObject = new GameObject();
+            gameObject.setType(GameObjectGridFragment.LAND);
+            gameObject.setSubType(GameObjectTypes.TANK);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+            gameObject = new GameObject();
+            gameObject.setType(GameObjectGridFragment.LAND);
+            gameObject.setSubType(GameObjectTypes.SATELLITE);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+            gameObject.setType(GameObjectGridFragment.LAND);
+            gameObject.setSubType(GameObjectTypes.RV);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+            gameObject.setType(GameObjectGridFragment.AIR);
+            gameObject.setSubType(GameObjectTypes.MINI_DRONE);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+
+        }
+        //g2g, gta
+        for(int i=0;i<50;i++){
+            gameObject = new GameObject();
+            gameObject.setType(GameObjectGridFragment.MISSILE);
+            gameObject.setSubType(GameObjectTypes.G2G);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+            gameObject = new GameObject();
+            gameObject.setType(GameObjectGridFragment.MISSILE);
+            gameObject.setSubType(GameObjectTypes.G2A);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+        }
+        //groundmines
+        for(int i=0;i<10;i++){
+            gameObject = new GameObject();
+            gameObject.setType(GameObjectGridFragment.MISSILE);
+            gameObject.setSubType(GameObjectTypes.GROUND_MINE);
+            callback.send(messageFactory.purchaseGameObject(gameObject));
+        }
 
     }
 
