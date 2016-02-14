@@ -105,9 +105,9 @@ public class MessageFactory {
         gameObjectMessage.create();
 
         gameObjectMessage.setState(Tags.PURCHASE);
-        gameObject.setType(gameObject.getType());
-        gameObject.setSubType(gameObject.getSubType());
-        //basically fuck the other values on create...
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+        gameObjectMessage.setUtmLocation(createUTMLocation());
 
         return gameObjectMessage;
     }

@@ -16,6 +16,7 @@ import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import util.GameObjectTypes;
 
 /**
  * Created by timmytime on 11/02/16.
@@ -57,7 +58,7 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tv = (TextView) view.findViewById(R.id.game_item_name);
         //in reality, its going to be the type name + key....
-        tv.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+        tv.setText(GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)))+" "+cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
     }
 
     @Override

@@ -260,7 +260,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if (invite) {
                 messageHandler.handleInvite(alliance.getKey(), alliance.getName());
             } else {
-                messageHandler.handleList();
+                messageHandler.handleAlliance();
             }
         }
 
@@ -285,7 +285,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(GAME_OBJECTS_TABLE, null, values);
 
         if (messageHandler != null) {
-            //TODO...ie update the list...well force it to reload.  messageHandler.handleGameObject();
+            messageHandler.handleGameObject();
         }
     }
 

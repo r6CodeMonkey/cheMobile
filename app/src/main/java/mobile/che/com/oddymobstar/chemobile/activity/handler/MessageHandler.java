@@ -26,8 +26,22 @@ public class MessageHandler extends Handler {
         this.controller = controller;
     }
 
+    public void handleGameObject(){
+        if (controller != null) {
+            if (controller.fragmentHandler.gameFrag != null) {
+                main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.fragmentHandler.gameFrag.refreshAdapter();
+                    }
+                });
 
-    public void handleList() {
+            }
+        }
+    }
+
+
+    public void handleAlliance() {
         if (controller != null) {
             if (controller.fragmentHandler.gridFrag != null) {
                 main.runOnUiThread(new Runnable() {
