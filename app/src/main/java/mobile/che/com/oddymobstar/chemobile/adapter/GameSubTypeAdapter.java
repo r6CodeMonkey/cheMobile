@@ -67,11 +67,33 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         tv.setText(detail);
     }
 
-    private String getStatus(Cursor cursor){
+    public static boolean isDeployStatus(Cursor cursor){
+        String status = getStatus(cursor);
+
+        switch (status){
+            case "Deploy":
+                return true;
+            case "Launch":
+                return true;
+            case "Available":
+                return true;
+            case "Drop":
+                return true;
+            case "Place":
+                return true;
+            case "Build":
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    public static String getStatus(Cursor cursor){
         switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))){
             //need to beef this up....once have more tables and data.
             case GameObjectGridFragment.INFASTRUCTURE:
-                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Installed";
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Build" : "Installed";
             case GameObjectGridFragment.SEA:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Launch" : "Active";
             case GameObjectGridFragment.AIR:
@@ -79,7 +101,15 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
             case GameObjectGridFragment.LAND:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
             case GameObjectGridFragment.MISSILE:
-                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Available" : "Armed";
+                switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))){
+                    case GameObjectTypes.GROUND_MINE:
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Place" : "Deployed";
+                    case GameObjectTypes.WATER_MINE:
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Drop" : "Deployed";
+                    default:
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Available" : "Armed";
+
+                }
 
         }
 

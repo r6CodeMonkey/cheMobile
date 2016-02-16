@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
+import android.content.DialogInterface;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -10,15 +11,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
+import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
+import util.GameObjectTypes;
 
 
 /**
@@ -164,6 +170,18 @@ public class MapHandler {
         //   }
     }
 
+    public void addGameObject(final GameObject gameObject){
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                markerMap.put(gameObject.getKey(), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
+                        new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(GameObjectTypes.getTypeName(gameObject.getSubType()))));
+
+            }
+        });
+
+    }
+
     public void addOthers() {
         //we now need to add any of our alliance members in...
   /*      Cursor allianceMembers = controller.dbHelper.getAllianceMembers();
@@ -204,6 +222,7 @@ public class MapHandler {
     public String getSelectedGrid() {
         return selectedGrid;
     }
+
 
 
 }

@@ -433,6 +433,14 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(GAME_OBJECT_SUBUTM_LONG, gameObject.getSubUtmLong());
 
         db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
+
+        handleGameObjectAdded(gameObject);
+    }
+
+    public void handleGameObjectAdded(GameObject gameObject){
+        if(messageHandler != null){
+            messageHandler.addGameObject(gameObject);
+        }
     }
 
 
@@ -495,6 +503,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getGameObjects(int type, int subType) {
         return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? AND "+GAME_OBJECT_SUBTYPE + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{String.valueOf(type), String.valueOf(subType)});
     }
+
+    public Cursor getAddedGameObjects() {
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE "+GAME_OBJECT_UTM_LAT+" IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+    }
+
 
     public Cursor getGameObjectTypes(int type){
         return this.getReadableDatabase().rawQuery("SELECT DISTINCT types."+GAME_OBJECT_SUBTYPE+" as _id, types."+GAME_OBJECT_SUBTYPE+", (SELECT COUNT("+GAME_OBJECT_SUBTYPE+") FROM "+GAME_OBJECTS_TABLE+" WHERE "+GAME_OBJECT_TYPE+" = ? AND "+GAME_OBJECT_SUBTYPE+" = types."+GAME_OBJECT_SUBTYPE+") as type_total FROM "+GAME_OBJECTS_TABLE+" types WHERE "+GAME_OBJECT_TYPE+"=? ORDER BY types."+GAME_OBJECT_SUBTYPE+" ASC", new String[]{String.valueOf(type), String.valueOf(type)});
@@ -583,6 +596,19 @@ public class DBHelper extends SQLiteOpenHelper {
         config.close();
 
         return returnConfig;
+    }
+
+    public GameObject getGameObject(String key){
+        Cursor cursor =  this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_KEY+"=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{key});
+        ;
+        GameObject gameObject = null;
+
+        while(cursor.moveToNext()){
+            gameObject = new GameObject(cursor);
+        }
+        cursor.close();
+
+        return gameObject;
     }
 
 

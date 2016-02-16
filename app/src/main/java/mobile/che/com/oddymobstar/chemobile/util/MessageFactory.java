@@ -1,6 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.util;
 
 import android.location.Location;
+import android.util.Log;
 
 import org.json.JSONException;
 
@@ -32,8 +33,6 @@ public class MessageFactory {
     public CheMessage createCheMessage() {
         CheMessage cheMessage = new CheMessage();
         cheMessage.create();
-
-        //   Log.d("message factory", "che message " + cheMessage.toString());
 
         return cheMessage;
     }
@@ -93,7 +92,6 @@ public class MessageFactory {
         player.setName(dbHelper.getConfig(Configuration.PLAYER_NAME).getValue());
         player.setKey(dbHelper.getConfig(Configuration.PLAYER_KEY).getValue());
         //    player.setImage(dbHelper.getConfig(Configuration.));
-        //    Log.d("message factory", "player " + player.toString());
 
         return player;
     }
@@ -112,12 +110,23 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
+    private message.GameObject createGameObject(GameObject gameObject, Location location){
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.GAME_OBJECT_ADD);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+        gameObjectMessage.setUtmLocation(createUTMLocation(location));
+
+
+        return gameObjectMessage;
+    }
+
     public Player createPlayer() {
         Player player = getPlayer();
         player.setUTMLocation(createUTMLocation());
-
-        //     Log.d("message factory", "player " + player.toString());
-
 
         return player;
     }
@@ -129,7 +138,6 @@ public class MessageFactory {
         acknowledge.setState(Tags.CHE_ACK_ID);
         acknowledge.setValue(Tags.ACCEPT);
 
-        //     Log.d("message factory", "che ack " + acknowledge.toString()+" key "+key);
 
         return acknowledge;
 
@@ -141,8 +149,6 @@ public class MessageFactory {
         acknowledge.create();
         acknowledge.setKey(UUIDGenerator.generateKey());
 
-        //     Log.d("message factory", "ack " + acknowledge.toString());
-
         return acknowledge;
 
     }
@@ -150,8 +156,6 @@ public class MessageFactory {
     public Player createPlayer(Location location) {
         Player player = getPlayer();
         player.setUTMLocation(createUTMLocation(location));
-
-        //    Log.d("message factory", "player " + player.toString());
 
 
         return player;
@@ -179,9 +183,6 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.PLAYER, createPlayer(location));
         cheMessage.setMessage(Tags.ACKNOWLEDGE, createAcknowledge());
 
-        //   Log.d("message factory", "lccation changed " + cheMessage.toString());
-
-
         return cheMessage;
     }
 
@@ -196,8 +197,6 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.ALLIANCE, alliance);
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
-
-        //   Log.d("message factory", "new alliance " + cheMessage.toString());
 
         return cheMessage;
     }
@@ -231,9 +230,24 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
-        //    Log.d("message factory", "purchase game object " + cheMessage.toString());
 
         return cheMessage;
+    }
+
+    public CheMessage createDeploy(GameObject gameObject, Location location) throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+        message.GameObject gameObjectMessage = createGameObject(gameObject, location);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("deploy", "deploy msg "+cheMessage.toString());
+
+        return  cheMessage;
+
     }
 
 

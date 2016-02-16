@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -61,7 +63,6 @@ public class CheMessageHandler extends MessageHandler {
 
     public synchronized void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
 
-        //     Log.d("handle", "handle che "+cheMessage.toString());
         //we always handle this.  we need to send the response back as well.
         acknowledgeHandler.handle(cheMessage);
 
@@ -76,7 +77,6 @@ public class CheMessageHandler extends MessageHandler {
         }
 
         if (cheMessage.containsMessage(Tags.ALLIANCE)) {
-            //       Log.d("handle", "handle alliance " + cheMessage.toString());
             allianceHandler.handle(cheMessage);
         }
 

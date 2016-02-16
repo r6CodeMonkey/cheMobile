@@ -33,10 +33,11 @@ public class GameObjectHandler extends MessageHandler {
 
         GameObject gameObject = (GameObject) cheMessage.getMessage(Tags.GAME_OBJECT);
 
+        mobile.che.com.oddymobstar.chemobile.model.GameObject model = null;
         switch (gameObject.getState()) {
             case Tags.PURCHASE:
                 //simple case under test now.
-                mobile.che.com.oddymobstar.chemobile.model.GameObject model = new mobile.che.com.oddymobstar.chemobile.model.GameObject();
+                model = new mobile.che.com.oddymobstar.chemobile.model.GameObject();
                 model.setKey(gameObject.getKey());
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
@@ -45,6 +46,23 @@ public class GameObjectHandler extends MessageHandler {
                 Log.d("purchase", "have purchased " + model.getType() + " " + model.getSubType());
                 break;
             case Tags.GAME_OBJECT_ADD:
+                //if we receive an ad
+                model = new mobile.che.com.oddymobstar.chemobile.model.GameObject();
+                //really this should be in object / model.  well perhaps not who knows its only in this point...
+                model.setKey(gameObject.getKey());
+                model.setType(gameObject.getType());
+                model.setSubType(gameObject.getSubType());
+                model.setLatitude(gameObject.getUtmLocation().getLatitude());
+                model.setLongitude(gameObject.getUtmLocation().getLongitude());
+                model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
+                model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
+                model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
+                model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+
+                dbHelper.updateGameObject(model);
+
+                Log.d("add", "have added game object " +gameObject.toString());
+
                 break;
             case Tags.GAME_OBJECT_HIT:
                 break;

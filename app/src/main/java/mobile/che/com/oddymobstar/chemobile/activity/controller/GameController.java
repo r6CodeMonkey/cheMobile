@@ -1,8 +1,11 @@
 package mobile.che.com.oddymobstar.chemobile.activity.controller;
 
+import android.os.Handler;
+
 import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.GameHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
@@ -17,9 +20,12 @@ public class GameController {
     private final ProjectCheController controller;
     private final ProjectCheActivity main;
 
+    public GameHandler gameHandler;
+
     public GameController(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
+        gameHandler = new GameHandler(main, controller);
     }
 
     public static int getGameColor(int type){
@@ -83,9 +89,29 @@ public class GameController {
         //1 garrison
         //2 sattelites
         //2 outposts
-        controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.GARRISON, 1);
-        controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.OUTPOST, 2);
-        controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.SATELLITE, 2);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.GARRISON, 1);
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.OUTPOST, 2);
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.SATELLITE, 2);
+            }
+        }, 1000);
+
 
 
     }
@@ -93,8 +119,21 @@ public class GameController {
     private void landInit() {
         //2 tanks
         //2 rv
-        controller.gameController.purchase(GameObjectGridFragment.LAND, GameObjectTypes.TANK, 2);
-        controller.gameController.purchase(GameObjectGridFragment.LAND, GameObjectTypes.RV, 2);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.LAND, GameObjectTypes.TANK, 2);
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.LAND, GameObjectTypes.RV, 2);
+            }
+        }, 1000);
+
     }
 
     private void seaInit() {
@@ -110,9 +149,27 @@ public class GameController {
         //20 g2g
         //10 gta
         //5 landmines
-        controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
-        controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.GROUND_MINE, 5);
-        controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2A, 10);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.GROUND_MINE, 5);
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2A, 10);
+            }
+        }, 1000);
     }
 
 

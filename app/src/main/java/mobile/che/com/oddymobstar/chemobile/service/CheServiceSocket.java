@@ -199,7 +199,6 @@ public class CheServiceSocket {
                         cheMessageHandler.handleNewPlayer(acknowledge);
                         break;
                     case Tags.SUCCESS:
-                        //    Log.d("success", "we are success ie accepted ack..." + acknowledge.getKey());
                         switch (acknowledge.getValue()) {
                             case Tags.RECEIVED:
                                 //         Log.d("rec", "standard rec");

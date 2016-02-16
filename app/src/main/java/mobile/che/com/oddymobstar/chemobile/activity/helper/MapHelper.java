@@ -3,6 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.activity.helper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -16,6 +17,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.SharedPreferencesHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
@@ -98,6 +100,7 @@ public class MapHelper {
 
         }
         controller.mapHandler.addOthers();
+        addGameMarkers();
     }
 
 
@@ -147,5 +150,16 @@ public class MapHelper {
                 });
 
         return controller.gridDialog;
+    }
+
+    private void addGameMarkers(){
+
+        Cursor cursor = controller.dbHelper.getAddedGameObjects();
+
+        while(cursor.moveToNext()){
+            controller.mapHandler.addGameObject(new GameObject(cursor));
+        }
+        cursor.close();
+
     }
 }

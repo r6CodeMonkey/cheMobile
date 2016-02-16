@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import message.Alliance;
@@ -58,7 +60,6 @@ public class AllianceHandler extends MessageHandler {
                 message.setMyMessage(player.getKey().equals(dbHelper.getConfig(Configuration.PLAYER_KEY).getValue()) ? "Y" : "N");
 
                 dbHelper.addMessage(message);
-
                 break;
         }
 

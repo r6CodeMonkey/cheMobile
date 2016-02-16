@@ -37,6 +37,7 @@ import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
+import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GridDialog;
 
 /**
@@ -81,6 +82,7 @@ public class ProjectCheController {
     public LocationManager locationManager;
     //fragments
     public GridDialog gridDialog;
+    public DeployDialog deployDialog;
     //controllers
     public GameController gameController;
 
