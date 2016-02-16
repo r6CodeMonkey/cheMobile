@@ -84,14 +84,9 @@ public class GameHelper {
         //2 sattelites
         //2 outposts
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.GARRISON, 1);
-            }
-        }, 1000);
+        purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.GARRISON, 1);
 
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -112,14 +107,9 @@ public class GameHelper {
     public void landInit() {
         //2 tanks
         //2 rv
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                purchase(GameObjectGridFragment.LAND, GameObjectTypes.TANK, 2);
-            }
-        }, 1000);
+        purchase(GameObjectGridFragment.LAND, GameObjectTypes.TANK, 2);
 
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -142,14 +132,9 @@ public class GameHelper {
         //20 g2g
         //10 gta
         //5 landmines
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
-            }
-        }, 1000);
+        purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
 
+        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
