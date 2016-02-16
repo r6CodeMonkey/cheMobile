@@ -253,11 +253,7 @@ public class MaterialsHandler {
     }
 
     public void handleGameFab() {
-        try {
-            controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 10);
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("security exception", "security " + e.getMessage());
-        }
+       controller.gameController.handleFab();
     }
 
     public void handlePlayerKey(String key) {

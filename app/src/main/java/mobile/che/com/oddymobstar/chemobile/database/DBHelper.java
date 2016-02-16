@@ -185,6 +185,17 @@ public class DBHelper extends SQLiteOpenHelper {
         addConfig(config);
         config = new Config(Configuration.RESET_SOCKET, "N", "Reset Connections", Config.SYSTEM, true);
         addConfig(config);
+        config = new Config(Configuration.START_PURCHASE_INFA, "N", "Start Purchase Infrastructure", Config.SYSTEM, false);
+        addConfig(config);
+        config = new Config(Configuration.START_PURCHASE_LAND, "N", "Start Purchase Land", Config.SYSTEM, false);
+        addConfig(config);
+        config = new Config(Configuration.START_PURCHASE_AIR, "N", "Start Purchase Air", Config.SYSTEM, false);
+        addConfig(config);
+        config = new Config(Configuration.START_PURCHASE_MISSILE, "N", "Start Purchase Missiles", Config.SYSTEM, false);
+        addConfig(config);
+        config = new Config(Configuration.START_PURCHASE_SEA, "N", "Start Purchase Sea", Config.SYSTEM, false);
+        addConfig(config);
+
 
     }
 
@@ -478,8 +489,15 @@ public class DBHelper extends SQLiteOpenHelper {
     we need to get our display lists
      */
 
-    public Cursor getGameObjects(int type) {
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? ORDER BY " + GAME_OBJECT_KEY + " ASC", new String[]{String.valueOf(type)});
+    /*
+     game objects need to be grouped by type...so distinct sub type, + count number of to display each individual
+     */
+    public Cursor getGameObjects(int type, int subType) {
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? AND "+GAME_OBJECT_SUBTYPE + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{String.valueOf(type), String.valueOf(subType)});
+    }
+
+    public Cursor getGameObjectTypes(int type){
+        return this.getReadableDatabase().rawQuery("SELECT DISTINCT types."+GAME_OBJECT_SUBTYPE+" as _id, types."+GAME_OBJECT_SUBTYPE+", (SELECT COUNT("+GAME_OBJECT_SUBTYPE+") FROM "+GAME_OBJECTS_TABLE+" WHERE "+GAME_OBJECT_TYPE+" = ? AND "+GAME_OBJECT_SUBTYPE+" = types."+GAME_OBJECT_SUBTYPE+") as type_total FROM "+GAME_OBJECTS_TABLE+" types WHERE "+GAME_OBJECT_TYPE+"=? ORDER BY types."+GAME_OBJECT_SUBTYPE+" ASC", new String[]{String.valueOf(type), String.valueOf(type)});
     }
 
 

@@ -14,23 +14,15 @@ import android.widget.ListAdapter;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameItemAdapter;
+import mobile.che.com.oddymobstar.chemobile.adapter.GameSubTypeAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 
 /**
- * Created by timmytime on 11/02/16.
+ * Created by timmytime on 16/02/16.
  */
-public class GameObjectGridFragment extends Fragment {
+public class GameSubTypeGridFragment extends Fragment {
 
-
-    public static final int LAND = 0;
-    public static final int SEA = 1;
-    public static final int AIR = 2;
-    public static final int MISSILE = 3;
-    public static final int INFASTRUCTURE = 4;
-
-
-    private int type = LAND;
-
+    private int type, subType;
 
     private AdapterView.OnItemClickListener onClickListener = null;
     private CursorAdapter adapter = null;
@@ -38,14 +30,14 @@ public class GameObjectGridFragment extends Fragment {
     private DBHelper dbHelper;
     private GridView gridView;
 
-
-    public GameObjectGridFragment() {
+    public GameSubTypeGridFragment(){
         setRetainInstance(true);
     }
 
-    public void init(int type, AdapterView.OnItemClickListener onClickListener) {
+    public void init(int type, int subType,  AdapterView.OnItemClickListener onClickListener) {
         this.onClickListener = onClickListener;
         this.type = type;
+        this.subType  = subType;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,17 +60,17 @@ public class GameObjectGridFragment extends Fragment {
         return view;
     }
 
-    private Cursor getCursor(int type) {
-        return dbHelper.getGameObjectTypes(type);
+    private Cursor getCursor(int type, int subType) {
+        return dbHelper.getGameObjects(type, subType);
     }
 
-    private CursorAdapter getCursorAdapter(int type, Cursor cursor) {
-        return new GameItemAdapter(getActivity(), cursor, true, type);
+    private CursorAdapter getCursorAdapter(int type, int subType,  Cursor cursor) {
+        return new GameSubTypeAdapter(getActivity(), cursor, true, type, subType);
     }
 
     public void refreshAdapter() {
         if (adapter != null) {
-            adapter.changeCursor(dbHelper.getGameObjectTypes(type));
+            adapter.changeCursor(dbHelper.getGameObjects(type, subType));
         }
     }
 
@@ -100,7 +92,6 @@ public class GameObjectGridFragment extends Fragment {
         }
     }
 
-    public int getType(){return type;}
 
 
     private class LoadCursors extends AsyncTask<String, Void, String> {
@@ -114,14 +105,14 @@ public class GameObjectGridFragment extends Fragment {
                 dbHelper = DBHelper.getInstance(getActivity());
             }
 
-            cursor = getCursor(type);
+            cursor = getCursor(type, subType);
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-            adapter = getCursorAdapter(type, cursor);
+            adapter = getCursorAdapter(type, subType, cursor);
             gridView.setAdapter(adapter);
 
         }
@@ -135,5 +126,7 @@ public class GameObjectGridFragment extends Fragment {
         }
 
     }
+
+
 
 }

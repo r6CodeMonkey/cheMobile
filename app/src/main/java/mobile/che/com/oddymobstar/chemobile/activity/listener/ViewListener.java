@@ -1,14 +1,18 @@
 package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
+import util.GameObjectTypes;
 
 
 /**
@@ -24,7 +28,34 @@ public class ViewListener {
         this.controller = controller;
     }
 
-    public AdapterView.OnItemClickListener getListClickListener() {
+    public AdapterView.OnItemClickListener getGameObjectTypesListClickListener(){
+        return new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> listView, View v, int position,
+                                    long id) {
+
+
+
+                android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+                //what are we,,,,
+                Cursor cursor = (Cursor) controller.fragmentHandler.gameFrag.getListAdapter().getItem(position);
+                controller.fragmentHandler.removeFragments(false);
+
+                //so now we simply need to load up the next phase...based on our type and subtype.
+                controller.fragmentHandler.gameSubTypeFrag.init(controller.fragmentHandler.gameFrag.getType(), cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)), null);
+                controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameController.getGameColor(controller.fragmentHandler.gameFrag.getType())), GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))));
+                transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameSubTypeFrag);
+                transaction.addToBackStack(null);
+
+                transaction.commit();
+
+            }
+        };
+    }
+
+    public AdapterView.OnItemClickListener getAllianceListClickListener() {
 
         return new AdapterView.OnItemClickListener() {
 

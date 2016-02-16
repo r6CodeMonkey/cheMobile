@@ -18,27 +18,27 @@ import java.util.List;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import util.GameObjectTypes;
 
 /**
- * Created by timmytime on 11/02/16.
+ * Created by timmytime on 16/02/16.
  */
-public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
+public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer {
 
     private final Context context;
-    private final int layout = R.layout.game_list_item;
-    private final int type;
+    private final int layout = R.layout.game_subtype_list_item;
+    private final int type, subType;
 
     private SparseIntArray sectionMap = new SparseIntArray();
     private SparseIntArray positionMap = new SparseIntArray();
 
-
-    public GameItemAdapter(Context context, Cursor c, boolean autoRequery, int type) {
+    public GameSubTypeAdapter(Context context, Cursor c, boolean autoRequery, int type, int subType) {
         super(context, c, autoRequery);
         this.context = context;
         this.type = type;
+        this.subType = subType;
     }
-
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -46,7 +46,7 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
 
         View v = inflator.inflate(layout, null);
 
-        CardView cardView = (CardView)v.findViewById(R.id.game_card_view_inner);
+        CardView cardView = (CardView)v.findViewById(R.id.game_sub_type_view_inner);
         cardView.setCardBackgroundColor(context.getResources().getColor(GameController.getGameColor(type)));
 
 
@@ -56,12 +56,34 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView tv = (TextView) view.findViewById(R.id.game_item_name);
+        TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
 
-        String detail = String.format("%s\nTotal:%s", GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),
-                cursor.getString(cursor.getColumnIndexOrThrow("type_total"))); ;
-        //in reality, its going to be the type name + key....
+        String detail = String.format("%s\nLat:%s\nLong:%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)) == 0.0 ? "" :  cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" :cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
+                getStatus(cursor));
         tv.setText(detail);
+    }
+
+    private String getStatus(Cursor cursor){
+        switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))){
+            //need to beef this up....once have more tables and data.
+            case GameObjectGridFragment.INFASTRUCTURE:
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Installed";
+            case GameObjectGridFragment.SEA:
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Launch" : "Active";
+            case GameObjectGridFragment.AIR:
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
+            case GameObjectGridFragment.LAND:
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
+            case GameObjectGridFragment.MISSILE:
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Available" : "Armed";
+
+        }
+
+        return "Unknown";
     }
 
     @Override
@@ -79,7 +101,7 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
         while (c.moveToNext()) {
 
             try {
-                current = c.getString(c.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))
+                current = c.getString(c.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY))
                         .substring(0, 1);
             } catch (Exception e) {
             }
@@ -120,4 +142,6 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
             return 0;
         }
     }
+
+
 }

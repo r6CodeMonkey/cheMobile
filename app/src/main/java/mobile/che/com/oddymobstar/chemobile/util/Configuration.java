@@ -42,6 +42,11 @@ public class Configuration implements Serializable {
     public final static String RESET_SOCKET = "RESET_SOCKET";
     public final static String CLEAR_BACKLOG = "CLEAR_BACKLOG";
 
+    public final static String START_PURCHASE_INFA = "FREE_INFRA";
+    public final static String START_PURCHASE_LAND = "FREE_LAND";
+    public final static String START_PURCHASE_AIR = "FREE_AIR";
+    public final static String START_PURCHASE_MISSILE = "FREE_MISSILE";
+    public final static String START_PURCHASE_SEA = "FREE_SEA";
 
     //Need last server contact.   public final static String CURRENT_SUBUTM = "CURRENT_SUBUTM";
     /*

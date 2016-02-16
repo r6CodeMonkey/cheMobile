@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.Polygon;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
@@ -70,27 +71,27 @@ public class OnOptionsItemSelectedHandler {
             case R.id.game_land:
                 controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
                 controller.fragmentHandler.removeFragments(false);
-                handleGame(GameObjectGridFragment.LAND, "Land");
+                handleGame(GameObjectGridFragment.LAND, main.getResources().getString(R.string.menu_land));
                 break;
             case R.id.game_sea:
                 controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
                 controller.fragmentHandler.removeFragments(false);
-                handleGame(GameObjectGridFragment.SEA, "Sea");
+                handleGame(GameObjectGridFragment.SEA, main.getResources().getString(R.string.menu_sea));
                 break;
             case R.id.game_airborne:
                 controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
                 controller.fragmentHandler.removeFragments(false);
-                handleGame(GameObjectGridFragment.AIR, "Airborne");
+                handleGame(GameObjectGridFragment.AIR, main.getResources().getString(R.string.menu_airborne));
                 break;
             case R.id.game_missiles:
                 controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
                 controller.fragmentHandler.removeFragments(false);
-                handleGame(GameObjectGridFragment.MISSILE, "Missiles");
+                handleGame(GameObjectGridFragment.MISSILE, main.getResources().getString(R.string.menu_explosives));
                 break;
             case R.id.game_infastructure:
                 controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
                 controller.fragmentHandler.removeFragments(false);
-                handleGame(GameObjectGridFragment.INFASTRUCTURE, "Infrastructure");
+                handleGame(GameObjectGridFragment.INFASTRUCTURE, main.getResources().getString(R.string.menu_infrastructure));
                 break;
             case R.id.utm:
                 controller.fragmentHandler.removeFragments(false);
@@ -188,7 +189,7 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsListener.FAB_MODE = MaterialsListener.ALLIANCE_FAB;
         controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_red_dark), main.getResources().getString(R.string.menu_alliances));
 
-        controller.fragmentHandler.gridFrag.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getListClickListener());
+        controller.fragmentHandler.gridFrag.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gridFrag);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -200,12 +201,12 @@ public class OnOptionsItemSelectedHandler {
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
 
-        controller.materialsHandler.handleFABChange(MaterialsHelper.GAME_COLOR, R.drawable.ic_monetization_on_white_24dp, View.VISIBLE);
+        controller.materialsHandler.handleFABChange(GameController.getGameColorFlag(type), R.drawable.ic_monetization_on_white_24dp, View.VISIBLE);
 
         controller.materialsListener.FAB_MODE = MaterialsListener.GAME_FAB;
-        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_blue_bright), title);
+        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameController.getGameColor(type)), title);
 
-        controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getListClickListener());
+        controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getGameObjectTypesListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
         transaction.addToBackStack(null);
         transaction.commit();

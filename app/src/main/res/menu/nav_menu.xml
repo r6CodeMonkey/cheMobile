@@ -22,23 +22,23 @@
                 <item
                     android:id="@+id/game_land"
                     android:icon="@drawable/ic_directions_car_black_24dp"
-                    android:title="Land" />
+                    android:title="@string/menu_land" />
                 <item
                     android:id="@+id/game_airborne"
                     android:icon="@drawable/ic_flight_black_24dp"
-                    android:title="Airborne" />
+                    android:title="@string/menu_airborne" />
                 <item
                     android:id="@+id/game_sea"
                     android:icon="@drawable/ic_directions_boat_black_24dp"
-                    android:title="Sea" />
+                    android:title="@string/menu_sea" />
                 <item
                     android:id="@+id/game_missiles"
                     android:icon="@drawable/ic_flare_black_24dp"
-                    android:title="Missiles" />
+                    android:title="@string/menu_explosives" />
                 <item
                     android:id="@+id/game_infastructure"
                     android:icon="@drawable/ic_account_balance_black_24dp"
-                    android:title="Infrastructure" />
+                    android:title="@string/menu_infrastructure" />
             </menu>
 
         </item>

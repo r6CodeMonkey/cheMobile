@@ -9,6 +9,7 @@ import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameSubTypeGridFragment;
 
 
 /**
@@ -22,6 +23,7 @@ public class FragmentHandler {
     public AllianceGridFragment gridFrag = new AllianceGridFragment();
     public ConfigurationFragment confFrag = new ConfigurationFragment();
     public GameObjectGridFragment gameFrag = new GameObjectGridFragment();
+    public GameSubTypeGridFragment gameSubTypeFrag = new GameSubTypeGridFragment();
 
 
     public FragmentHandler(ProjectCheActivity main, ProjectCheController controller) {
@@ -67,6 +69,12 @@ public class FragmentHandler {
 
         }
 
+        try{
+            gameSubTypeFrag.clearAdapter();
+            transaction.remove(gameSubTypeFrag);
+        }catch (Exception e){
+
+        }
 
         try {
             transaction.remove(confFrag);

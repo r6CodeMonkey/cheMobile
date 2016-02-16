@@ -15,5 +15,11 @@
     <string name="menu_subutm">SubUTM</string>
     <string name="menu_alliances">Alliances</string>
     <string name="menu_encryption">Encryption</string>
+    <string name="menu_explosives">Explosives</string>
+    <string name="menu_infrastructure">Infrastructure</string>
+    <string name="menu_land">Land</string>
+    <string name="menu_sea">Sea</string>
+    <string name="menu_airborne">Airborne</string>
+
 
 </resources>
