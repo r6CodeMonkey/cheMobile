@@ -69,10 +69,10 @@ public class FragmentHandler {
 
         }
 
-        try{
+        try {
             gameSubTypeFrag.clearAdapter();
             transaction.remove(gameSubTypeFrag);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 

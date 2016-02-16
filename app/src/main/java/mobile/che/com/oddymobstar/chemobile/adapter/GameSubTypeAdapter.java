@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.R;
-import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
+import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import util.GameObjectTypes;
@@ -40,37 +40,10 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         this.subType = subType;
     }
 
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        LayoutInflater inflator = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-
-        View v = inflator.inflate(layout, null);
-
-        CardView cardView = (CardView)v.findViewById(R.id.game_sub_type_view_inner);
-        cardView.setCardBackgroundColor(context.getResources().getColor(GameController.getGameColor(type)));
-
-
-        bindView(v, context, cursor);
-        return v;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
-
-        String detail = String.format("%s\nLat:%s\nLong:%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
-                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)) == 0.0 ? "" :  cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)),
-                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)),
-                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
-                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" :cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
-                getStatus(cursor));
-        tv.setText(detail);
-    }
-
-    public static boolean isDeployStatus(Cursor cursor){
+    public static boolean isDeployStatus(Cursor cursor) {
         String status = getStatus(cursor);
 
-        switch (status){
+        switch (status) {
             case "Deploy":
                 return true;
             case "Launch":
@@ -89,8 +62,8 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
 
     }
 
-    public static String getStatus(Cursor cursor){
-        switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))){
+    public static String getStatus(Cursor cursor) {
+        switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
             //need to beef this up....once have more tables and data.
             case GameObjectGridFragment.INFASTRUCTURE:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Build" : "Installed";
@@ -101,7 +74,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
             case GameObjectGridFragment.LAND:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
             case GameObjectGridFragment.MISSILE:
-                switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))){
+                switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))) {
                     case GameObjectTypes.GROUND_MINE:
                         return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Place" : "Deployed";
                     case GameObjectTypes.WATER_MINE:
@@ -114,6 +87,33 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         }
 
         return "Unknown";
+    }
+
+    @Override
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        LayoutInflater inflator = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
+        View v = inflator.inflate(layout, null);
+
+        CardView cardView = (CardView) v.findViewById(R.id.game_sub_type_view_inner);
+        cardView.setCardBackgroundColor(context.getResources().getColor(GameHelper.getGameColor(type)));
+
+
+        bindView(v, context, cursor);
+        return v;
+    }
+
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+        TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
+
+        String detail = String.format("%s\nLat:%s\nLong:%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
+                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
+                getStatus(cursor));
+        tv.setText(detail);
     }
 
     @Override

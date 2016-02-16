@@ -13,7 +13,6 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 
 import mobile.che.com.oddymobstar.chemobile.R;
-import mobile.che.com.oddymobstar.chemobile.adapter.GameItemAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameSubTypeAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 
@@ -30,14 +29,14 @@ public class GameSubTypeGridFragment extends Fragment {
     private DBHelper dbHelper;
     private GridView gridView;
 
-    public GameSubTypeGridFragment(){
+    public GameSubTypeGridFragment() {
         setRetainInstance(true);
     }
 
-    public void init(int type, int subType,  AdapterView.OnItemClickListener onClickListener) {
+    public void init(int type, int subType, AdapterView.OnItemClickListener onClickListener) {
         this.onClickListener = onClickListener;
         this.type = type;
-        this.subType  = subType;
+        this.subType = subType;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +63,7 @@ public class GameSubTypeGridFragment extends Fragment {
         return dbHelper.getGameObjects(type, subType);
     }
 
-    private CursorAdapter getCursorAdapter(int type, int subType,  Cursor cursor) {
+    private CursorAdapter getCursorAdapter(int type, int subType, Cursor cursor) {
         return new GameSubTypeAdapter(getActivity(), cursor, true, type, subType);
     }
 
@@ -91,7 +90,6 @@ public class GameSubTypeGridFragment extends Fragment {
 
         }
     }
-
 
 
     private class LoadCursors extends AsyncTask<String, Void, String> {
@@ -126,7 +124,6 @@ public class GameSubTypeGridFragment extends Fragment {
         }
 
     }
-
 
 
 }

@@ -1,7 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
-import android.util.Log;
-
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;

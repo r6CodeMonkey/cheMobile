@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
-import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.graphics.RoundedImageView;
@@ -67,11 +66,11 @@ public class MaterialsHelper {
         utmColorList = createColorStateList(android.R.color.holo_purple);
         allianceColorList = createColorStateList(android.R.color.holo_red_dark);
         chatColorList = createColorStateList(android.R.color.holo_green_dark);
-        seaColorList = createColorStateList(GameController.getGameColor(GameObjectGridFragment.SEA));
-        airColorList = createColorStateList(GameController.getGameColor(GameObjectGridFragment.AIR));
-        landColorList = createColorStateList(GameController.getGameColor(GameObjectGridFragment.LAND));
-        infraColorList = createColorStateList(GameController.getGameColor(GameObjectGridFragment.INFASTRUCTURE));
-        missileColorList = createColorStateList(GameController.getGameColor(GameObjectGridFragment.MISSILE));
+        seaColorList = createColorStateList(GameHelper.getGameColor(GameObjectGridFragment.SEA));
+        airColorList = createColorStateList(GameHelper.getGameColor(GameObjectGridFragment.AIR));
+        landColorList = createColorStateList(GameHelper.getGameColor(GameObjectGridFragment.LAND));
+        infraColorList = createColorStateList(GameHelper.getGameColor(GameObjectGridFragment.INFASTRUCTURE));
+        missileColorList = createColorStateList(GameHelper.getGameColor(GameObjectGridFragment.MISSILE));
 
     }
 

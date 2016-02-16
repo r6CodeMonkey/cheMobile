@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.R;
-import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
+import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import util.GameObjectTypes;
 
@@ -46,8 +46,8 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
 
         View v = inflator.inflate(layout, null);
 
-        CardView cardView = (CardView)v.findViewById(R.id.game_card_view_inner);
-        cardView.setCardBackgroundColor(context.getResources().getColor(GameController.getGameColor(type)));
+        CardView cardView = (CardView) v.findViewById(R.id.game_card_view_inner);
+        cardView.setCardBackgroundColor(context.getResources().getColor(GameHelper.getGameColor(type)));
 
 
         bindView(v, context, cursor);
@@ -59,7 +59,8 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
         TextView tv = (TextView) view.findViewById(R.id.game_item_name);
 
         String detail = String.format("%s\nTotal:%s", GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),
-                cursor.getString(cursor.getColumnIndexOrThrow("type_total"))); ;
+                cursor.getString(cursor.getColumnIndexOrThrow("type_total")));
+        ;
         //in reality, its going to be the type name + key....
         tv.setText(detail);
     }

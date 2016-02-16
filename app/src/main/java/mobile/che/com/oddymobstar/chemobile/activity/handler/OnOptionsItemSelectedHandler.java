@@ -8,8 +8,8 @@ import com.google.android.gms.maps.model.Polygon;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
-import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
@@ -201,10 +201,10 @@ public class OnOptionsItemSelectedHandler {
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
 
-        controller.materialsHandler.handleFABChange(GameController.getGameColorFlag(type), R.drawable.ic_monetization_on_white_24dp, View.VISIBLE);
+        controller.materialsHandler.handleFABChange(GameHelper.getGameColorFlag(type), R.drawable.ic_monetization_on_white_24dp, View.VISIBLE);
 
         controller.materialsListener.FAB_MODE = MaterialsListener.GAME_FAB;
-        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameController.getGameColor(type)), title);
+        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameHelper.getGameColor(type)), title);
 
         controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getGameObjectTypesListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);

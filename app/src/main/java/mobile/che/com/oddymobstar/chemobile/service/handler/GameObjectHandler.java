@@ -61,7 +61,7 @@ public class GameObjectHandler extends MessageHandler {
 
                 dbHelper.updateGameObject(model);
 
-                Log.d("add", "have added game object " +gameObject.toString());
+                Log.d("add", "have added game object " + gameObject.toString());
 
                 break;
             case Tags.GAME_OBJECT_HIT:

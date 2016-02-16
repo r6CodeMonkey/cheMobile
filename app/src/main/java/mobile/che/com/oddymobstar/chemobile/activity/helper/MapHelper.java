@@ -152,11 +152,11 @@ public class MapHelper {
         return controller.gridDialog;
     }
 
-    private void addGameMarkers(){
+    private void addGameMarkers() {
 
         Cursor cursor = controller.dbHelper.getAddedGameObjects();
 
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             controller.mapHandler.addGameObject(new GameObject(cursor));
         }
         cursor.close();

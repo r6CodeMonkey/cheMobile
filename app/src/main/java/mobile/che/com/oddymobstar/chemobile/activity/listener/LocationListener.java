@@ -30,14 +30,13 @@ public class LocationListener implements android.location.LocationListener {
         return currentLocation;
     }
 
-    public LatLng getCurrentLocationLatLng(){
-        return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-    }
-
     public void setCurrentLocation(Location currentLocation) {
         this.currentLocation = currentLocation;
     }
 
+    public LatLng getCurrentLocationLatLng() {
+        return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+    }
 
     @Override
     public void onLocationChanged(Location location) {

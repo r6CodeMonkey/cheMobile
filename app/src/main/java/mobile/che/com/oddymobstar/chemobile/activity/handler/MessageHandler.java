@@ -3,20 +3,15 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 import android.os.Handler;
 import android.util.Log;
 
-import com.google.android.gms.games.Game;
 import com.google.android.gms.maps.model.PolygonOptions;
-
-import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
-import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
-import util.GameObjectTypes;
 
 
 /**
@@ -68,9 +63,9 @@ public class MessageHandler extends Handler {
 
     }
 
-    public void addGameObject(GameObject gameObject){
-        if(controller != null){
-           controller.mapHandler.addGameObject(gameObject);
+    public void addGameObject(GameObject gameObject) {
+        if (controller != null) {
+            controller.mapHandler.addGameObject(gameObject);
         }
     }
 

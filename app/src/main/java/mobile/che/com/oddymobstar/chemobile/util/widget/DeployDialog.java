@@ -31,14 +31,14 @@ public class DeployDialog extends DialogFragment {
         return new DeployDialog();
     }
 
-    public String getGameObjectKey(){
+    public String getGameObjectKey() {
         return gameObjectKey;
     }
 
     public Dialog onCreateDialog(Bundle savedInstance) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle(deployAction+" "+gameObjectName);
+        builder.setTitle(deployAction + " " + gameObjectName);
 
         builder.setPositiveButton(deployAction, deployListener);
 

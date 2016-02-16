@@ -110,7 +110,7 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
-    private message.GameObject createGameObject(GameObject gameObject, Location location){
+    private message.GameObject createGameObject(GameObject gameObject, Location location) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
 
@@ -244,9 +244,9 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
-        Log.d("deploy", "deploy msg "+cheMessage.toString());
+        Log.d("deploy", "deploy msg " + cheMessage.toString());
 
-        return  cheMessage;
+        return cheMessage;
 
     }
 

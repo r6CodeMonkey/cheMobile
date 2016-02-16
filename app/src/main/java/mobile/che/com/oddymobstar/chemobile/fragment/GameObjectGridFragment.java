@@ -100,7 +100,9 @@ public class GameObjectGridFragment extends Fragment {
         }
     }
 
-    public int getType(){return type;}
+    public int getType() {
+        return type;
+    }
 
 
     private class LoadCursors extends AsyncTask<String, Void, String> {
