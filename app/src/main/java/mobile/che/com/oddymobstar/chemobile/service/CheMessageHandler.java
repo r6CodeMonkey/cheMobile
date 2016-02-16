@@ -1,12 +1,8 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
-import android.util.Log;
-
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 import message.Acknowledge;
 import message.CheMessage;
@@ -28,8 +24,6 @@ import util.Tags;
  */
 public class CheMessageHandler extends MessageHandler {
 
-    //track everything.
-    private final Map<String, CheMessage> sentAcks = new HashMap<>();
     private final AcknowledgeHandler acknowledgeHandler;
     private final PlayerHandler playerHandler;
     private final AllianceHandler allianceHandler;
@@ -37,6 +31,8 @@ public class CheMessageHandler extends MessageHandler {
     private final GridHandler gridHandler;
     private final MissileHandler missileHandler;
     private MessageFactory messageFactory;
+
+    // private List<CheMessage> buffer = new ArrayList<>();
 
     public CheMessageHandler(DBHelper dbHelper) {
         super(dbHelper);
@@ -46,7 +42,7 @@ public class CheMessageHandler extends MessageHandler {
         acknowledgeHandler = new AcknowledgeHandler(dbHelper, messageFactory);
         playerHandler = new PlayerHandler(dbHelper, messageFactory);
         allianceHandler = new AllianceHandler(dbHelper);
-        gameObjectHandler = new GameObjectHandler(dbHelper);
+        gameObjectHandler = new GameObjectHandler(dbHelper, messageFactory);
         gridHandler = new GridHandler(dbHelper);
         missileHandler = new MissileHandler(dbHelper);
 
@@ -55,11 +51,7 @@ public class CheMessageHandler extends MessageHandler {
     public void addCallback(CheCallbackInterface callback) {
         acknowledgeHandler.addCheCallback(callback);
         playerHandler.addCheCallback(callback);
-        //   gameObjectHandler.addCheCallback(callback);
-    }
-
-    public Map<String, CheMessage> getSentAcks() {
-        return sentAcks;
+        gameObjectHandler.addCheCallback(callback);
     }
 
 
@@ -67,36 +59,34 @@ public class CheMessageHandler extends MessageHandler {
         playerHandler.handleNewPlayer(acknowledge);
     }
 
-    public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
+    public synchronized void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
 
-        Log.d("handle", "handle che");
+        //     Log.d("handle", "handle che "+cheMessage.toString());
         //we always handle this.  we need to send the response back as well.
         acknowledgeHandler.handle(cheMessage);
 
-        /*
-        simply a case of testing if we have the object
-         */
         if (cheMessage.containsMessage(Tags.GAME_OBJECT)) {
-            Log.d("handle", "handle game object");
+            //         Log.d("handle", "handle game object");
             gameObjectHandler.handle(cheMessage);
         }
 
         if (cheMessage.containsMessage(Tags.MISSILE)) {
-            Log.d("handle", "handle missile");
+            //        Log.d("handle", "handle missile");
             missileHandler.handle(cheMessage);
         }
 
         if (cheMessage.containsMessage(Tags.ALLIANCE)) {
-            Log.d("handle", "handle alliance " + cheMessage.toString());
+            //       Log.d("handle", "handle alliance " + cheMessage.toString());
             allianceHandler.handle(cheMessage);
         }
 
         if (cheMessage.containsMessage(Tags.UTM_LOCATION)) {
-            Log.d("handle", "handle utm location " + cheMessage.toString());
+            //       Log.d("handle", "handle utm location " + cheMessage.toString());
             gridHandler.handle(cheMessage);
         }
 
     }
+
 
     public boolean isNewPlayer() {
         return dbHelper.getConfig(Configuration.PLAYER_KEY).getValue().isEmpty();

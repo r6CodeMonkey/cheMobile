@@ -26,7 +26,7 @@ public class MessageHandler extends Handler {
         this.controller = controller;
     }
 
-    public void handleGameObject(){
+    public void handleGameObject() {
         if (controller != null) {
             if (controller.fragmentHandler.gameFrag != null) {
                 main.runOnUiThread(new Runnable() {

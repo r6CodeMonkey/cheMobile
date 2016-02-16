@@ -1,10 +1,13 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import message.CheMessage;
 import message.GameObject;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import util.Tags;
 
 /**
@@ -12,10 +15,12 @@ import util.Tags;
  */
 public class GameObjectHandler extends MessageHandler {
 
+    private final MessageFactory messageFactory;
     private CheCallbackInterface cheCallback;
 
-    public GameObjectHandler(DBHelper dbHelper) {
+    public GameObjectHandler(DBHelper dbHelper, MessageFactory messageFactory) {
         super(dbHelper);
+        this.messageFactory = messageFactory;
     }
 
     //probably not required anyway leave here.
@@ -26,9 +31,9 @@ public class GameObjectHandler extends MessageHandler {
     @Override
     public void handle(CheMessage cheMessage) throws JSONException {
 
-        GameObject gameObject = (GameObject)cheMessage.getMessage(Tags.GAME_OBJECT);
+        GameObject gameObject = (GameObject) cheMessage.getMessage(Tags.GAME_OBJECT);
 
-        switch(gameObject.getState()){
+        switch (gameObject.getState()) {
             case Tags.PURCHASE:
                 //simple case under test now.
                 mobile.che.com.oddymobstar.chemobile.model.GameObject model = new mobile.che.com.oddymobstar.chemobile.model.GameObject();
@@ -36,7 +41,9 @@ public class GameObjectHandler extends MessageHandler {
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
                 dbHelper.addGameObject(model);
-             break;
+
+                Log.d("purchase", "have purchased " + model.getType() + " " + model.getSubType());
+                break;
             case Tags.GAME_OBJECT_ADD:
                 break;
             case Tags.GAME_OBJECT_HIT:
@@ -52,4 +59,5 @@ public class GameObjectHandler extends MessageHandler {
 
         }
     }
+
 }

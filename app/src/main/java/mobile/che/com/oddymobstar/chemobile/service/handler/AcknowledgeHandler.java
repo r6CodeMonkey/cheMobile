@@ -28,10 +28,16 @@ public class AcknowledgeHandler extends MessageHandler {
 
     @Override
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
-        cheMessage.setMessage(Tags.ACKNOWLEDGE, messageFactory.createAcknowledge());
-        cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
 
-        cheCallback.send(cheMessage);
+        CheMessage temp = messageFactory.createCheMessage();
+
+        temp.setMessage(Tags.CHE_ACKNOWLEDGE, messageFactory.createCheAcknowledge(cheMessage.getMessage(Tags.CHE_ACKNOWLEDGE).getString(Tags.CHE_ACK_ID)).getContents());
+
+        temp.setMessage(Tags.ACKNOWLEDGE, messageFactory.createAcknowledge());
+        temp.setMessage(Tags.PLAYER, messageFactory.createPlayer());
+
+
+        cheCallback.send(temp);
     }
 
 

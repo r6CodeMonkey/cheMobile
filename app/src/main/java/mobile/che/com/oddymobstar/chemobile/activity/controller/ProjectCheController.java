@@ -81,6 +81,8 @@ public class ProjectCheController {
     public LocationManager locationManager;
     //fragments
     public GridDialog gridDialog;
+    //controllers
+    public GameController gameController;
 
     public ProjectCheController(ProjectCheActivity main) {
         this.main = main;
@@ -90,8 +92,6 @@ public class ProjectCheController {
 
         dbHelper = new DBHelper(main);
         messageFactory = new MessageFactory(dbHelper);
-
-        dbHelper.developStub();
 
 
         if (!dbHelper.hasPreLoad()) {
@@ -111,6 +111,7 @@ public class ProjectCheController {
         };
 
 
+        gameController = new GameController(main, this);
         fragmentHandler = new FragmentHandler(main, this);
         configuration = new Configuration(dbHelper.getConfigs());
         messageHandler = new MessageHandler(main, this);

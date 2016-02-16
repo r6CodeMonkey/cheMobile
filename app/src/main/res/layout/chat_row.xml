@@ -15,9 +15,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/speech2"
+        android:elevation="10dp"
         android:singleLine="false"
-        app:borderWidth="0dp"
-        android:elevation="10dp" />
+        app:borderWidth="0dp" />
 
     <mobile.che.com.oddymobstar.chemobile.util.widget.ChatBubbleLeft
         android:id="@+id/message_bubble_me"
@@ -27,9 +27,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/speech"
+        android:elevation="10dp"
         android:singleLine="false"
-        app:borderWidth="0dp"
-        android:elevation="10dp" />
+        app:borderWidth="0dp" />
 
 
 </RelativeLayout>

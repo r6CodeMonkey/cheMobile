@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -11,14 +12,18 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
+import java.security.NoSuchAlgorithmException;
+
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ChatPost;
 import mobile.che.com.oddymobstar.chemobile.util.widget.CreateView;
+import util.GameObjectTypes;
 
 
 /**
@@ -245,6 +250,14 @@ public class MaterialsHandler {
             controller.materialsHelper.floatingActionButton.setImageDrawable(main.getDrawable(image));
         }
 
+    }
+
+    public void handleGameFab() {
+        try {
+            controller.gameController.purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 10);
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("security exception", "security " + e.getMessage());
+        }
     }
 
     public void handlePlayerKey(String key) {

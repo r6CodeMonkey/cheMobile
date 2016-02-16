@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:elevation="12dp"
-    app:borderWidth="0dp"
     android:background="@android:color/white"
-    android:orientation="vertical"  >
+    android:elevation="12dp"
+    android:orientation="vertical"
+    app:borderWidth="0dp">
 
 
     <ExpandableListView
         android:id="@+id/expandableListView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@android:color/darker_gray"
+        android:layout_alignParentRight="true"
         android:childDivider="@android:color/white"
+        android:divider="@android:color/darker_gray"
         android:dividerHeight="2dp"
-        android:fadingEdge="none"
-        android:layout_alignParentRight="true" >
+        android:fadingEdge="none">
 
     </ExpandableListView>
 

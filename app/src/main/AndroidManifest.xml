@@ -30,10 +30,10 @@
 
         <activity
             android:name=".activity.ProjectCheActivity"
-            android:windowSoftInputMode="adjustResize"
             android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_project_che"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_project_che">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="BluetoothDevice.ACTION_FOUND" />
@@ -72,9 +72,8 @@
         </activity>
 
         <service
-            android:enabled="true"
-            android:name="mobile.che.com.oddymobstar.chemobile.service.CheService">
-        </service>
+            android:name="mobile.che.com.oddymobstar.chemobile.service.CheService"
+            android:enabled="true"></service>
 
     </application>
 

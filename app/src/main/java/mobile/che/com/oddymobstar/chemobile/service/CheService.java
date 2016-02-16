@@ -103,7 +103,7 @@ public class CheService extends IntentService {
 
 
     public void clearBacklog() {
-        cheServiceSocket.messageBuffer.clear();
+        cheServiceSocket.clearQueue();
     }
 
     public void resetConnection() {
@@ -118,9 +118,7 @@ public class CheService extends IntentService {
     }
 
     public void writeToSocket(CheMessage cheMessage) {
-        Log.d("service", "write to service with " + cheMessage.toString());
-
-        cheServiceSocket.writeToSocket(cheMessage, true);
+        cheServiceSocket.addToQueue(cheMessage);
     }
 
 

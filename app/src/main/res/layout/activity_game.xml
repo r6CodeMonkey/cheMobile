@@ -14,23 +14,23 @@
         android:layout_height="match_parent">
 
 
-    <include
-        layout="@layout/activity_project_che"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <include
+            layout="@layout/activity_project_che"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-</RelativeLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_height="match_parent"
         android:layout_width="240dp"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:layout_marginTop="?android:attr/actionBarSize"
-        app:headerLayout="@layout/nav_header"
         android:background="@android:color/white"
         android:divider="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
 
 </android.support.v4.widget.DrawerLayout>

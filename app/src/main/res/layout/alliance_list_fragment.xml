@@ -8,26 +8,25 @@
 
 
     <GridView
+        android:id="@+id/grid_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:id="@+id/grid_view"
-        android:layout_width="match_parent"
         android:layout_weight="0.8"
-        android:verticalSpacing="5dp"
+        android:gravity="center"
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
-        android:gravity="center"
-        android:layout_height="wrap_content" />
+        android:verticalSpacing="5dp" />
 
     <mobile.che.com.oddymobstar.chemobile.util.widget.CreateView
         android:id="@+id/create_alliance"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        app:borderWidth="0dp"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:borderWidth="0dp" />
 
 
 </LinearLayout>

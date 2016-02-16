@@ -205,7 +205,7 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsListener.FAB_MODE = MaterialsListener.GAME_FAB;
         controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_blue_bright), title);
 
-        controller.fragmentHandler.gridFrag.init(type, controller.viewListener.getListClickListener());
+        controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
         transaction.addToBackStack(null);
         transaction.commit();

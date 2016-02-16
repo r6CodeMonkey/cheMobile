@@ -46,6 +46,7 @@ public class MaterialsListener {
                         controller.materialsHandler.handleSearchFab();
                         break;
                     case GAME_FAB:
+                        controller.materialsHandler.handleGameFab();
                         break;
                 }
 
