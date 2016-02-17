@@ -191,7 +191,6 @@ public class OnOptionsItemSelectedHandler {
 
         controller.fragmentHandler.gridFrag.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gridFrag);
-        transaction.addToBackStack(null);
         transaction.commit();
 
     }
@@ -208,7 +207,6 @@ public class OnOptionsItemSelectedHandler {
 
         controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getGameObjectTypesListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -222,7 +220,6 @@ public class OnOptionsItemSelectedHandler {
         controller.fragmentHandler.confFrag.init(controller.configurationHandler, controller.dbHelper.getConfigs(Config.USER), controller.dbHelper.getConfigs(Config.SYSTEM));
 
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.confFrag);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 

@@ -1,6 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.activity.controller;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.LocationHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MapHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.MaterialsHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
+import mobile.che.com.oddymobstar.chemobile.activity.listener.MapListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.MaterialsListener;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.ViewListener;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
@@ -37,7 +40,6 @@ import mobile.che.com.oddymobstar.chemobile.service.CheService;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import mobile.che.com.oddymobstar.chemobile.util.UUIDGenerator;
-import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GridDialog;
 
 /**
@@ -75,6 +77,7 @@ public class ProjectCheController {
     public MaterialsListener materialsListener;
     public LocationListener locationListener;
     public ViewListener viewListener;
+    public MapListener mapListener;
     //receivers
     public BroadcastReceiver bluetoothReceiver;
     public BroadcastReceiver messageReceiver;
@@ -82,9 +85,12 @@ public class ProjectCheController {
     public LocationManager locationManager;
     //fragments
     public GridDialog gridDialog;
-    public DeployDialog deployDialog;
     //controllers
     public GameController gameController;
+    //progess dialog
+    public ProgressDialog progressDialog;
+
+    public boolean runNewUserAnimation = false;
 
     public ProjectCheController(ProjectCheActivity main) {
         this.main = main;
@@ -97,6 +103,14 @@ public class ProjectCheController {
 
 
         if (!dbHelper.hasPreLoad()) {
+
+            runNewUserAnimation = true;
+
+            progressDialog = new ProgressDialog(main);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Configuring...");
+            progressDialog.show();
+
             dbHelper.addBaseConfiguration();
             Config config = dbHelper.getConfig(Configuration.PLAYER_NAME);
             config.setValue(main.googleAccountName);
@@ -121,6 +135,7 @@ public class ProjectCheController {
         configurationHandler = new ConfigurationHandler(this);
         viewHandler = new ViewHandler(main, this);
         viewListener = new ViewListener(main, this);
+        mapListener = new MapListener(main, this);
         activityResultHandler = new ActivityResultHandler(main, this);
         onOptionsItemSelectedHandler = new OnOptionsItemSelectedHandler(main, this);
 
@@ -149,7 +164,19 @@ public class ProjectCheController {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 cheService = ((CheService.CheServiceBinder) service).getCheServiceInstance();
-                cheService.setMessageHandler(messageHandler);
+                //timing on new entry
+                if (runNewUserAnimation) {
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            cheService.setMessageHandler(messageHandler, dbHelper.getConfig(Configuration.PLAYER_KEY).getValue());
+                        }
+                    }, 2000);
+                } else {
+                    cheService.setMessageHandler(messageHandler);
+                }
             }
 
             @Override

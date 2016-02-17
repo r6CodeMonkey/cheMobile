@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.util.Log;
 
@@ -57,8 +58,27 @@ public class MessageHandler extends Handler {
     }
 
     public void handlePlayerKey(String key) {
+
         if (controller != null) {
             controller.materialsHandler.handlePlayerKey(key);
+            if(controller.progressDialog != null){
+
+                Log.d("dismiss progress", "dismiss");
+
+                controller.progressDialog.dismiss();
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.progressDialog = new ProgressDialog(main);
+                        controller.progressDialog.setMessage("Locating...");
+                        controller.progressDialog.setIndeterminate(true);
+                        controller.progressDialog.show();
+                    }
+                }, 100);
+
+            }
         }
 
     }

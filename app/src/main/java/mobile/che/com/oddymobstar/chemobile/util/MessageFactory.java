@@ -12,6 +12,7 @@ import java.util.List;
 import message.Acknowledge;
 import message.Alliance;
 import message.CheMessage;
+import message.Missile;
 import message.Player;
 import message.UTM;
 import message.UTMLocation;
@@ -35,6 +36,15 @@ public class MessageFactory {
         cheMessage.create();
 
         return cheMessage;
+    }
+
+    private UTM createUTM(String utmLat, String utmLong) {
+        UTM utm = new UTM();
+        utm.create();
+        utm.setUTMLatGrid(utmLat);
+        utm.setUTMLongGrid(utmLong);
+
+        return utm;
     }
 
     private UTM createUTM() {
@@ -70,6 +80,21 @@ public class MessageFactory {
         return utmLocation;
     }
 
+    private UTMLocation createUTMLocation(double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong){
+        UTMLocation utmLocation = new UTMLocation();
+        utmLocation.create();
+
+        utmLocation.setLongitude(longitude);
+        utmLocation.setLatitude(latitude);
+        utmLocation.setSpeed(0);
+        utmLocation.setAltitude(0);
+
+        utmLocation.setUTM(createUTM(utmLat, utmLong));
+        utmLocation.setSubUTM(createUTM(subUtmLat, subUtmLong));
+
+        return utmLocation;
+    }
+
     private UTMLocation createUTMLocation() {
         UTMLocation utmLocation = new UTMLocation();
         utmLocation.create();
@@ -96,6 +121,18 @@ public class MessageFactory {
         return player;
     }
 
+    private Missile createMissile(GameObject missile, UTMLocation utmLocation){
+        Missile missileMessage = new Missile();
+        missileMessage.create();
+
+        missileMessage.setKey(missile.getKey());
+        missileMessage.setCurrentUTMLocation(utmLocation);
+        missileMessage.setStartUTMLocation(utmLocation);
+        missileMessage.setTargetUTMLocation(createUTMLocation());
+
+        return missileMessage;
+    }
+
     private message.GameObject createNewGameObject(GameObject gameObject, int quantity) {
 
         message.GameObject gameObjectMessage = new message.GameObject();
@@ -120,6 +157,28 @@ public class MessageFactory {
         gameObjectMessage.setSubType(gameObject.getSubType());
         gameObjectMessage.setUtmLocation(createUTMLocation(location));
 
+
+        return gameObjectMessage;
+    }
+
+    private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive){
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.MISSILE_ADDED);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+
+        UTMLocation utmLocation = createUTMLocation(gameObject.getLatitude(),
+                gameObject.getLongitude(), gameObject.getUtmLat(),
+                gameObject.getUtmLong(), gameObject.getSubUtmLat(),
+                gameObject.getSubUtmLong());
+        gameObjectMessage.setUtmLocation(utmLocation);
+        //we only set the one we are adding...or do we send all of them?  just add
+        List<Missile> missiles = new ArrayList<>();
+        missiles.add(createMissile(explosive, utmLocation));
+        gameObjectMessage.setMissiles(missiles);
 
         return gameObjectMessage;
     }
@@ -245,6 +304,20 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
         Log.d("deploy", "deploy msg " + cheMessage.toString());
+
+        return cheMessage;
+
+    }
+
+    public CheMessage armExplosive(GameObject gameObject, GameObject explosive, Location location) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+        message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, explosive);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
         return cheMessage;
 

@@ -18,12 +18,14 @@ public class DeployDialog extends DialogFragment {
     private static String gameObjectName = "";
     private static String deployAction = "";
 
+
     private static String gameObjectKey = "";
 
 
-    public static DeployDialog newInstance(String action, String gameObject, String key, DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener dismiss) {
+    public static DeployDialog newInstance(String action, String gameObject, String key,
+                                           DialogInterface.OnClickListener listener,DialogInterface.OnCancelListener dismiss) {
         deployListener = listener;
-        dismissListener = dismiss;
+         dismissListener = dismiss;
         gameObjectName = gameObject;
         deployAction = action;
         gameObjectKey = key;
@@ -35,12 +37,15 @@ public class DeployDialog extends DialogFragment {
         return gameObjectKey;
     }
 
+
+
     public Dialog onCreateDialog(Bundle savedInstance) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle(deployAction + " " + gameObjectName);
+        builder.setTitle(gameObjectName);
 
         builder.setPositiveButton(deployAction, deployListener);
+
 
         builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override

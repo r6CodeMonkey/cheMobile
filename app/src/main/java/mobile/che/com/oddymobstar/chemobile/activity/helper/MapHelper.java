@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.activity.helper;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -101,6 +103,8 @@ public class MapHelper {
         }
         controller.mapHandler.addOthers();
         addGameMarkers();
+
+        map.setOnMarkerClickListener(controller.mapListener.getMarkerListener());
     }
 
 
@@ -109,6 +113,12 @@ public class MapHelper {
     }
 
     public void initLocationUpdates() {
+
+        controller.progressDialog = new ProgressDialog(main);
+        controller.progressDialog.setMessage("Locating...");
+        controller.progressDialog.setIndeterminate(true);
+        controller.progressDialog.show();
+
         controller.locationHelper.initLocationUpdates();
     }
 

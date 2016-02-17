@@ -2,12 +2,15 @@ package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.security.NoSuchAlgorithmException;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -42,6 +45,24 @@ public class LocationListener implements android.location.LocationListener {
     public void onLocationChanged(Location location) {
         //this is our only location listener now...
         currentLocation = location;
+
+        if(controller.progressDialog != null){
+            controller.progressDialog.dismiss();
+
+            //its enough for time being.
+            if(controller.runNewUserAnimation){
+                controller.runNewUserAnimation = false;
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
+
+                    }
+                }, 1500);
+
+            }
+        }
 
         Log.d("location changed", "location changed");
         LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());

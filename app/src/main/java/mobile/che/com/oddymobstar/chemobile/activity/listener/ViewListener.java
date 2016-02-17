@@ -11,6 +11,7 @@ import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
+import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameSubTypeAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
@@ -52,26 +53,32 @@ public class ViewListener {
                     latLng = new LatLng(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)), cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)));
                 }
 
-                //zoom to wherever we are headed.
-                controller.mapHandler.handleCamera(latLng, 45, 0, 20);
+                final String action = GameSubTypeAdapter.getStatus(cursor);
+                final String title = GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))).replace("\n", " ") + "\nKey: " + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
+                final String key = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
 
-                //ideally need to wait a little bit.
-                if (deploy) {
+                if (action.equals("Arm")) {
+                    controller.gameController.gameHandler.armDialog(title, key,
+                            new ArmExplosiveAdapter(main, controller.dbHelper.getAvailableObjectsToArm(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),true));
+                } else {
 
-                    final String title = GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))).replace("\n", " ") + "\nKey: " + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
-                    final String action = GameSubTypeAdapter.getStatus(cursor);
-                    final String key = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
+                    //zoom to wherever we are headed.
+                    controller.mapHandler.handleCamera(latLng, 45, 0, 20);
+
+                    //ideally need to wait a little bit.
+                    if (deploy) {
 
 
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            controller.gameController.gameHandler.deployDialog(action, title, key);
-                        }
-                    }, 3000);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.gameController.gameHandler.deployDialog(action, title, key);
+                            }
+                        }, 3000);
+                    }
+
                 }
-
             }
         };
     }

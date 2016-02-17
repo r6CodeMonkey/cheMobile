@@ -10,7 +10,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
  */
 public class GameObject implements CheModelInterface {
 
-    private String utmLat, utmLong, subUtmLat, subUtmLong, key;
+    private String utmLat, utmLong, subUtmLat, subUtmLong, key, status;
     private double latitude, longitude;
     private int type, subType;
 
@@ -22,6 +22,7 @@ public class GameObject implements CheModelInterface {
     public GameObject(Cursor cursor) {
 
         setKey(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+        setStatus(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STATUS)));
         setType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)));
         setSubType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)));
         setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)));
@@ -46,6 +47,12 @@ public class GameObject implements CheModelInterface {
 
     public String getUtmLat() {
         return utmLat;
+    }
+
+    public String getStatus(){return status;}
+
+    public void setStatus(String status){
+        this.status = status;
     }
 
     public void setUtmLat(String utmLat) {

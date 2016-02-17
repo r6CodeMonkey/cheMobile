@@ -58,6 +58,7 @@ public class GameObjectHandler extends MessageHandler {
                 model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
                 model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
                 model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
 
                 dbHelper.updateGameObject(model);
 
@@ -71,6 +72,18 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.GAME_OBJECT_DESTROYED:
                 break;
             case Tags.MISSILE_ADDED:
+                ///so basically we just need to update the missile object...and save its data.  the server knows its active.
+                // but if we want to view missiles on the actual vehicles we have a problem.
+                model = dbHelper.getGameObject(gameObject.getMissiles().get(0).getKey());
+                model.setLatitude(gameObject.getUtmLocation().getLatitude());
+                model.setLongitude(gameObject.getUtmLocation().getLongitude());
+                model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
+                model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
+                model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
+                model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+
+                dbHelper.updateGameObject(model);
+                dbHelper.addMissileToGameObject(gameObject.getKey(), gameObject.getMissiles().get(0).getKey());
                 break;
             case Tags.MISSILE_REMOVED:
                 break;

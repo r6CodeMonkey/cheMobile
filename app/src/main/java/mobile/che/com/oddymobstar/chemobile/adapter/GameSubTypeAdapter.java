@@ -46,13 +46,9 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         switch (status) {
             case "Deploy":
                 return true;
-            case "Launch":
-                return true;
-            case "Available":
+             case "Arm":
                 return true;
             case "Drop":
-                return true;
-            case "Place":
                 return true;
             case "Build":
                 return true;
@@ -62,13 +58,64 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
 
     }
 
+
+    public static String getTertiaryAction(Cursor cursor){
+        switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
+            case GameObjectGridFragment.INFASTRUCTURE:
+                return "";
+            case GameObjectGridFragment.SEA:
+                return "Navigate";
+            case GameObjectGridFragment.AIR:
+                return "Fly";
+            case GameObjectGridFragment.LAND:
+                return "";
+            case GameObjectGridFragment.MISSILE:
+                switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))) {
+                    case GameObjectTypes.GROUND_MINE:
+                        return "";
+                    case GameObjectTypes.WATER_MINE:
+                        return "";
+                    default:
+                        return "Launch";
+
+                }
+        }
+
+        return "";
+    }
+
+    public static String getSecondaryAction(Cursor cursor) {
+        switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
+            case GameObjectGridFragment.INFASTRUCTURE:
+                return "";
+            case GameObjectGridFragment.SEA:
+                return "Launch";
+            case GameObjectGridFragment.AIR:
+                return "Takeoff";
+            case GameObjectGridFragment.LAND:
+                return "Move";
+            case GameObjectGridFragment.MISSILE:
+                switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))) {
+                    case GameObjectTypes.GROUND_MINE:
+                        return "Drop";
+                    case GameObjectTypes.WATER_MINE:
+                        return "Drop";
+                    default:
+                        return "Target";
+
+                }
+        }
+
+        return "";
+    }
+
     public static String getStatus(Cursor cursor) {
         switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
             //need to beef this up....once have more tables and data.
             case GameObjectGridFragment.INFASTRUCTURE:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Build" : "Installed";
             case GameObjectGridFragment.SEA:
-                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Launch" : "Active";
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
             case GameObjectGridFragment.AIR:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
             case GameObjectGridFragment.LAND:
@@ -76,11 +123,11 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
             case GameObjectGridFragment.MISSILE:
                 switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))) {
                     case GameObjectTypes.GROUND_MINE:
-                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Place" : "Deployed";
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" : "Armed";
                     case GameObjectTypes.WATER_MINE:
-                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Drop" : "Deployed";
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" : "Armed";
                     default:
-                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Available" : "Armed";
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" : "Armed";
 
                 }
 
@@ -106,14 +153,21 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
+        if(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)) == GameObjectGridFragment.MISSILE){
+            String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
+                    getStatus(cursor));
+            tv.setText(detail);
 
-        String detail = String.format("%s\nLat:%s\nLong:%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
-                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)),
-                cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)) == 0.0 ? "" : cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)),
-                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
-                cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
-                getStatus(cursor));
-        tv.setText(detail);
+        }else {
+            String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s\nExplosives:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
+                    getStatus(cursor),
+                    cursor.getString(cursor.getColumnIndexOrThrow("explosives_count")));
+            tv.setText(detail);
+        }
     }
 
     @Override

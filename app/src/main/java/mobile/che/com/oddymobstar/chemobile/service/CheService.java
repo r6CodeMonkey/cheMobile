@@ -96,6 +96,11 @@ public class CheService extends IntentService {
         dbHelper.setMessageHandler(messageHandler);
     }
 
+    public void setMessageHandler(MessageHandler messageHandler, String key) {
+        dbHelper.setMessageHandler(messageHandler);
+        dbHelper.handleNewPlayer(key); //needs a kick start if first time.
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return cheServiceBinder;

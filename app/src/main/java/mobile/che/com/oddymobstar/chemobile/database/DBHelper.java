@@ -7,17 +7,21 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MessageHandler;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Alliance;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import util.GameObjectTypes;
+import util.Tags;
 
 /**
  * Created by timmytime on 19/01/16.
@@ -31,6 +35,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String MESSAGE_TABLE = "MESSAGES";
     public static final String IMAGE_TABLE = "USER_IMAGES";
     public static final String GAME_OBJECTS_TABLE = "GAME_OBJECTS";
+    public static final String MISSILES_BY_GAME_OBJECT = "MISSILES_BY_GAME_OBJECT";
+
     public static final String UTM = "utm";
     public static final String SUBUTM = "subutm";
     //column tags
@@ -67,6 +73,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String GAME_OBJECT_UTM_LONG = "game_object_utm_long";
     public static final String GAME_OBJECT_SUBUTM_LAT = "game_object_subutm_lat";
     public static final String GAME_OBJECT_SUBUTM_LONG = "game_object_subutm_long";
+    public static final String GAME_OBJECT_STATUS = "game_object_status";
+    public static final String MISSILE_KEY = "missile_key";
+
 
     //going to also need a player points table, well on server too...not now.
 
@@ -79,8 +88,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_ALLIANCE_MEMBERS = "CREATE TABLE " + ALLIANCE_MEMBERS_TABLE + " (" + ALLIANCE_KEY + " VARCHAR2(200)," + PLAYER_KEY + " VARCHAR2(200)," + PLAYER_NAME + " VARCHAR2(30)," + LATITUDE + " NUMBER, " + LONGITUDE + " NUMBER, " + UTM + " VARCHAR2(10)," + SUBUTM + " VARCHAR2(10)," + SPEED + " NUMBER," + ALTITUDE + " NUMBER)";
     private static final String CREATE_MESSAGES = "CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + MESSAGE_CONTENT + " VARCHAR2(300), " + MESSAGE_KEY + " VARCHAR2(200)," + MESSAGE_TYPE + " CHAR(1), " + MESSAGE_TIME + " INTEGER," + MY_MESSAGE + " CHAR(1)," + MESSAGE_AUTHOR + " VARCHAR2(200) )";
     private static final String CREATE_USER_IMAGES = "CREATE TABLE " + IMAGE_TABLE + "(" + USER_IMAGE_KEY + " VARCHAR2(200)," + USER_IMAGE + " BLOB)";
-    private static final String CREATE_GAME_OBJECTS = "CREATE TABLE " + GAME_OBJECTS_TABLE + "(" + GAME_OBJECT_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + GAME_OBJECT_TYPE + " INTEGER, " + GAME_OBJECT_SUBTYPE + " INTEGER," + GAME_OBJECT_LAT + " NUMBER, " + GAME_OBJECT_LONG + " NUMBER, " + GAME_OBJECT_UTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_UTM_LONG + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LONG + " VARCHAR2(10))";
-    //static db instance.
+    private static final String CREATE_GAME_OBJECTS = "CREATE TABLE " + GAME_OBJECTS_TABLE + "(" + GAME_OBJECT_KEY + " VARCHAR2(200) UNIQUE NOT NULL," + GAME_OBJECT_TYPE + " INTEGER, " + GAME_OBJECT_SUBTYPE + " INTEGER," + GAME_OBJECT_LAT + " NUMBER, " + GAME_OBJECT_LONG + " NUMBER, " + GAME_OBJECT_UTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_UTM_LONG + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LAT + " VARCHAR2(10), " + GAME_OBJECT_SUBUTM_LONG + " VARCHAR2(10), "+GAME_OBJECT_STATUS+" VARCHAR2(20))";
+    private static final String CREATE_MISSILES_BY_GAME_OBJECT = "CREATE TABLE "+MISSILES_BY_GAME_OBJECT+"( "+GAME_OBJECT_KEY+" VARCHAR2(200), "+MISSILE_KEY+" VARCHAR2(200))";
+
     private static DBHelper dbHelper = null;
     /*
      need to put other shit here.  bear in mind this will likely become a defacto class that is deliverable
@@ -140,6 +150,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MESSAGES);
         db.execSQL(CREATE_USER_IMAGES);
         db.execSQL(CREATE_GAME_OBJECTS);
+        db.execSQL(CREATE_MISSILES_BY_GAME_OBJECT);
+
 
     }
 
@@ -218,6 +230,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void addMissileToGameObject(String gameObjectKey, String missileKey){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(GAME_OBJECT_KEY, gameObjectKey);
+        values.put(MISSILE_KEY, missileKey);
+
+        db.insert(MISSILES_BY_GAME_OBJECT, null, values);
+
+    }
+
     public void addMessage(Message message) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -292,6 +315,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(GAME_OBJECT_UTM_LONG, gameObject.getUtmLong());
         values.put(GAME_OBJECT_SUBUTM_LAT, gameObject.getSubUtmLat());
         values.put(GAME_OBJECT_SUBUTM_LONG, gameObject.getSubUtmLong());
+        values.put(GAME_OBJECT_STATUS, gameObject.getStatus());
 
         db.insert(GAME_OBJECTS_TABLE, null, values);
 
@@ -335,6 +359,13 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(MESSAGE_TABLE, MESSAGE_ID + " = ?", new String[]{String.valueOf(message.getId())});
+
+    }
+
+    public void deleteMissileFromGameObject(String gameObjectKey, String missileKey){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(MISSILES_BY_GAME_OBJECT, GAME_OBJECT_KEY + " = ? AND " + MISSILE_KEY + " =?", new String[]{gameObjectKey, missileKey});
 
     }
 
@@ -431,10 +462,12 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(GAME_OBJECT_UTM_LONG, gameObject.getUtmLong());
         values.put(GAME_OBJECT_SUBUTM_LAT, gameObject.getSubUtmLat());
         values.put(GAME_OBJECT_SUBUTM_LONG, gameObject.getSubUtmLong());
+        values.put(GAME_OBJECT_STATUS, gameObject.getStatus());
 
         db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
-
-        handleGameObjectAdded(gameObject);
+         if(gameObject.getType() != GameObjectGridFragment.MISSILE) {  //we dont add missiles at this point.
+             handleGameObjectAdded(gameObject);
+         }
     }
 
     public void handleGameObjectAdded(GameObject gameObject) {
@@ -445,7 +478,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public void handleNewPlayer(String key) {
+        Log.d("handle new player", "new player");
         if (messageHandler != null) {
+            Log.d("handle new player", "new player not null handler");
             messageHandler.handlePlayerKey(key);
         }
     }
@@ -501,13 +536,43 @@ public class DBHelper extends SQLiteOpenHelper {
      game objects need to be grouped by type...so distinct sub type, + count number of to display each individual
      */
     public Cursor getGameObjects(int type, int subType) {
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? AND " + GAME_OBJECT_SUBTYPE + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{String.valueOf(type), String.valueOf(subType)});
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + "(SELECT COUNT(1) FROM "+MISSILES_BY_GAME_OBJECT+" WHERE "+GAME_OBJECT_KEY+" = "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_KEY+") as explosives_count," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+ "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + "=? AND " + GAME_OBJECT_SUBTYPE + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{ String.valueOf(type), String.valueOf(subType)});
     }
 
     public Cursor getAddedGameObjects() {
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + ","+GAME_OBJECT_STATUS+"," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND "+GAME_OBJECT_TYPE+" != "+GameObjectGridFragment.MISSILE+" AND "+GAME_OBJECT_STATUS+"='"+ Tags.GAME_OBJECT_IS_FIXED+"' ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
     }
 
+    public Cursor getAvailableObjectsToArm(int type){
+
+        switch (type){
+            case GameObjectTypes.G2G:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+ GameObjectGridFragment.LAND+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.G2A:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+ GameObjectGridFragment.LAND+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.G2W:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+ GameObjectGridFragment.LAND+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.A2A:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+ "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.AIR+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.A2G:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.AIR+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.A2W:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.AIR+") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.W2A:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.SEA +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.W2G:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.SEA +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.W2W:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.SEA +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.WATER_MINE:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.SEA +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            case GameObjectTypes.GROUND_MINE:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+GameObjectGridFragment.LAND +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+            default:
+                return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY +","+GAME_OBJECT_STATUS+  "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN ("+ GameObjectGridFragment.LAND+","+GameObjectGridFragment.AIR+","+GameObjectGridFragment.SEA +") AND TRIM("+GAME_OBJECT_UTM_LAT+") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+        }
+
+    }
 
     public Cursor getGameObjectTypes(int type) {
         return this.getReadableDatabase().rawQuery("SELECT DISTINCT types." + GAME_OBJECT_SUBTYPE + " as _id, types." + GAME_OBJECT_SUBTYPE + ", (SELECT COUNT(" + GAME_OBJECT_SUBTYPE + ") FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " = ? AND " + GAME_OBJECT_SUBTYPE + " = types." + GAME_OBJECT_SUBTYPE + ") as type_total FROM " + GAME_OBJECTS_TABLE + " types WHERE " + GAME_OBJECT_TYPE + "=? ORDER BY types." + GAME_OBJECT_SUBTYPE + " ASC", new String[]{String.valueOf(type), String.valueOf(type)});
@@ -599,7 +664,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public GameObject getGameObject(String key) {
-        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_KEY + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{key});
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + ","+GAME_OBJECT_STATUS+"," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_KEY + "=? ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", new String[]{key});
         ;
         GameObject gameObject = null;
 
