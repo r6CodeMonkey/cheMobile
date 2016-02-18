@@ -20,6 +20,8 @@ public class SubUTM {
     private int subLatInt;
 
 
+
+
     public SubUTM(String subUtm) {
         process(subUtm);
 
@@ -29,6 +31,8 @@ public class SubUTM {
         process(subUtmLat + subUtmLong);
 
     }
+
+
 
     public static void createSubUtms() {
         for (int indexCounter = 1; indexCounter <= 8; indexCounter++) {
@@ -41,23 +45,25 @@ public class SubUTM {
 
     }
 
+
+
     public static List<String> getSubUtmList() {
         return subUtmList;
     }
 
     public static void main(String[] args) {
 
-        SubUTM subUTM = new SubUTM("19", "V20");
+      /*  SubUTM subUTM = new SubUTM("19", "V20");
 
         System.out.println(subUTM.getSubUtmLat());
         System.out.println(subUTM.getSubUtmLong());
+*/
 
 
     }
 
     private void process(String subUtm) {
 
-        Log.d("subutm", "value is " + subUtm);
         //its in form....lat => Number + Letter,,,
         //               long => Number
         //no regex this time...find occurence of letter..

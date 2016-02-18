@@ -28,7 +28,7 @@ public class MapListener {
             public boolean onMarkerClick(Marker marker) {
                 GameObject gameObject = controller.dbHelper.getGameObject(marker.getSnippet());
                 controller.gameController.gameHandler.actionsDialog(gameObject.getKey(), gameObject.getType());
-                return false;
+                return true;
             }
         };
     }

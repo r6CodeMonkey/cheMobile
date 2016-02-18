@@ -36,7 +36,7 @@ public class GameObjectActionsDialog extends DialogFragment {
     }
 
     public String getGameObjectKey() {
-        return getGameObjectKey();
+        return gameObjectKey;
     }
 
     public Dialog onCreateDialog(Bundle savedInstance) {
@@ -51,19 +51,19 @@ public class GameObjectActionsDialog extends DialogFragment {
 
         switch (gameObjectType) {
             case GameObjectGridFragment.AIR:
-                positiveAction = "Target";
-                negativeAction = "Take Off";
-                neutralAction = "Land";
+                positiveAction = "Take Off";
+                negativeAction = "Land";
+                neutralAction = "Target";
                 break;
             case GameObjectGridFragment.LAND:
-                positiveAction = "Target";
-                negativeAction = "Move";
-                neutralAction = "Stop";
+                positiveAction = "Move";
+                negativeAction = "Stop";
+                neutralAction = "Target";
                 break;
             case GameObjectGridFragment.SEA:
-                positiveAction = "Target";
-                negativeAction = "Move";
-                neutralAction = "Stop";
+                positiveAction = "Move";
+                negativeAction = "Stop";
+                neutralAction = "Target";
                 break;
             case GameObjectGridFragment.INFASTRUCTURE:
                 positiveAction = "Repair";

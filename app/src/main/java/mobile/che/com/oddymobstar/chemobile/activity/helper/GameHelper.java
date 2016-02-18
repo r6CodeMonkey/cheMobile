@@ -1,12 +1,18 @@
 package mobile.che.com.oddymobstar.chemobile.activity.helper;
 
+import android.content.DialogInterface;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import util.GameObjectTypes;
 
 /**
@@ -148,6 +154,38 @@ public class GameHelper {
                 purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2A, 10);
             }
         }, 1000);
+    }
+
+
+    public AlertDialog getGameMoveDialog(final GameObject gameObject){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        builder.setTitle("Game Rules");
+        builder.setMessage("Move within the orange grids\nPress on the map for a destination");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                 dialog.dismiss();
+                  controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),45, 0, 15);
+            }
+        });
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
     }
 
 }
