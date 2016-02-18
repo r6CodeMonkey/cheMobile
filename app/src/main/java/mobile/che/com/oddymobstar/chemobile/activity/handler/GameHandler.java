@@ -30,7 +30,7 @@ import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
-import util.GameObjectTypes;
+
 
 /**
  * Created by timmytime on 16/02/16.
@@ -195,6 +195,7 @@ public class GameHandler {
             PolygonOptions utmOptions = UTMGridCreator.getUTMGrid(utm).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
 
             for(SubUTM subUTM : subUTMs) {
+                controller.gameController.currentValidators.add(subUTM);
                 //
                 PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(subUTM, utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
                 controller.mapHelper.getMap().addPolygon(subUtmOptions);
@@ -232,6 +233,41 @@ public class GameHandler {
 
     public void handleStop(String key){
 
+    }
+
+
+    public void handleMoveDestination(final LatLng latLng){
+        //1: popup to say this is the chosen location....then send message.
+        controller.gameController.gameHelper.getDestinationDialog(
+                latLng, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        final List<SubUTM> validators = controller.gameController.currentValidators;
+                        final GameObject gameObject = controller.gameController.currentGameObject;
+                        //this will clear the above...as can only run 1 action at a time...need to stop other presses if timer running.
+                        controller.gameController.gameTimer.stopTimer();
+
+                        controller.mapHandler.handleCamera(new LatLng(controller.gameController.currentGameObject.getLatitude(), controller.gameController.currentGameObject.getLongitude()), 45, 0, 20);
+
+                        //so new message plus tag.  ie we are moving game object.  so make ticket, + set the validators for it.  simples.
+                        //then if its success, we remove map marker as its active...and change the flag, else we say, sorry, its not a valid move...
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    controller.cheService.writeToSocket(controller.messageFactory.moveGameObject(gameObject,validators,latLng, controller.locationListener.getCurrentLocation()));
+                                } catch (NoSuchAlgorithmException e) {
+
+                                }
+                            }
+                        }).start();
+
+
+                    }
+                }
+        ).show();
     }
 
 

@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
@@ -156,19 +157,49 @@ public class GameHelper {
         }, 1000);
     }
 
+    public AlertDialog getDestinationDialog(LatLng latLng, DialogInterface.OnClickListener moveListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+
+        builder.setTitle("Destination Confirmation");
+        builder.setMessage("Move " + GameObjectTypes.getTypeName(controller.gameController.currentGameObject.getSubType()) + " - " + controller.gameController.currentGameObject.getKey());
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("Move It", moveListener);
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
 
     public AlertDialog getGameMoveDialog(final GameObject gameObject){
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
+        controller.gameController.currentGameObject = gameObject;
+
         builder.setTitle("Game Rules");
-        builder.setMessage("Move within the orange grids\nPress on the map for a destination");
+        builder.setMessage("Move within the orange grids\nPress on the map to set destination\nYou have 20 seconds to complete it!");
         builder.setCancelable(false);
 
         builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                 dialog.dismiss();
-                  controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),45, 0, 15);
+                dialog.dismiss();
+                controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 20);
+                controller.gameController.GAME_STATE = GameController.GAME_OBJECT_MOVE_STATE;
+                controller.gameController.gameTimer.startTimer(1000*20);
             }
         });
 

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -89,6 +90,12 @@ public class MessageHandler extends Handler {
         }
     }
 
+    public void moveGameObject(GameObject gameObject){
+        if (controller != null) {
+          controller.mapHandler.addPath(gameObject);
+         }
+
+    }
 
     public void handleUTMChange(String utm) {
 

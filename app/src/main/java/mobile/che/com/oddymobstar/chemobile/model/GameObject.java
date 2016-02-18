@@ -11,7 +11,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 public class GameObject implements CheModelInterface {
 
     private String utmLat, utmLong, subUtmLat, subUtmLong, key, status;
-    private double latitude, longitude;
+    private double latitude, longitude, destLat, destLong;
     private int type, subType;
 
 
@@ -27,6 +27,8 @@ public class GameObject implements CheModelInterface {
         setSubType(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)));
         setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LAT)));
         setLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_LONG)));
+        setDestLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_DEST_LAT)));
+        setDestLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_DEST_LONG)));
         setUtmLat(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)));
         setUtmLong(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)));
         setSubUtmLat(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)));
@@ -105,6 +107,22 @@ public class GameObject implements CheModelInterface {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public double getDestLatitude() {
+        return destLat;
+    }
+
+    public void setDestLatitude(double latitude) {
+        this.destLat = latitude;
+    }
+
+    public double getDestLongitude() {
+        return destLong;
+    }
+
+    public void setDestLongitude(double longitude) {
+        this.destLong = longitude;
     }
 
     public int getType() {

@@ -1,7 +1,10 @@
 package mobile.che.com.oddymobstar.chemobile.util.map;
 
+import android.graphics.Color;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,6 +135,18 @@ public class UTMGridCreator {
         //given above.  we need point1 lat + 1/2 lat degrees + point1 long + 1/2 long degrees
 
         return new LatLng(options.get(0).latitude + (LAT_SUB_DEG / 2), options.get(0).longitude + (LONG_SUB_DEG / 2));
+    }
+
+
+    public static PolylineOptions createPath(LatLng start, LatLng destination){
+        PolylineOptions options = new PolylineOptions();
+
+        options.add(start);
+        options.add(destination);
+        options.width(2);
+        options.color(Color.BLACK);
+
+        return options;
     }
 
 

@@ -6,6 +6,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 
@@ -26,9 +27,14 @@ public class MapListener {
        return new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                GameObject gameObject = controller.dbHelper.getGameObject(marker.getSnippet());
-                controller.gameController.gameHandler.actionsDialog(gameObject.getKey(), gameObject.getType());
-                return true;
+                if(controller.gameController.GAME_STATE != GameController.DEFAULT_STATE) {
+                    GameObject gameObject = controller.dbHelper.getGameObject(marker.getSnippet());
+                    controller.gameController.gameHandler.actionsDialog(gameObject.getKey(), gameObject.getType());
+                    return true;
+                }
+                else{//could warn ie not allowed...as active..
+                    return false;
+                }
             }
         };
     }

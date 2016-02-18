@@ -3,6 +3,8 @@ package mobile.che.com.oddymobstar.chemobile.util;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -18,6 +20,7 @@ import message.UTM;
 import message.UTMLocation;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
+import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import util.Tags;
 
 /**
@@ -143,6 +146,8 @@ public class MessageFactory {
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
         gameObjectMessage.setUtmLocation(createUTMLocation());
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
+
 
         return gameObjectMessage;
     }
@@ -156,6 +161,7 @@ public class MessageFactory {
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
         gameObjectMessage.setUtmLocation(createUTMLocation(location));
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
 
 
         return gameObjectMessage;
@@ -175,10 +181,35 @@ public class MessageFactory {
                 gameObject.getUtmLong(), gameObject.getSubUtmLat(),
                 gameObject.getSubUtmLong());
         gameObjectMessage.setUtmLocation(utmLocation);
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
+
         //we only set the one we are adding...or do we send all of them?  just add
         List<Missile> missiles = new ArrayList<>();
         missiles.add(createMissile(explosive, utmLocation));
         gameObjectMessage.setMissiles(missiles);
+
+        return gameObjectMessage;
+    }
+
+    private message.GameObject createGameObjectMove(GameObject gameObject, List<SubUTM> validators, LatLng destination){
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.GAME_OBJECT_MOVE);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+
+        gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(),
+                gameObject.getUtmLat(), gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation(destination.latitude, destination.longitude, "", "", "", ""));
+
+
+        List<UTM> utms = new ArrayList<>();
+        for(SubUTM subUTM : validators) {
+            utms.add(createUTM(subUTM.getSubUtmLat(), subUTM.getSubUtmLong()));
+        }
+        gameObjectMessage.setDestinationValidator(utms);
 
         return gameObjectMessage;
     }
@@ -321,6 +352,20 @@ public class MessageFactory {
 
         return cheMessage;
 
+    }
+
+    public CheMessage moveGameObject(GameObject gameObject, List<SubUTM> validators, LatLng destination, Location location) throws  NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObjectMove(gameObject, validators, destination);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        return cheMessage;
     }
 
 

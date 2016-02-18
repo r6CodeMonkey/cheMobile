@@ -55,7 +55,9 @@ public class MaterialsHelper {
     public TextView playerName;
     public TextView playerKey;
     public String playerKeyString = "";
+    public TextView gameTimer;
     private Context context;
+
 
 
     public MaterialsHelper(ProjectCheActivity main) {
@@ -189,6 +191,9 @@ public class MaterialsHelper {
                 userImageView.setImageBitmap(userImage.getUserImage());
             }
         }
+
+       gameTimer = (TextView)main.findViewById(R.id.nav_timer);
+
 
     }
 

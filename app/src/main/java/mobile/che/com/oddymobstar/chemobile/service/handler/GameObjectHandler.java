@@ -68,6 +68,25 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.GAME_OBJECT_HIT:
                 break;
             case Tags.GAME_OBJECT_MOVE:
+                if(gameObject.getValue().equals(Tags.SUCCESS)){
+                    model = dbHelper.getGameObject(gameObject.getKey());
+                    model.setLatitude(gameObject.getUtmLocation().getLatitude());
+                    model.setLongitude(gameObject.getUtmLocation().getLongitude());
+                    model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
+                    model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
+                    model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
+                    model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                    model.setStatus(Tags.GAME_OBJECT_IS_MOVING);
+                    //done....talking to myself...
+                    model.setDestLatitude(gameObject.getDestinationUtmLocation().getLatitude());
+                    model.setDestLongitude(gameObject.getDestinationUtmLocation().getLongitude());
+
+                    dbHelper.updateGameObject(model);
+
+                }else{
+                    //its invalid we need to send to user...note we need the screen to say so
+                    Log.d("invalid move", "invalid move");
+                }
                 break;
             case Tags.GAME_OBJECT_DESTROYED:
                 break;

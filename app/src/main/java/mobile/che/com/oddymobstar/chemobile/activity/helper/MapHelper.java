@@ -56,6 +56,7 @@ public class MapHelper {
             map = ((SupportMapFragment) main.getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
 
+
             // Check if we were successful in obtaining the map.
             if (map != null) {
                 setUpMap();
@@ -103,8 +104,10 @@ public class MapHelper {
         }
         controller.mapHandler.addOthers();
         addGameMarkers();
+        addPaths();
 
         map.setOnMarkerClickListener(controller.mapListener.getMarkerListener());
+        map.setOnMapLongClickListener(controller.gameController.gameListener.getGameLongClickListener());
     }
 
 
@@ -171,5 +174,14 @@ public class MapHelper {
         }
         cursor.close();
 
+    }
+
+    private void addPaths(){
+        Cursor cursor = controller.dbHelper.getMovingGameObjects();
+
+        while (cursor.moveToNext()) {
+            controller.mapHandler.addPath(new GameObject(cursor));
+        }
+        cursor.close();
     }
 }

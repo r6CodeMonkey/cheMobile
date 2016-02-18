@@ -202,6 +202,13 @@ public class MapHandler {
 
     }
 
+    public void addPath(GameObject gameObject){
+        controller.mapHelper.getMap().addPolyline(UTMGridCreator.createPath(
+                new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),
+                new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude())));
+
+    }
+
     public void addOthers() {
         //we now need to add any of our alliance members in...
   /*      Cursor allianceMembers = controller.dbHelper.getAllianceMembers();
