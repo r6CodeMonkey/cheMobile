@@ -1,7 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.util.map;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,8 +18,6 @@ public class SubUTM {
     private int subLatInt;
 
 
-
-
     public SubUTM(String subUtm) {
         process(subUtm);
 
@@ -31,7 +27,6 @@ public class SubUTM {
         process(subUtmLat + subUtmLong);
 
     }
-
 
 
     public static void createSubUtms() {
@@ -44,7 +39,6 @@ public class SubUTM {
         }
 
     }
-
 
 
     public static List<String> getSubUtmList() {

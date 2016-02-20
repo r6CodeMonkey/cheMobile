@@ -69,28 +69,18 @@ public class OnOptionsItemSelectedHandler {
                 controller.viewHandler.allianceInvite(false);
                 break; */
             case R.id.game_land:
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
-                controller.fragmentHandler.removeFragments(false);
                 handleGame(GameObjectGridFragment.LAND, main.getResources().getString(R.string.menu_land));
                 break;
             case R.id.game_sea:
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
-                controller.fragmentHandler.removeFragments(false);
                 handleGame(GameObjectGridFragment.SEA, main.getResources().getString(R.string.menu_sea));
                 break;
             case R.id.game_airborne:
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
-                controller.fragmentHandler.removeFragments(false);
                 handleGame(GameObjectGridFragment.AIR, main.getResources().getString(R.string.menu_airborne));
                 break;
             case R.id.game_missiles:
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
-                controller.fragmentHandler.removeFragments(false);
                 handleGame(GameObjectGridFragment.MISSILE, main.getResources().getString(R.string.menu_explosives));
                 break;
             case R.id.game_infastructure:
-                controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
-                controller.fragmentHandler.removeFragments(false);
                 handleGame(GameObjectGridFragment.INFASTRUCTURE, main.getResources().getString(R.string.menu_infrastructure));
                 break;
             case R.id.utm:
@@ -167,12 +157,6 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
         controller.mapHandler.animateToGrid(controller.mapHelper.getMySubUTM(), MapHandler.SUB_UTM_ZOOM);
 
-/*        try {
-            //
-            transaction.show(controller.fragmentHandler.gridViewFragment);
-        } catch (Exception e) {
-
-        } */
 
         transaction.commit();
 
@@ -196,6 +180,10 @@ public class OnOptionsItemSelectedHandler {
     }
 
     private void handleGame(int type, String title) {
+
+        controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
+        controller.fragmentHandler.removeFragments(false);
+
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
@@ -207,6 +195,7 @@ public class OnOptionsItemSelectedHandler {
 
         controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getGameObjectTypesListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
+        transaction.addToBackStack(null); //this is an issue with backstack back press...but it fucks everything else up via nav drawer selection
         transaction.commit();
     }
 
@@ -221,6 +210,7 @@ public class OnOptionsItemSelectedHandler {
 
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.confFrag);
         transaction.commit();
+
     }
 
 }

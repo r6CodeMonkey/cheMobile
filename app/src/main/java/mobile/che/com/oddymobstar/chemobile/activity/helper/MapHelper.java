@@ -10,7 +10,6 @@ import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -170,13 +169,13 @@ public class MapHelper {
         Cursor cursor = controller.dbHelper.getAddedGameObjects();
 
         while (cursor.moveToNext()) {
-            controller.mapHandler.addGameObject(new GameObject(cursor));
+            controller.mapHandler.addGameObject(new GameObject(cursor), false);
         }
         cursor.close();
 
     }
 
-    private void addPaths(){
+    private void addPaths() {
         Cursor cursor = controller.dbHelper.getMovingGameObjects();
 
         while (cursor.moveToNext()) {

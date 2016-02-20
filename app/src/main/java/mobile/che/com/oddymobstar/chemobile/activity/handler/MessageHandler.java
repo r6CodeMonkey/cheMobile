@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Handler;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -31,10 +30,16 @@ public class MessageHandler extends Handler {
 
     public void handleGameObject() {
         if (controller != null) {
+
+            Log.d("adapter", "handler is not null so adding object, getting bored fixing shit that worked when i havent touched it  2");
+
+
             if (controller.fragmentHandler.gameFrag != null) {
                 main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("adapter", "handler is not null so adding object, getting bored fixing shit that worked when i havent touched it 3");
+
                         controller.fragmentHandler.gameFrag.refreshAdapter();
                     }
                 });
@@ -58,11 +63,25 @@ public class MessageHandler extends Handler {
         }
     }
 
+    public void handleVidiNews() {
+        if (controller != null) {
+            if (controller.fragmentHandler.vidiPrintFragment != null) {
+                main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
+                    }
+                });
+
+            }
+        }
+    }
+
     public void handlePlayerKey(String key) {
 
         if (controller != null) {
             controller.materialsHandler.handlePlayerKey(key);
-            if(controller.progressDialog != null){
+            if (controller.progressDialog != null) {
 
                 Log.d("dismiss progress", "dismiss");
 
@@ -86,14 +105,15 @@ public class MessageHandler extends Handler {
 
     public void addGameObject(GameObject gameObject) {
         if (controller != null) {
-            controller.mapHandler.addGameObject(gameObject);
+            controller.mapHandler.addGameObject(gameObject, false);
         }
     }
 
-    public void moveGameObject(GameObject gameObject){
+    public void moveGameObject(GameObject gameObject) {
         if (controller != null) {
-          controller.mapHandler.addPath(gameObject);
-         }
+            controller.mapHandler.addPath(gameObject);
+            controller.gameController.gameTimer.stopTimer();
+        }
 
     }
 

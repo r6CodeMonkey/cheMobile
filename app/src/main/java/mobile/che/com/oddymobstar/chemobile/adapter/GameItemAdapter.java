@@ -37,6 +37,7 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
         super(context, c, autoRequery);
         this.context = context;
         this.type = type;
+
     }
 
 
@@ -58,9 +59,10 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tv = (TextView) view.findViewById(R.id.game_item_name);
 
+
         String detail = String.format("%s\nTotal:%s", GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),
                 cursor.getString(cursor.getColumnIndexOrThrow("type_total")));
-        ;
+
         //in reality, its going to be the type name + key....
         tv.setText(detail);
     }

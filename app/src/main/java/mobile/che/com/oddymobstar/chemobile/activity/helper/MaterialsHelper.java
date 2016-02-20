@@ -9,10 +9,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.graphics.RoundedImageView;
@@ -35,6 +38,7 @@ public class MaterialsHelper {
     public static final int MISSILE_COLOR = 9;
 
     private final ProjectCheActivity main;
+    private final ProjectCheController controller;
     private final ColorStateList subUtmColorList;
     private final ColorStateList utmColorList;
     private final ColorStateList allianceColorList;
@@ -56,13 +60,14 @@ public class MaterialsHelper {
     public TextView playerKey;
     public String playerKeyString = "";
     public TextView gameTimer;
+    public Animation blinkAnimation;
     private Context context;
 
 
-
-    public MaterialsHelper(ProjectCheActivity main) {
+    public MaterialsHelper(ProjectCheActivity main, ProjectCheController controller) {
         this.context = main.getApplicationContext();
         this.main = main;
+        this.controller = controller;
 
         subUtmColorList = createColorStateList(android.R.color.holo_orange_dark);
         utmColorList = createColorStateList(android.R.color.holo_purple);
@@ -192,7 +197,14 @@ public class MaterialsHelper {
             }
         }
 
-       gameTimer = (TextView)main.findViewById(R.id.nav_timer);
+        gameTimer = (TextView) main.findViewById(R.id.nav_timer);
+
+        blinkAnimation = AnimationUtils.loadAnimation(main, R.anim.blink);
+
+
+        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.vidiprint_fragment, controller.fragmentHandler.vidiPrintFragment);
+        transaction.commit();
 
 
     }

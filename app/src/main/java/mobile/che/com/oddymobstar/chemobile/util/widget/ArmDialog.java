@@ -8,11 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
-import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 
 /**
  * Created by timmytime on 17/02/16.
@@ -30,7 +26,7 @@ public class ArmDialog extends DialogFragment {
     private Cursor selectedObject;
 
     public static ArmDialog newInstance(String gameObject, String key, ArmExplosiveAdapter adapter,
-                                        DialogInterface.OnClickListener listener,DialogInterface.OnCancelListener dismiss) {
+                                        DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener dismiss) {
         armListener = listener;
         dismissListener = dismiss;
         gameObjectName = gameObject;
@@ -46,7 +42,7 @@ public class ArmDialog extends DialogFragment {
         return gameObjectKey;
     }
 
-    public Cursor getSelectItem(){
+    public Cursor getSelectItem() {
         return selectedObject;
     }
 
@@ -55,11 +51,11 @@ public class ArmDialog extends DialogFragment {
 
         builder.setTitle("Arm " + gameObjectName);
 
-        builder.setSingleChoiceItems(gameObjects, -1, new DialogInterface.OnClickListener(){
+        builder.setSingleChoiceItems(gameObjects, -1, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedObject = (Cursor)gameObjects.getItem(which);
+                selectedObject = (Cursor) gameObjects.getItem(which);
             }
         });
 

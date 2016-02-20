@@ -9,6 +9,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
+
 /**
  * Created by timmytime on 05/05/15.
  */
@@ -138,13 +140,24 @@ public class UTMGridCreator {
     }
 
 
-    public static PolylineOptions createPath(LatLng start, LatLng destination){
+    public static PolylineOptions createPath(LatLng start, LatLng destination, int type) {
         PolylineOptions options = new PolylineOptions();
 
         options.add(start);
         options.add(destination);
-        options.width(2);
-        options.color(Color.BLACK);
+        options.width(50);
+        switch (type) {
+            case GameObjectGridFragment.AIR:
+                options.color(Color.CYAN);
+                break;
+            case GameObjectGridFragment.LAND:
+                options.color(Color.GREEN);
+                break;
+            case GameObjectGridFragment.SEA:
+                options.color(Color.BLUE);
+                break;
+
+        }
 
         return options;
     }

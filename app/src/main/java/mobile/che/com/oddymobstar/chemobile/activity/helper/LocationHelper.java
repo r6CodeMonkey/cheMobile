@@ -1,6 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.activity.helper;
 
-import android.app.ProgressDialog;
 import android.location.LocationManager;
 
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;

@@ -10,7 +10,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.security.NoSuchAlgorithmException;
 
-import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -46,18 +45,17 @@ public class LocationListener implements android.location.LocationListener {
         //this is our only location listener now...
         currentLocation = location;
 
-        if(controller.progressDialog != null){
+        if (controller.progressDialog != null) {
             controller.progressDialog.dismiss();
 
             //its enough for time being.
-            if(controller.runNewUserAnimation){
+            if (controller.runNewUserAnimation) {
                 controller.runNewUserAnimation = false;
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
-
                     }
                 }, 1500);
 

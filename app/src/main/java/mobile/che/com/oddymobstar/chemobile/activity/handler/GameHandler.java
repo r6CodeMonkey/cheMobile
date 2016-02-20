@@ -3,9 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -71,7 +69,7 @@ public class GameHandler {
 
     }
 
-    public void armDialog(String object, String key, ArmExplosiveAdapter adapter){
+    public void armDialog(String object, String key, ArmExplosiveAdapter adapter) {
         controller.gameController.armDialog =
                 ArmDialog.newInstance(object, key, adapter,
                         new DialogInterface.OnClickListener() {
@@ -96,22 +94,24 @@ public class GameHandler {
         controller.gameController.armDialog.show(transaction, "dialog");
     }
 
-    public void actionsDialog(String key, final int type){
+    public void actionsDialog(String key, final int type) {
+
         controller.gameController.actionsDialog =
                 GameObjectActionsDialog.newInstance(type, key,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, final int which) {
-                              //positive action
+                                //positive action
                                 dialog.dismiss();
-                                switch (type){
+                                switch (type) {
                                     case GameObjectGridFragment.INFASTRUCTURE: //repair
                                         handleRepair(controller.gameController.actionsDialog.getGameObjectKey());
                                         break;
-                                    case GameObjectGridFragment.AIR: //take off
-                                        handleTakeOff(controller.gameController.actionsDialog.getGameObjectKey());
+                                    case GameObjectGridFragment.AIR: //take off .. does it really need airport....ie cant deploy unless at a nase
+                                        handleGameObjectMove(controller.gameController.actionsDialog.getGameObjectKey());
                                         break;
                                     default: //land and sea move
+                                        Log.d("actions", "actions handler");
                                         handleGameObjectMove(controller.gameController.actionsDialog.getGameObjectKey());
                                         break;
                                 }
@@ -138,7 +138,7 @@ public class GameHandler {
                                 //neutral action
                                 dialog.dismiss();
                                 handleGameObjectTarget(controller.gameController.actionsDialog.getGameObjectKey());
-                           }
+                            }
                         }
                         , new DialogInterface.OnCancelListener() {
                             @Override
@@ -179,7 +179,7 @@ public class GameHandler {
         controller.gameController.deployDialog.show(transaction, "dialog");
     }
 
-    public void handleGameObjectMove(final String key){
+    public void handleGameObjectMove(final String key) {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
 
@@ -188,13 +188,13 @@ public class GameHandler {
         //we need to grab out each UTM, and its children.
         Set<UTM> keys = mapGridInfo.keySet();
 
-        for(UTM utm : keys){
+        for (UTM utm : keys) {
             //grab our sub utm list...
             List<SubUTM> subUTMs = mapGridInfo.get(utm);
 
             PolygonOptions utmOptions = UTMGridCreator.getUTMGrid(utm).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
 
-            for(SubUTM subUTM : subUTMs) {
+            for (SubUTM subUTM : subUTMs) {
                 controller.gameController.currentValidators.add(subUTM);
                 //
                 PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(subUTM, utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
@@ -215,28 +215,29 @@ public class GameHandler {
 
     }
 
-    public void handleGameObjectTarget(String key){
+    public void handleGameObjectTarget(String key) {
 
     }
 
-    public void handleRepair(String key){
+    public void handleRepair(String key) {
 
     }
 
-    public void handleTakeOff(String key){
+    //think there is nothing to do here
+    public void handleTakeoff(String key) {
 
     }
 
-    public void handleLanding(String key){
+    public void handleLanding(String key) {
 
     }
 
-    public void handleStop(String key){
+    public void handleStop(String key) {
 
     }
 
 
-    public void handleMoveDestination(final LatLng latLng){
+    public void handleMoveDestination(final LatLng latLng) {
         //1: popup to say this is the chosen location....then send message.
         controller.gameController.gameHelper.getDestinationDialog(
                 latLng, new DialogInterface.OnClickListener() {
@@ -246,8 +247,6 @@ public class GameHandler {
 
                         final List<SubUTM> validators = controller.gameController.currentValidators;
                         final GameObject gameObject = controller.gameController.currentGameObject;
-                        //this will clear the above...as can only run 1 action at a time...need to stop other presses if timer running.
-                        controller.gameController.gameTimer.stopTimer();
 
                         controller.mapHandler.handleCamera(new LatLng(controller.gameController.currentGameObject.getLatitude(), controller.gameController.currentGameObject.getLongitude()), 45, 0, 20);
 
@@ -257,7 +256,8 @@ public class GameHandler {
                             @Override
                             public void run() {
                                 try {
-                                    controller.cheService.writeToSocket(controller.messageFactory.moveGameObject(gameObject,validators,latLng, controller.locationListener.getCurrentLocation()));
+                                    controller.cheService.writeToSocket(controller.messageFactory.moveGameObject(gameObject, validators, latLng, controller.locationListener.getCurrentLocation()));
+
                                 } catch (NoSuchAlgorithmException e) {
 
                                 }

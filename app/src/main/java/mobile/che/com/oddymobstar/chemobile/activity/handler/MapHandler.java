@@ -164,11 +164,11 @@ public class MapHandler {
                 markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me").icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(roundBitmap, 354, 354, false))).flat(false)));
             }
         } else { */
-      //  markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me")));
+        //  markerMap.put("Me", controller.mapHelper.getMap().addMarker(new MarkerOptions().position(latLng).title("Me")));
         //   }
     }
 
-    public void addGameObject(final GameObject gameObject) {
+    public void addGameObject(final GameObject gameObject, final boolean destination) {
 
 
         main.runOnUiThread(new Runnable() {
@@ -177,15 +177,15 @@ public class MapHandler {
 
                 float hue = BitmapDescriptorFactory.HUE_AZURE;
 
-                switch(gameObject.getType()){
+                switch (gameObject.getType()) {
                     case GameObjectGridFragment.AIR:
-                        hue = BitmapDescriptorFactory.HUE_BLUE;
+                        hue = BitmapDescriptorFactory.HUE_AZURE;
                         break;
                     case GameObjectGridFragment.LAND:
                         hue = BitmapDescriptorFactory.HUE_GREEN;
                         break;
                     case GameObjectGridFragment.SEA:
-                        hue = BitmapDescriptorFactory.HUE_AZURE;
+                        hue = BitmapDescriptorFactory.HUE_BLUE;
                         break;
                     case GameObjectGridFragment.INFASTRUCTURE:
                         hue = BitmapDescriptorFactory.HUE_RED;
@@ -193,8 +193,12 @@ public class MapHandler {
 
                 }
 
+                if (destination) {
+                    hue = BitmapDescriptorFactory.HUE_YELLOW;
+                }
+
                 markerMap.put(gameObject.getKey(), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
-                        new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
+                        new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
 
             }
@@ -202,12 +206,26 @@ public class MapHandler {
 
     }
 
-    public void addPath(GameObject gameObject){
-        controller.mapHelper.getMap().addPolyline(UTMGridCreator.createPath(
-                new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),
-                new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude())));
+    public void addPath(final GameObject gameObject) {
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                controller.mapHelper.getMap().addPolyline(UTMGridCreator.createPath(
+                        new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),
+                        new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), gameObject.getType()));
+
+                addGameObject(gameObject, false);
+                GameObject destination = gameObject;
+                destination.setLongitude(gameObject.getDestLongitude());
+                destination.setLatitude(gameObject.getDestLatitude());
+                addGameObject(gameObject, true);
+
+            }
+        });
 
     }
+
 
     public void addOthers() {
         //we now need to add any of our alliance members in...

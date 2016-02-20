@@ -15,19 +15,19 @@ public class GameListener {
     private final ProjectCheActivity main;
     private final ProjectCheController controller;
 
-    public GameListener(ProjectCheActivity main, ProjectCheController controller){
+    public GameListener(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
     }
 
-    public GoogleMap.OnMapLongClickListener getGameLongClickListener(){
+    public GoogleMap.OnMapLongClickListener getGameLongClickListener() {
 
         return new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                
+
                 //what is our mode...
-                switch(controller.gameController.GAME_STATE){
+                switch (controller.gameController.GAME_STATE) {
                     case GameController.GAME_OBJECT_MOVE_STATE:
                         controller.gameController.gameHandler.handleMoveDestination(latLng);
                         break;

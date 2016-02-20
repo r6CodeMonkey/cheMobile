@@ -23,9 +23,9 @@ public class DeployDialog extends DialogFragment {
 
 
     public static DeployDialog newInstance(String action, String gameObject, String key,
-                                           DialogInterface.OnClickListener listener,DialogInterface.OnCancelListener dismiss) {
+                                           DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener dismiss) {
         deployListener = listener;
-         dismissListener = dismiss;
+        dismissListener = dismiss;
         gameObjectName = gameObject;
         deployAction = action;
         gameObjectKey = key;
@@ -36,7 +36,6 @@ public class DeployDialog extends DialogFragment {
     public String getGameObjectKey() {
         return gameObjectKey;
     }
-
 
 
     public Dialog onCreateDialog(Bundle savedInstance) {

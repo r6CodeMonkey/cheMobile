@@ -157,7 +157,7 @@ public class GameHelper {
         }, 1000);
     }
 
-    public AlertDialog getDestinationDialog(LatLng latLng, DialogInterface.OnClickListener moveListener){
+    public AlertDialog getDestinationDialog(LatLng latLng, DialogInterface.OnClickListener moveListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
 
@@ -184,7 +184,7 @@ public class GameHelper {
     }
 
 
-    public AlertDialog getGameMoveDialog(final GameObject gameObject){
+    public AlertDialog getGameMoveDialog(final GameObject gameObject) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
         controller.gameController.currentGameObject = gameObject;
@@ -199,7 +199,7 @@ public class GameHelper {
                 dialog.dismiss();
                 controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 20);
                 controller.gameController.GAME_STATE = GameController.GAME_OBJECT_MOVE_STATE;
-                controller.gameController.gameTimer.startTimer(1000*20);
+                controller.gameController.gameTimer.startTimer(1000 * 20);
             }
         });
 

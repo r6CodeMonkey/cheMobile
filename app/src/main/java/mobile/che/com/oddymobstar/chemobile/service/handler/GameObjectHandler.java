@@ -41,6 +41,7 @@ public class GameObjectHandler extends MessageHandler {
                 model.setKey(gameObject.getKey());
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
+                model.setStatus("");
                 dbHelper.addGameObject(model);
 
                 Log.d("purchase", "have purchased " + model.getType() + " " + model.getSubType());
@@ -68,7 +69,7 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.GAME_OBJECT_HIT:
                 break;
             case Tags.GAME_OBJECT_MOVE:
-                if(gameObject.getValue().equals(Tags.SUCCESS)){
+                if (gameObject.getValue().equals(Tags.SUCCESS)) {
                     model = dbHelper.getGameObject(gameObject.getKey());
                     model.setLatitude(gameObject.getUtmLocation().getLatitude());
                     model.setLongitude(gameObject.getUtmLocation().getLongitude());
@@ -83,7 +84,7 @@ public class GameObjectHandler extends MessageHandler {
 
                     dbHelper.updateGameObject(model);
 
-                }else{
+                } else {
                     //its invalid we need to send to user...note we need the screen to say so
                     Log.d("invalid move", "invalid move");
                 }

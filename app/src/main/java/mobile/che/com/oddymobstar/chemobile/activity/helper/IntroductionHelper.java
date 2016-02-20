@@ -14,7 +14,7 @@ public class IntroductionHelper {
     private final ProjectCheController controller;
 
 
-    public IntroductionHelper(ProjectCheActivity main, ProjectCheController controller){
+    public IntroductionHelper(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
     }
@@ -23,7 +23,7 @@ public class IntroductionHelper {
       basically just put our popups to help users..messages go in the strings resource file..
      */
 
-    public AlertDialog getAlertDialog(String title, String message){
+    public AlertDialog getAlertDialog(String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
         builder.setTitle(title);

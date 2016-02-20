@@ -10,6 +10,7 @@ import mobile.che.com.oddymobstar.chemobile.fragment.ChatFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameSubTypeGridFragment;
+import mobile.che.com.oddymobstar.chemobile.fragment.VidiPrintFragment;
 
 
 /**
@@ -24,12 +25,16 @@ public class FragmentHandler {
     public ConfigurationFragment confFrag = new ConfigurationFragment();
     public GameObjectGridFragment gameFrag = new GameObjectGridFragment();
     public GameSubTypeGridFragment gameSubTypeFrag = new GameSubTypeGridFragment();
+    public VidiPrintFragment vidiPrintFragment = new VidiPrintFragment();
 
 
     public FragmentHandler(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
+
+        vidiPrintFragment.setVidi(controller.dbHelper.getVidiNews());
     }
+
 
     public void removeFragments(boolean backPressed) {
 
@@ -40,7 +45,6 @@ public class FragmentHandler {
         } catch (Exception e) {
 
         }
-
 
         try {
             transaction.remove(chatFrag);

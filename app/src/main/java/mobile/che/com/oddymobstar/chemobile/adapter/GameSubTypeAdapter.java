@@ -46,7 +46,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         switch (status) {
             case "Deploy":
                 return true;
-             case "Arm":
+            case "Arm":
                 return true;
             case "Drop":
                 return true;
@@ -59,7 +59,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
     }
 
 
-    public static String getTertiaryAction(Cursor cursor){
+    public static String getTertiaryAction(Cursor cursor) {
         switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
             case GameObjectGridFragment.INFASTRUCTURE:
                 return "";
@@ -153,14 +153,14 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
-        if(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)) == GameObjectGridFragment.MISSILE){
+        if (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)) == GameObjectGridFragment.MISSILE) {
             String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
                     getStatus(cursor));
             tv.setText(detail);
 
-        }else {
+        } else {
             String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s\nExplosives:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),

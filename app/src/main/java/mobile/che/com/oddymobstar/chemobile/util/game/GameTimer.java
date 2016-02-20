@@ -14,12 +14,12 @@ public class GameTimer {
     private final ProjectCheActivity main;
     private final ProjectCheController controller;
 
-    public GameTimer(ProjectCheActivity main, ProjectCheController controller){
+    public GameTimer(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
     }
 
-    public void stopTimer(){
+    public void stopTimer() {
         main.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -31,7 +31,7 @@ public class GameTimer {
 
     }
 
-    public void startTimer(long duration){
+    public void startTimer(long duration) {
 
 
         new CountDownTimer(duration, 1000) {
@@ -41,18 +41,17 @@ public class GameTimer {
                 main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        controller.materialsHelper.gameTimer.setText(String.valueOf(millisUntilFinished/1000));
+                        controller.materialsHelper.gameTimer.startAnimation(controller.materialsHelper.blinkAnimation);
+                        controller.materialsHelper.gameTimer.setText(String.valueOf(millisUntilFinished / 1000));
                     }
                 });
             }
 
             @Override
             public void onFinish() {
-               stopTimer();
+                stopTimer();
             }
         }.start();
-
-
 
 
     }

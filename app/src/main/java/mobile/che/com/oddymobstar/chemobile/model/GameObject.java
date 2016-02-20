@@ -51,14 +51,16 @@ public class GameObject implements CheModelInterface {
         return utmLat;
     }
 
-    public String getStatus(){return status;}
-
-    public void setStatus(String status){
-        this.status = status;
-    }
-
     public void setUtmLat(String utmLat) {
         this.utmLat = utmLat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUtmLong() {

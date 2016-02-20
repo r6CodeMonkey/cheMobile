@@ -51,7 +51,9 @@ public class CheMessageQueue {
             messageQueue.remove(ack);
             lastSentKey = "";
             try {
-                cheServiceSocket.write(messageQueue.get(messageQueue.keySet().iterator().next()));
+                if (!messageQueue.isEmpty()) {
+                    cheServiceSocket.write(messageQueue.get(messageQueue.keySet().iterator().next()));
+                }
             } catch (Exception e) {
                 Log.d("receive ack", "receive error " + e.getMessage());
             }

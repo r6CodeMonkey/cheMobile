@@ -83,7 +83,7 @@ public class MessageFactory {
         return utmLocation;
     }
 
-    private UTMLocation createUTMLocation(double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong){
+    private UTMLocation createUTMLocation(double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong) {
         UTMLocation utmLocation = new UTMLocation();
         utmLocation.create();
 
@@ -124,7 +124,7 @@ public class MessageFactory {
         return player;
     }
 
-    private Missile createMissile(GameObject missile, UTMLocation utmLocation){
+    private Missile createMissile(GameObject missile, UTMLocation utmLocation) {
         Missile missileMessage = new Missile();
         missileMessage.create();
 
@@ -167,7 +167,7 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
-    private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive){
+    private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
 
@@ -191,7 +191,7 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
-    private message.GameObject createGameObjectMove(GameObject gameObject, List<SubUTM> validators, LatLng destination){
+    private message.GameObject createGameObjectMove(GameObject gameObject, List<SubUTM> validators, LatLng destination) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
 
@@ -206,7 +206,7 @@ public class MessageFactory {
 
 
         List<UTM> utms = new ArrayList<>();
-        for(SubUTM subUTM : validators) {
+        for (SubUTM subUTM : validators) {
             utms.add(createUTM(subUTM.getSubUtmLat(), subUTM.getSubUtmLong()));
         }
         gameObjectMessage.setDestinationValidator(utms);
@@ -320,6 +320,8 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
+        Log.d("purchase", "purchase msg " + cheMessage.toString());
+
 
         return cheMessage;
     }
@@ -340,7 +342,7 @@ public class MessageFactory {
 
     }
 
-    public CheMessage armExplosive(GameObject gameObject, GameObject explosive, Location location) throws NoSuchAlgorithmException{
+    public CheMessage armExplosive(GameObject gameObject, GameObject explosive, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -354,7 +356,7 @@ public class MessageFactory {
 
     }
 
-    public CheMessage moveGameObject(GameObject gameObject, List<SubUTM> validators, LatLng destination, Location location) throws  NoSuchAlgorithmException{
+    public CheMessage moveGameObject(GameObject gameObject, List<SubUTM> validators, LatLng destination, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -364,6 +366,9 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "move vaidator size " + validators.size());
+        Log.d("move", "move msg " + cheMessage.toString());
 
         return cheMessage;
     }

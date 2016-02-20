@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -59,11 +60,16 @@ public class ViewListener {
 
                 if (action.equals("Arm")) {
                     controller.gameController.gameHandler.armDialog(title, key,
-                            new ArmExplosiveAdapter(main, controller.dbHelper.getAvailableObjectsToArm(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),true));
+                            new ArmExplosiveAdapter(main, controller.dbHelper.getAvailableObjectsToArm(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))), true));
                 } else {
 
                     //zoom to wherever we are headed.
                     controller.mapHandler.handleCamera(latLng, 45, 0, 20);
+                    Marker marker = controller.mapHandler.getMarkerMap().get(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+
+                    if (marker != null) {
+                        marker.showInfoWindow();
+                    }
 
                     //ideally need to wait a little bit.
                     if (deploy) {

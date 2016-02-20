@@ -141,7 +141,7 @@ public class ProjectCheController {
 
         dbHelper.setMessageHandler(messageHandler);
 
-        materialsHelper = new MaterialsHelper(main);
+        materialsHelper = new MaterialsHelper(main, this);
         materialsHandler = new MaterialsHandler(main, this);
         materialsListener = new MaterialsListener(main, this);
 
@@ -194,6 +194,7 @@ public class ProjectCheController {
         main.bindService(intent, serviceConnection, main.BIND_AUTO_CREATE);
 
         mapHelper.setUpMapIfNeeded();
+
 
     }
 
