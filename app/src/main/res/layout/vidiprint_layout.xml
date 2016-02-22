@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,11 +8,20 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         android:id="@+id/vidiprint_list">
 
     </ListView>
 
-    </LinearLayout>
+    <mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textSize="16dp"
+        android:id="@+id/vidi_print_new_item"
+        android:layout_below="@+id/vidiprint_list"
+        android:textColor="@android:color/holo_green_dark"/>
+
+    </RelativeLayout>

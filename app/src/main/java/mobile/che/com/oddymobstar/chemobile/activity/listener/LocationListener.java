@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
 
@@ -44,6 +45,11 @@ public class LocationListener implements android.location.LocationListener {
     public void onLocationChanged(Location location) {
         //this is our only location listener now...
         currentLocation = location;
+
+        Message message = new Message();
+        message.setMessage("this is a test on location change and now we force a line break");
+        message.setTime(System.currentTimeMillis());
+        controller.dbHelper.addVidiNews(message);
 
         if (controller.progressDialog != null) {
             controller.progressDialog.dismiss();

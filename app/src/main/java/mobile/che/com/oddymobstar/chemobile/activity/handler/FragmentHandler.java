@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import mobile.che.com.oddymobstar.chemobile.R;
@@ -11,6 +13,7 @@ import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameSubTypeGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.VidiPrintFragment;
+import util.GameObjectTypes;
 
 
 /**
@@ -28,11 +31,20 @@ public class FragmentHandler {
     public VidiPrintFragment vidiPrintFragment = new VidiPrintFragment();
 
 
-    public FragmentHandler(ProjectCheActivity main, ProjectCheController controller) {
+    public FragmentHandler(ProjectCheActivity main, final ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
 
         vidiPrintFragment.setVidi(controller.dbHelper.getVidiNews());
+
+        vidiPrintFragment.addFragmentCallback(new Runnable() {
+            @Override
+            public void run() {
+                vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
+                vidiPrintFragment.clearNewText();
+            }
+        });
+
     }
 
 

@@ -230,6 +230,8 @@ public class ProjectCheController {
         if (locationHelper.getLocationUpdates() == null) {
             mapHelper.initLocationUpdates();
         }
+        //clear old news on resume....
+        dbHelper.deleteVidiNews(System.currentTimeMillis());
         //and we need to bind to it.
         if (cheService == null) {
             main.bindService(intent, serviceConnection, main.BIND_AUTO_CREATE);

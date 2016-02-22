@@ -4,20 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import java.util.Date;
+
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView;
 
 /**
  * Created by timmytime on 20/02/16.
  */
 public class VidiPrintAdapter extends CursorAdapter {
 
-    private final int layout = android.R.layout.simple_list_item_1;
+    private final int layout = R.layout.vidi_print_row;
 
     public VidiPrintAdapter(Context context, Cursor cursor, boolean autoRequery) {
         super(context, cursor, autoRequery);
@@ -37,13 +42,19 @@ public class VidiPrintAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        final TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setTextColor(Color.GREEN);
+        final TextView textView = (TextView) view.findViewById(R.id.vidi_print_item);
 
-        textView.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
+        Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_TIME)));
+
+        //need to add date time formatted:
+        String formatter = String.format("%s:%s",VidiPrintView.sdf.format(date),  cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
+
+        textView.setText(formatter);
 
     }
-
+    /*
+     wrong...basically we want it on a new view only.
+     */
 
 }
 

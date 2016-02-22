@@ -63,13 +63,14 @@ public class MessageHandler extends Handler {
         }
     }
 
-    public void handleVidiNews() {
+    public void handleVidiNews(final String message) {
         if (controller != null) {
             if (controller.fragmentHandler.vidiPrintFragment != null) {
                 main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
+                        controller.fragmentHandler.vidiPrintFragment.setNewText(message);
+                       // controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
                     }
                 });
 

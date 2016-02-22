@@ -20,6 +20,7 @@ import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView;
 import util.GameObjectTypes;
 import util.Tags;
 
@@ -265,7 +266,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(VIDIPRINT_TABLE, null, values);
 
         if (messageHandler != null) {
-            messageHandler.handleVidiNews();
+            String formatter = String.format("%s:%s", VidiPrintView.sdf.format(message.getTime()),  message.getMessage());
+
+            messageHandler.handleVidiNews(formatter);
         }
 
     }
@@ -390,7 +393,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deleteVidiNews(long time) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(VIDIPRINT_TABLE, MESSAGE_TIME + " < ?", new String[]{String.valueOf(time)});
+        db.delete(VIDIPRINT_TABLE, MESSAGE_TIME + " < ?", new String[]{String.valueOf(time - (((1000*60)*60)*24))});
 
     }
 
@@ -630,7 +633,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getVidiNews() {
-        return this.getReadableDatabase().rawQuery("SELECT " + MESSAGE_ID + " as _id, " + MESSAGE_CONTENT + " FROM " + VIDIPRINT_TABLE + " ORDER BY " + MESSAGE_TIME + " ASC", null);
+        return this.getReadableDatabase().rawQuery("SELECT " + MESSAGE_ID + " as _id, " + MESSAGE_CONTENT +","+MESSAGE_TIME+" FROM " + VIDIPRINT_TABLE + " ORDER BY " + MESSAGE_TIME + " ASC", null);
     }
 
     public Cursor getMessages(String messageType, String messageKey) {
