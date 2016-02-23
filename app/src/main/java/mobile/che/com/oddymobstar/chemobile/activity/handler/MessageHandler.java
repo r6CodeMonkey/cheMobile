@@ -158,8 +158,7 @@ public class MessageHandler extends Handler {
 
             try {
                 utm = new UTM(controller.configuration.getConfig(Configuration.CURRENT_UTM_LAT).getValue(), controller.configuration.getConfig(Configuration.CURRENT_UTM_LONG).getValue());
-                //seem to get problems with this for some reason...ie integer = "".  could be data has not updated etc.
-                //     subUTM = new SubUTM(subUtm);
+                subUTM = new SubUTM(controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LAT).getValue(), controller.configuration.getConfig(Configuration.CURRENT_SUBUTM_LONG).getValue());
             } catch (Exception e) {
                 Log.d("error on utm", "error " + e.getMessage());
             }
