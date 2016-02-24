@@ -8,7 +8,7 @@ import android.os.Handler;
 public class CheReconnectListener implements Runnable {
 
     //allow a maximum 10 seconds to receive ack....
-    public static final long TIMEOUT = 1000 * 60 * 20;
+    public static final long TIMEOUT = 20000;
     private final Handler handler = new Handler();
     private final Runnable callback;
 
