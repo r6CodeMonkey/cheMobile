@@ -40,6 +40,14 @@ public class CheServiceSocket {
     public DataOutputStream dOut = null;
     public DataInputStream dIn = null;
 
+    private Thread cheReconnectThread;
+    private final CheReconnectListener cheReconnectListener = new CheReconnectListener(new Runnable() {
+        @Override
+        public void run() {
+            reConnect();
+        }
+    });
+
     public CheServiceSocket(CheService cheService, CheMessageHandler cheMessageHandler, Configuration configuration) {
         this.cheService = cheService;
         this.cheMessageHandler = cheMessageHandler;
@@ -166,7 +174,6 @@ public class CheServiceSocket {
                                 if (cheMessageHandler.isNewPlayer()) {
                                     Log.d("socket listen", "create message to get che id");
                                     cheMessageQueue.addMessage(cheMessageHandler.createNewPlayer());
-
                                 }
 
                                 if (write != null) {
@@ -195,6 +202,7 @@ public class CheServiceSocket {
                         break;
                     case Tags.UUID:
                         Log.d("uuid", "we are uuid");
+                        stopCheSocketListener(acknowledge.getKey());
                         cheMessageQueue.receiveAck(acknowledge.getKey());
                         cheMessageHandler.handleNewPlayer(acknowledge);
                         break;
@@ -203,14 +211,17 @@ public class CheServiceSocket {
                             case Tags.RECEIVED:
                                 //         Log.d("rec", "standard rec");
                                 //need to remove but its not che...
+                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 break;
                             case Tags.CHE_RECEIVED:
                                 //        Log.d("che rec", "che rec");
+                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 //need to remove tag...
                                 break;
                             default:
+                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 break;
                         }
@@ -306,8 +317,25 @@ public class CheServiceSocket {
 
     }
 
+    private void startCheSocketListener(String key){
+        cheReconnectListener.setKey(key);
+        cheReconnectThread = new Thread(cheReconnectListener);
+        cheReconnectThread.start();
+
+    }
+
+    private void stopCheSocketListener(String key){
+        if(cheReconnectListener.getKey().equals(key)){
+            cheReconnectThread.interrupt();
+        }
+
+    }
+
     public void write(CheMessage cheMessage) {
         try {
+            if(!cheReconnectListener.isSocketActive()){
+                startCheSocketListener(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey());
+            }
             dOut.write(cheMessage.toString().getBytes("UTF-8"));
         } catch (Exception e) {
             connect = new Thread(new Runnable() {
