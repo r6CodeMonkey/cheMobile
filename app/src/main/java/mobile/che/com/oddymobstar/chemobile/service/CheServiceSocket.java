@@ -332,13 +332,11 @@ public class CheServiceSocket {
     }
 
     private void startCheSocketListener() {
-        Log.d("we timed out", "listener started ");
         cheReconnectThread = new Thread(cheReconnectListener);
         cheReconnectThread.start();
     }
 
     private void stopCheSocketListener() {
-        Log.d("we timed out", "listener interupted ");
        if(cheReconnectThread != null) {
            cheReconnectThread.interrupt();
            cheReconnectThread = null;

@@ -1,6 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service.util;
 
 import android.os.Handler;
+import android.util.Log;
 
 /**
  * Created by timmytime on 24/02/16.
@@ -8,7 +9,7 @@ import android.os.Handler;
 public class CheReconnectListener implements Runnable {
 
     //allow a maximum 10 seconds to receive ack....
-    public static final long TIMEOUT = 20000;
+    public static final long TIMEOUT = 10000;
     private final Handler handler = new Handler();
     private final Runnable callback;
 
@@ -20,10 +21,7 @@ public class CheReconnectListener implements Runnable {
 
     @Override
     public void run() {
-
-        long startTime = System.currentTimeMillis();
-        handler.postDelayed(callback, TIMEOUT + startTime);
-
+        handler.postDelayed(callback, TIMEOUT);
     }
 
 }
