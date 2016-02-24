@@ -339,6 +339,7 @@ public class CheServiceSocket {
     private void stopCheSocketListener() {
        if(cheReconnectThread != null) {
            cheReconnectThread.interrupt();
+           cheReconnectListener.stop();
            cheReconnectThread = null;
        }
     }

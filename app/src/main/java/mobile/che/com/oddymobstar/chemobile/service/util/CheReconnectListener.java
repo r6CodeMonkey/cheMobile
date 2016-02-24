@@ -18,6 +18,10 @@ public class CheReconnectListener implements Runnable {
         this.callback = callback;
     }
 
+    public void stop(){
+        handler.removeCallbacks(callback);
+    }
+
 
     @Override
     public void run() {
