@@ -47,7 +47,7 @@ public class VidiPrintAdapter extends CursorAdapter {
         Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_TIME)));
 
         //need to add date time formatted:
-        String formatter = String.format("%s:%s",VidiPrintView.sdf.format(date),  cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
+        String formatter = String.format("%s: %s",VidiPrintView.sdf.format(date),  cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
 
         textView.setText(formatter);
 

@@ -1,4 +1,4 @@
-package mobile.che.com.oddymobstar.chemobile.service;
+package mobile.che.com.oddymobstar.chemobile.service.util;
 
 import android.util.Log;
 
@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 
 import factory.MessageFactory;
 import message.CheMessage;
+import mobile.che.com.oddymobstar.chemobile.service.CheServiceSocket;
 import util.Tags;
 
 /**

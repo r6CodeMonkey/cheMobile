@@ -17,6 +17,8 @@ import message.Acknowledge;
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface;
+import mobile.che.com.oddymobstar.chemobile.service.util.CheMessageQueue;
+import mobile.che.com.oddymobstar.chemobile.service.util.CheReconnectListener;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import util.Tags;
 
@@ -41,10 +43,17 @@ public class CheServiceSocket {
     public DataInputStream dIn = null;
 
     private Thread cheReconnectThread;
-    private final CheReconnectListener cheReconnectListener = new CheReconnectListener(new Runnable() {
+    private CheReconnectListener cheReconnectListener = new CheReconnectListener(new Runnable() {
         @Override
         public void run() {
-            reConnect();
+            connect = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    reConnect();
+                }
+            });
+
+            connect.start();
         }
     });
 
@@ -150,6 +159,9 @@ public class CheServiceSocket {
 
     private void processJSON(final String object) {
         try {
+
+            stopCheSocketListener();
+
             //each message we receive should be a JSON.  We need to work out the type.
             JSONObject jsonObject = new JSONObject(object);
 
@@ -202,7 +214,6 @@ public class CheServiceSocket {
                         break;
                     case Tags.UUID:
                         Log.d("uuid", "we are uuid");
-                        stopCheSocketListener(acknowledge.getKey());
                         cheMessageQueue.receiveAck(acknowledge.getKey());
                         cheMessageHandler.handleNewPlayer(acknowledge);
                         break;
@@ -211,17 +222,14 @@ public class CheServiceSocket {
                             case Tags.RECEIVED:
                                 //         Log.d("rec", "standard rec");
                                 //need to remove but its not che...
-                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 break;
                             case Tags.CHE_RECEIVED:
                                 //        Log.d("che rec", "che rec");
-                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 //need to remove tag...
                                 break;
                             default:
-                                stopCheSocketListener(acknowledge.getKey());
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 break;
                         }
@@ -262,6 +270,11 @@ public class CheServiceSocket {
         messageIntent.putExtra("message", "Reconnect called");
         LocalBroadcastManager.getInstance(cheService).sendBroadcast(messageIntent);
 
+        try {
+            cheReconnectThread.interrupt();
+        } catch (Exception e) {
+
+        }
 
         try {
             socket.close();
@@ -279,6 +292,7 @@ public class CheServiceSocket {
         socket = null;
         write = null;
         read = null;
+        cheReconnectThread = null;
 
 
         try {
@@ -317,25 +331,23 @@ public class CheServiceSocket {
 
     }
 
-    private void startCheSocketListener(String key){
-        cheReconnectListener.setKey(key);
+    private void startCheSocketListener() {
+        Log.d("we timed out", "listener started ");
         cheReconnectThread = new Thread(cheReconnectListener);
         cheReconnectThread.start();
-
     }
 
-    private void stopCheSocketListener(String key){
-        if(cheReconnectListener.getKey().equals(key)){
-            cheReconnectThread.interrupt();
-        }
-
+    private void stopCheSocketListener() {
+        Log.d("we timed out", "listener interupted ");
+       if(cheReconnectThread != null) {
+           cheReconnectThread.interrupt();
+           cheReconnectThread = null;
+       }
     }
 
     public void write(CheMessage cheMessage) {
         try {
-            if(!cheReconnectListener.isSocketActive()){
-                startCheSocketListener(cheMessage.getMessage(Tags.ACKNOWLEDGE).getKey());
-            }
+            startCheSocketListener();
             dOut.write(cheMessage.toString().getBytes("UTF-8"));
         } catch (Exception e) {
             connect = new Thread(new Runnable() {

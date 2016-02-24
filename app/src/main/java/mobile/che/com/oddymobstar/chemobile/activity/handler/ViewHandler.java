@@ -46,7 +46,6 @@ public class ViewHandler {
         if (controller.fragmentHandler.chatFrag.getHiddenChatPost().isPostValid()) {
             //     try {
 
-            CheMessage cheMessage = null;
 
             switch (controller.fragmentHandler.gridFrag.getType()) {
 
@@ -54,12 +53,19 @@ public class ViewHandler {
                 case AllianceGridFragment.MY_ALLIANCES:
 
                     try {
-                        cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
+                      final CheMessage cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
                                 controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost(),
                                 controller.locationListener.getCurrentLocation());
                         //need to animate...but
                         controller.materialsHandler.handleChatFAB(controller.fragmentHandler.chatFrag, false);
-                        controller.cheService.writeToSocket(cheMessage);
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.cheService.writeToSocket(cheMessage);
+                            }
+                        }).start();
+
 
                         cancelPost();
 
@@ -81,26 +87,32 @@ public class ViewHandler {
     }
 
     public void createButton() {
-        String createText = controller.fragmentHandler.gridFrag.getHiddenCreateView().getCreateText();
+        final String createText = controller.fragmentHandler.gridFrag.getHiddenCreateView().getCreateText();
 
         switch (controller.fragmentHandler.gridFrag.getType()) {
 
             case AllianceGridFragment.MY_ALLIANCES:
 
                 if (!createText.trim().isEmpty()) {
-                    try {
 
-                        controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
+                                } catch (NoSuchAlgorithmException e) {
+
+                                } catch (JSONException e) {
+
+                                }
+                            }
+                        }).start();
 
                         //need to animate...but
                         controller.materialsHandler.handleAllianceFAB(controller.fragmentHandler.gridFrag, false);
 
 
-                    } catch (NoSuchAlgorithmException e) {
-                        Log.d("security exception", "security exception " + e.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
                 }
 
                 break;
