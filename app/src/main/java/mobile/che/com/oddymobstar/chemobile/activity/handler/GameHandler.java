@@ -183,10 +183,6 @@ public class GameHandler {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
 
-        Log.d("lat", "lat"+gameObject.getLatitude());
-        Log.d("lng", "lng"+gameObject.getLongitude());
-
-
         Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
 
         //we need to grab out each UTM, and its children.
