@@ -10,9 +10,9 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
-import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
-import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
+import util.map.SubUTM;
+import util.map.UTM;
 
 
 /**

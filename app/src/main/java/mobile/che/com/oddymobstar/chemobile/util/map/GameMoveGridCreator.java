@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
+import util.map.SubUTM;
+import util.map.UTM;
+import util.map.UTMConvert;
 
 /**
  * Created by timmytime on 18/02/16.
@@ -25,7 +28,7 @@ public class GameMoveGridCreator {
         String y = gameObject.getSubUtmLong();
 
         String alpha = gameObject.getSubUtmLat().substring(gameObject.getSubUtmLat().length() - 1);
-        int alphaIndex = UTMGridCreator.latValues.indexOf(alpha);
+        int alphaIndex = UTMConvert.latValues.indexOf(alpha);
         int latInt = Integer.valueOf(gameObject.getSubUtmLat().substring(0, 1));
         int longInt = Integer.valueOf(gameObject.getSubUtmLong());
 
@@ -41,17 +44,17 @@ public class GameMoveGridCreator {
             currentUtmList.add(new SubUTM(latInt + alpha, String.valueOf(longInt + 1)));  //east
             currentUtmList.add(new SubUTM(latInt + alpha, String.valueOf(longInt - 1))); //west
 
-            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt)));  //north
-            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt))); //south
+            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt)));  //north
+            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt))); //south
 
             //north east
-            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt + 1)));
+            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt + 1)));
             //north west
-            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt - 1)));
+            currentUtmList.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt - 1)));
             //south east
-            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt + 1)));
+            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt + 1)));
             //south west
-            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt - 1)));
+            currentUtmList.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt - 1)));
 
             grids.put(new UTM(gameObject.getUtmLat(), gameObject.getUtmLong()), currentUtmList);
 
@@ -69,32 +72,32 @@ public class GameMoveGridCreator {
             UTM northWest = null;
 
 
-            alphaIndex = UTMGridCreator.latValues.indexOf(gameObject.getUtmLat());
+            alphaIndex = UTMConvert.latValues.indexOf(gameObject.getUtmLat());
 
             if (!gameObject.getUtmLat().equals("X")) {
-                north = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), gameObject.getUtmLong());
+                north = new UTM(UTMConvert.latValues.get(alphaIndex + 1), gameObject.getUtmLong());
                 if (gameObject.getUtmLong().equals("60")) {
-                    northEast = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), "1");
-                    northWest = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), "1");
+                    northEast = new UTM(UTMConvert.latValues.get(alphaIndex + 1), "1");
+                    northWest = new UTM(UTMConvert.latValues.get(alphaIndex + 1), "1");
                 } else if (gameObject.getUtmLong().equals("1")) {
-                    northEast = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), "60");
-                    northWest = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), "60");
+                    northEast = new UTM(UTMConvert.latValues.get(alphaIndex + 1), "60");
+                    northWest = new UTM(UTMConvert.latValues.get(alphaIndex + 1), "60");
                 } else {
-                    northEast = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) + 1));
-                    northWest = new UTM(UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) - 1));
+                    northEast = new UTM(UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) + 1));
+                    northWest = new UTM(UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) - 1));
                 }
             }
             if (!gameObject.getUtmLat().equals("C")) {
-                south = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), gameObject.getUtmLong());
+                south = new UTM(UTMConvert.latValues.get(alphaIndex - 1), gameObject.getUtmLong());
                 if (gameObject.getUtmLong().equals("60")) {
-                    southEast = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), "1");
-                    southWest = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), "1");
+                    southEast = new UTM(UTMConvert.latValues.get(alphaIndex - 1), "1");
+                    southWest = new UTM(UTMConvert.latValues.get(alphaIndex - 1), "1");
                 } else if (gameObject.getUtmLong().equals("1")) {
-                    southEast = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), "60");
-                    southWest = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), "60");
+                    southEast = new UTM(UTMConvert.latValues.get(alphaIndex - 1), "60");
+                    southWest = new UTM(UTMConvert.latValues.get(alphaIndex - 1), "60");
                 } else {
-                    southEast = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) + 1));
-                    southWest = new UTM(UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) - 1));
+                    southEast = new UTM(UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) + 1));
+                    southWest = new UTM(UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(Integer.valueOf(gameObject.getUtmLong()) - 1));
                 }
             }
 
@@ -170,7 +173,7 @@ public class GameMoveGridCreator {
         String y = gameObject.getSubUtmLong();
 
         String alpha = gameObject.getSubUtmLat().substring(gameObject.getSubUtmLat().length() - 1);
-        int alphaIndex = UTMGridCreator.latValues.indexOf(alpha);
+        int alphaIndex = UTMConvert.latValues.indexOf(alpha);
         int latInt = Integer.valueOf(gameObject.getSubUtmLat().substring(0, 1));
         int longInt = Integer.valueOf(gameObject.getSubUtmLong());
 
@@ -217,14 +220,14 @@ public class GameMoveGridCreator {
                     grids.add(new SubUTM(latInt + alpha, "59"));
 
                     if (!(alpha.equals("C") && latInt == 1) && !(alpha.equals("X") && latInt == 8)) {
-                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), "59"));
-                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), "59"));
+                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), "59"));
+                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), "59"));
 
                     } else if (alpha.equals("C") && latInt == 1) {
-                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), "59"));
+                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), "59"));
 
                     } else if (alpha.equals("X") && latInt == 8) {
-                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), "59"));
+                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), "59"));
                     }
 
                 }
@@ -235,14 +238,14 @@ public class GameMoveGridCreator {
                     grids.add(new SubUTM(latInt + alpha, "1"));
 
                     if (!(alpha.equals("C") && latInt == 1) && !(alpha.equals("X") && latInt == 8)) {
-                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), "1"));
-                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), "1"));
+                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), "1"));
+                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), "1"));
 
                     } else if (alpha.equals("C") && latInt == 1) {
-                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMGridCreator.latValues.get(alphaIndex + 1), "1"));
+                        grids.add(new SubUTM(alpha.equals("X") ? latInt + 1 + "C" : latInt + UTMConvert.latValues.get(alphaIndex + 1), "1"));
 
                     } else if (alpha.equals("X") && latInt == 8) {
-                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMGridCreator.latValues.get(alphaIndex - 1), "1"));
+                        grids.add(new SubUTM(alpha.equals("C") ? latInt - 1 + "X" : latInt + UTMConvert.latValues.get(alphaIndex - 1), "1"));
                     }
 
                 }
@@ -280,18 +283,18 @@ public class GameMoveGridCreator {
         String y = gameObject.getSubUtmLong();
 
         String alpha = gameObject.getSubUtmLat().substring(gameObject.getSubUtmLat().length() - 1);
-        int alphaIndex = UTMGridCreator.latValues.indexOf(alpha);
+        int alphaIndex = UTMConvert.latValues.indexOf(alpha);
         int latInt = Integer.valueOf(gameObject.getSubUtmLat().substring(0, 1));
         int longInt = Integer.valueOf(gameObject.getSubUtmLong());
 
         SubUTM south, north, east, west, southEast, southWest, northEast, northWest;
         try {
-            south = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt));
+            south = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt));
         } catch (Exception e) {
             south = null;
         }
         try {
-            north = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt));
+            north = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt));
         } catch (Exception e) {
             north = null;
         }
@@ -308,25 +311,25 @@ public class GameMoveGridCreator {
 
         }
         try {
-            southEast = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt + 1));
+            southEast = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt + 1));
         } catch (Exception e) {
             southEast = null;
 
         }
         try {
-            southWest = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex - 1), String.valueOf(longInt - 1));
+            southWest = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex - 1), String.valueOf(longInt - 1));
         } catch (Exception e) {
             southWest = null;
 
         }
         try {
-            northEast = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt + 1));
+            northEast = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt + 1));
         } catch (Exception e) {
             northEast = null;
 
         }
         try {
-            northWest = new SubUTM(latInt + UTMGridCreator.latValues.get(alphaIndex + 1), String.valueOf(longInt - 1));
+            northWest = new SubUTM(latInt + UTMConvert.latValues.get(alphaIndex + 1), String.valueOf(longInt - 1));
         } catch (Exception e) {
             northWest = null;
         }

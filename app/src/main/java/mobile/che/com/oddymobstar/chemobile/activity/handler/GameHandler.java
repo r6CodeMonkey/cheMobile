@@ -22,12 +22,12 @@ import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.GameMoveGridCreator;
-import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
-import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
+import util.map.SubUTM;
+import util.map.UTM;
 
 
 /**

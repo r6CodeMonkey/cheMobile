@@ -20,8 +20,8 @@ import message.UTM;
 import message.UTMLocation;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
-import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
 import util.Tags;
+import util.map.SubUTM;
 
 /**
  * Created by timmytime on 05/02/16.

@@ -11,8 +11,8 @@ import android.view.KeyEvent;
 import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.activity.handler.MapHandler;
-import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
-import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
+import util.map.SubUTM;
+import util.map.UTM;
 
 
 /**

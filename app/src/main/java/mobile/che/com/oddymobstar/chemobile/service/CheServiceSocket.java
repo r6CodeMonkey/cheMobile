@@ -169,17 +169,13 @@ public class CheServiceSocket {
             //test for ack..
             if (!jsonObject.isNull(Tags.ACKNOWLEDGE)) {
 
-                //   Log.d("socket listen", "we have an ack"); // also need to remove it from buffer at some point.
-
                 Acknowledge acknowledge = new Acknowledge(object);
 
                 switch (acknowledge.getState()) {
 
                     case Tags.ACCEPT:
-                        //      Log.d("accept", "we are accept");
                         switch (acknowledge.getValue()) {
                             case Tags.ERROR:
-                                //         Log.d("ack error", "ack error " + acknowledge.toString());
                                 break;
                             case Tags.ACTIVE:
                                 Log.d("active", "we are active");
@@ -220,14 +216,10 @@ public class CheServiceSocket {
                     case Tags.SUCCESS:
                         switch (acknowledge.getValue()) {
                             case Tags.RECEIVED:
-                                //         Log.d("rec", "standard rec");
-                                //need to remove but its not che...
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
                                 break;
                             case Tags.CHE_RECEIVED:
-                                //        Log.d("che rec", "che rec");
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
-                                //need to remove tag...
                                 break;
                             default:
                                 cheMessageQueue.receiveAck(acknowledge.getKey());
@@ -239,16 +231,13 @@ public class CheServiceSocket {
                 }
 
             } else {
-                //         Log.d("che message", "we have a che message");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             cheMessageHandler.handle(new CheMessage(object));
                         } catch (JSONException e) {
-                            // e.printStackTrace();
                         } catch (NoSuchAlgorithmException e) {
-                            //  e.printStackTrace();
                         }
                     }
                 }).start();
@@ -337,11 +326,11 @@ public class CheServiceSocket {
     }
 
     private void stopCheSocketListener() {
-       if(cheReconnectThread != null) {
-           cheReconnectThread.interrupt();
-           cheReconnectListener.stop();
-           cheReconnectThread = null;
-       }
+        if (cheReconnectThread != null) {
+            cheReconnectThread.interrupt();
+            cheReconnectListener.stop();
+            cheReconnectThread = null;
+        }
     }
 
     public void write(CheMessage cheMessage) {

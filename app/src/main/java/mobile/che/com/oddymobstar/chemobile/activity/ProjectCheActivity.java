@@ -13,8 +13,9 @@ import android.view.View;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
-import mobile.che.com.oddymobstar.chemobile.util.map.SubUTM;
-import mobile.che.com.oddymobstar.chemobile.util.map.UTM;
+import util.map.SubUTM;
+import util.map.UTM;
+
 
 public class ProjectCheActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

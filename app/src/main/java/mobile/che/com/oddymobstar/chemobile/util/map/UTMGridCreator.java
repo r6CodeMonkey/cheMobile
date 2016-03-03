@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
+import util.map.SubUTM;
+import util.map.UTM;
+import util.map.UTMConvert;
 
 /**
  * Created by timmytime on 05/05/15.
@@ -26,28 +29,7 @@ public class UTMGridCreator {
     public static final double LONG_SUB_DEG = 0.1;
 
 
-    public static final List<String> latValues = new ArrayList<String>() {{
-        add("C");
-        add("D");
-        add("E");
-        add("F");
-        add("G");
-        add("H");
-        add("J");
-        add("K");
-        add("L");
-        add("M");
-        add("N");
-        add("P");
-        add("Q");
-        add("R");
-        add("S");
-        add("T");
-        add("U");
-        add("V");
-        add("W");
-        add("X");
-    }};
+
 
 
 
@@ -75,8 +57,8 @@ public class UTMGridCreator {
 
         double long1 = ((Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_DEGREES) - LONG_OFFSET;
         double long2 = (Integer.valueOf(utm.getUtmLong()) * LONG_DEGREES) - LONG_OFFSET;
-        double lat1 = (((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_DEGREES) - LAT_OFFSET;
-        double lat2 = ((latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_OFFSET;
+        double lat1 = (((UTMConvert.latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_DEGREES) - LAT_OFFSET;
+        double lat2 = ((UTMConvert.latValues.indexOf(utm.getUtmLat()) + 1) * LAT_DEGREES) - LAT_OFFSET;
 
         LatLng point1 = new LatLng(lat1, long1);  //lower left hand corner
         LatLng point2 = new LatLng(lat1, long2);  //lower right hand corner
@@ -103,7 +85,7 @@ public class UTMGridCreator {
 
 
         double utmlong = Integer.valueOf(subUTM.getSubUtmLong()) * LONG_SUB_DEG;
-        double utmLat = ((latValues.indexOf(subUTM.getSubLatString())) + ((subUTM.getSubLatInt() - 1) * latValues.size())) * LAT_SUB_DEG;
+        double utmLat = ((UTMConvert.latValues.indexOf(subUTM.getSubLatString())) + ((subUTM.getSubLatInt() - 1) * UTMConvert.latValues.size())) * LAT_SUB_DEG;
 
 
         double long1 = latLng1.longitude + utmlong;
