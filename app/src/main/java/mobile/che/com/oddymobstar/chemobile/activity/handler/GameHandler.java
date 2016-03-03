@@ -21,11 +21,11 @@ import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
-import mobile.che.com.oddymobstar.chemobile.util.map.GameMoveGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
+import util.map.GridCreator;
 import util.map.SubUTM;
 import util.map.UTM;
 
@@ -183,7 +183,11 @@ public class GameHandler {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
 
-        Map<UTM, List<SubUTM>> mapGridInfo = GameMoveGridCreator.get3by3Grid(gameObject);
+        Log.d("lat", "lat"+gameObject.getLatitude());
+        Log.d("lng", "lng"+gameObject.getLongitude());
+
+
+        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
 
         //we need to grab out each UTM, and its children.
         Set<UTM> keys = mapGridInfo.keySet();
