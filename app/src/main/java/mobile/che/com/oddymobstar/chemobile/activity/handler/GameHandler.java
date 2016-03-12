@@ -101,7 +101,7 @@ public class GameHandler {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, final int which) {
-                                //positive action
+                                //positive action9
                                 dialog.dismiss();
                                 switch (type) {
                                     case GameObjectGridFragment.INFASTRUCTURE: //repair

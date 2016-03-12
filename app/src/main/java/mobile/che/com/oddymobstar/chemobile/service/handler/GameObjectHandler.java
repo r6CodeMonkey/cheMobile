@@ -89,6 +89,14 @@ public class GameObjectHandler extends MessageHandler {
                     Log.d("invalid move", "invalid move");
                 }
                 break;
+            case Tags.MESSAGE:
+                switch( gameObject.getValue()) {  //sorted...
+                    case Tags.GAME_OBJECT_IS_MOVING:
+
+                        Log.d("invalid move", "moving");
+
+                        break;
+                }
             case Tags.GAME_OBJECT_DESTROYED:
                 break;
             case Tags.MISSILE_ADDED:
