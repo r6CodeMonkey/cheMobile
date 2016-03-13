@@ -10,6 +10,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +53,7 @@ public class MapHandler {
     public Map<String, Polygon> lastLocateUTMs = new HashMap<>();
     public Polygon lastLocateSubUTM;
     private Map<String, Marker> markerMap = new HashMap<>();
+    private Map<String, Polyline> polylineMap = new HashMap<>();
     private String selectedGrid;
 
     public MapHandler(ProjectCheActivity main, ProjectCheController controller) {
@@ -175,6 +178,11 @@ public class MapHandler {
             @Override
             public void run() {
 
+                //first, we need to attempt to remove it if set already
+           /*     if(markerMap.get(gameObject.getKey()) != null){
+                    markerMap.get(gameObject.getKey()).remove();
+                }
+*/
                 float hue = BitmapDescriptorFactory.HUE_AZURE;
 
                 switch (gameObject.getType()) {
@@ -197,7 +205,7 @@ public class MapHandler {
                     hue = BitmapDescriptorFactory.HUE_YELLOW;
                 }
 
-                markerMap.put(gameObject.getKey(), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
+                markerMap.put(gameObject.getKey()+String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
                         new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
 
@@ -211,9 +219,20 @@ public class MapHandler {
             @Override
             public void run() {
 
-                controller.mapHelper.getMap().addPolyline(UTMGridCreator.createPath(
+
+                if(polylineMap.containsKey(gameObject.getKey())){
+                    polylineMap.get(gameObject.getKey()).remove();
+                }
+
+                PolylineOptions polyline = UTMGridCreator.createPath(
                         new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),
-                        new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), gameObject.getType()));
+                        new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), gameObject.getType());
+
+                polylineMap.put(gameObject.getKey(),controller.mapHelper.getMap().addPolyline(polyline));
+
+                if(markerMap.containsKey(gameObject.getKey()+String.valueOf(false))){
+                    markerMap.get(gameObject.getKey()+String.valueOf(false)).remove();
+                }
 
                 addGameObject(gameObject, false);
                 GameObject destination = gameObject;

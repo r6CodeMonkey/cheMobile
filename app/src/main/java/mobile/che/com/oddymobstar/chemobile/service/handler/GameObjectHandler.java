@@ -33,6 +33,8 @@ public class GameObjectHandler extends MessageHandler {
 
         GameObject gameObject = (GameObject) cheMessage.getMessage(Tags.GAME_OBJECT);
 
+        Log.d("game object", "message state is "+gameObject.getState()+" value is "+gameObject.getValue());
+
         mobile.che.com.oddymobstar.chemobile.model.GameObject model = null;
         switch (gameObject.getState()) {
             case Tags.PURCHASE:
@@ -53,15 +55,10 @@ public class GameObjectHandler extends MessageHandler {
                 model.setKey(gameObject.getKey());
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
-                model.setLatitude(gameObject.getUtmLocation().getLatitude());
-                model.setLongitude(gameObject.getUtmLocation().getLongitude());
-                model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
-                model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
-                model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
-                model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                model = updateLocation(model, gameObject);
                 model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
 
-                dbHelper.updateGameObject(model);
+                dbHelper.updateGameObject(model, false);
 
                 Log.d("add", "have added game object " + gameObject.toString());
 
@@ -71,52 +68,72 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.GAME_OBJECT_MOVE:
                 if (gameObject.getValue().equals(Tags.SUCCESS)) {
                     model = dbHelper.getGameObject(gameObject.getKey());
-                    model.setLatitude(gameObject.getUtmLocation().getLatitude());
-                    model.setLongitude(gameObject.getUtmLocation().getLongitude());
-                    model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
-                    model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
-                    model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
-                    model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                    model = updateLocation(model, gameObject);
                     model.setStatus(Tags.GAME_OBJECT_IS_MOVING);
                     //done....talking to myself...
                     model.setDestLatitude(gameObject.getDestinationUtmLocation().getLatitude());
                     model.setDestLongitude(gameObject.getDestinationUtmLocation().getLongitude());
 
-                    dbHelper.updateGameObject(model);
+                    dbHelper.updateGameObject(model, false);
 
                 } else {
                     //its invalid we need to send to user...note we need the screen to say so
                     Log.d("invalid move", "invalid move");
                 }
                 break;
-            case Tags.MESSAGE:
+            case Tags.GAME_OBJECT_STOP:  //only if we actually tell it to stop.
+                model = dbHelper.getGameObject(gameObject.getKey());
+                model = updateLocation(model, gameObject);
+                model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
+                dbHelper.updateGameObject(model, true);
+                break;
+            case Tags.MESSAGE:  //these come from engine, not user actions.
                 switch( gameObject.getValue()) {  //sorted...
                     case Tags.GAME_OBJECT_IS_MOVING:
 
-                        Log.d("invalid move", "moving");
+                        //so now we need to update the models current position.
+                        model = dbHelper.getGameObject(gameObject.getKey());
+                        model.setLatitude(gameObject.getUtmLocation().getLatitude());
+                        model.setLongitude(gameObject.getUtmLocation().getLongitude());
+
+                        dbHelper.updateGameObject(model, false);
 
                         break;
+                    case Tags.GAME_OBJECT_IS_FIXED:
+                        //actually...we just need to send a message to sever, to tell it to stop as we have ack,  but if it calls twice not a huge issue.
+                        //really need to add a dont bother to reply to me tag.
+                        model = dbHelper.getGameObject(gameObject.getKey());
+                        model = updateLocation(model, gameObject);
+                        model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
+                        dbHelper.updateGameObject(model, true);
+                        break;
                 }
+                break;
             case Tags.GAME_OBJECT_DESTROYED:
                 break;
             case Tags.MISSILE_ADDED:
                 ///so basically we just need to update the missile object...and save its data.  the server knows its active.
                 // but if we want to view missiles on the actual vehicles we have a problem.
                 model = dbHelper.getGameObject(gameObject.getMissiles().get(0).getKey());
-                model.setLatitude(gameObject.getUtmLocation().getLatitude());
-                model.setLongitude(gameObject.getUtmLocation().getLongitude());
-                model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
-                model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
-                model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
-                model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
-
-                dbHelper.updateGameObject(model);
+                model = updateLocation(model, gameObject);
+                dbHelper.updateGameObject(model, false);
                 dbHelper.addMissileToGameObject(gameObject.getKey(), gameObject.getMissiles().get(0).getKey());
                 break;
             case Tags.MISSILE_REMOVED:
                 break;
 
         }
+    }
+
+    private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, GameObject gameObject){
+        model.setLatitude(gameObject.getUtmLocation().getLatitude());
+        model.setLongitude(gameObject.getUtmLocation().getLongitude());
+        model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());
+        model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
+        model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
+        model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+        return model;
+
     }
 
 }

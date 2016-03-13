@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.security.NoSuchAlgorithmException;
+
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
@@ -70,7 +72,7 @@ public class MessageHandler extends Handler {
                     @Override
                     public void run() {
                         controller.fragmentHandler.vidiPrintFragment.setNewText(message);
-                       // controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
+                        // controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
                     }
                 });
 
@@ -104,9 +106,24 @@ public class MessageHandler extends Handler {
 
     }
 
-    public void addGameObject(GameObject gameObject) {
+    public void addGameObject(final GameObject gameObject, boolean hasStopped) {
         if (controller != null) {
             controller.mapHandler.addGameObject(gameObject, false);
+        }
+
+        if(hasStopped){
+            //we need to tell server to stop it.
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        controller.cheService.writeToSocket(controller.messageFactory.stopGameObject(gameObject, controller.locationListener.getCurrentLocation()));
+
+                    } catch (NoSuchAlgorithmException e) {
+
+                    }
+                }
+            }).start();
         }
     }
 

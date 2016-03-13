@@ -237,7 +237,9 @@ public class CheServiceSocket {
                         try {
                             cheMessageHandler.handle(new CheMessage(object));
                         } catch (JSONException e) {
+                            Log.d("json error", e.getMessage());
                         } catch (NoSuchAlgorithmException e) {
+                            Log.d("algo error", e.getMessage());
                         }
                     }
                 }).start();
@@ -386,7 +388,6 @@ public class CheServiceSocket {
         } catch (IOException e) {
             //crashed.
             Log.d("socket error", "socket " + e.toString());
-
 
         }
 

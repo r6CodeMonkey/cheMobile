@@ -373,5 +373,21 @@ public class MessageFactory {
         return cheMessage;
     }
 
+    public CheMessage stopGameObject(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObject(gameObject, location);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "stop msg " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
 
 }

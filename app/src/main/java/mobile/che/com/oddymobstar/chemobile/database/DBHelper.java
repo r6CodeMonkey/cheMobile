@@ -494,7 +494,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public void updateGameObject(GameObject gameObject) {
+    public void updateGameObject(GameObject gameObject, boolean hasStopped) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -511,15 +511,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
         if (gameObject.getType() != GameObjectGridFragment.MISSILE) {  //we dont add missiles at this point.
-            handleGameObjectAdded(gameObject);
+            handleGameObjectAdded(gameObject,hasStopped);
         }
 
     }
 
-    public void handleGameObjectAdded(GameObject gameObject) {
+    public void handleGameObjectAdded(GameObject gameObject, boolean hasStopped) {
         if (messageHandler != null) {
             if (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_FIXED) || gameObject.getStatus().trim().isEmpty()) {
-                messageHandler.addGameObject(gameObject);
+                messageHandler.addGameObject(gameObject,hasStopped);
             } else if (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
                 messageHandler.moveGameObject(gameObject);
             }
