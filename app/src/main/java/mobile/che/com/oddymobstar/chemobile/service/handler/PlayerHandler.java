@@ -32,16 +32,6 @@ public class PlayerHandler extends MessageHandler {
         this.cheCallback = cheCallback;
     }
 
-    public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
-        CheMessage cheMessage = messageFactory.createCheMessage();
-
-        cheMessage.setMessage(Tags.PLAYER, messageFactory.createPlayer());
-        cheMessage.setMessage(Tags.ACKNOWLEDGE, messageFactory.createAcknowledge());
-
-        Log.d("new player message ", "is " + cheMessage.toString());
-
-        return cheMessage;
-    }
 
 
     @Override

@@ -102,7 +102,7 @@ public class MessageFactory {
         UTMLocation utmLocation = new UTMLocation();
         utmLocation.create();
 
-        utmLocation.setLongitude(0);
+        utmLocation.setLongitude(0.0);
         utmLocation.setLatitude(0);
         utmLocation.setSpeed(0);
         utmLocation.setAltitude(0);
@@ -214,14 +214,16 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
-    public Player createPlayer() {
+
+
+    private Player createPlayer() {
         Player player = getPlayer();
-        player.setUTMLocation(createUTMLocation());
+        player.setUTMLocation(createUTMLocation());  ///the bug is that we dont use our current lat and long
 
         return player;
     }
 
-    public Acknowledge createCheAcknowledge(String key) {
+    private Acknowledge createCheAcknowledge(String key) {
         Acknowledge acknowledge = new Acknowledge(true);
         acknowledge.create();
         acknowledge.setKey(key);
@@ -243,12 +245,48 @@ public class MessageFactory {
 
     }
 
-    public Player createPlayer(Location location) {
+    private Player createPlayer(Location location) {
         Player player = getPlayer();
         player.setUTMLocation(createUTMLocation(location));
 
 
         return player;
+    }
+
+    public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+
+        cheMessage.setMessage(Tags.PLAYER, createPlayer());
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, createAcknowledge());
+
+        return cheMessage;
+
+    }
+
+    public CheMessage createPlayerReconnect() throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+
+        Player player = createPlayer();
+        player.setState(Tags.CONNECT);
+        player.setValue(Tags.SUCCESS);
+
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, createAcknowledge());
+
+        return cheMessage;
+    }
+
+    public CheMessage createCheAcknowledge(CheMessage cheContents) throws NoSuchAlgorithmException, JSONException {
+
+        CheMessage cheMessage = createCheMessage();
+
+        cheMessage.setMessage(Tags.CHE_ACKNOWLEDGE, createCheAcknowledge(cheContents.getMessage(Tags.CHE_ACKNOWLEDGE).getString(Tags.CHE_ACK_ID)).getContents());
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, createAcknowledge());
+        cheMessage.setMessage(Tags.PLAYER, createPlayer());
+
+
+        return cheMessage;
     }
 
     public Alliance createAlliance(String name, String key) throws NoSuchAlgorithmException {

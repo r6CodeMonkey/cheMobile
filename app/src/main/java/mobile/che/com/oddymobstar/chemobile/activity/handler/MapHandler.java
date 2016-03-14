@@ -178,11 +178,7 @@ public class MapHandler {
             @Override
             public void run() {
 
-                //first, we need to attempt to remove it if set already
-           /*     if(markerMap.get(gameObject.getKey()) != null){
-                    markerMap.get(gameObject.getKey()).remove();
-                }
-*/
+
                 float hue = BitmapDescriptorFactory.HUE_AZURE;
 
                 switch (gameObject.getType()) {
@@ -243,6 +239,12 @@ public class MapHandler {
             }
         });
 
+    }
+
+    public void removeDestination(GameObject gameObject){
+        if(markerMap.containsKey(gameObject.getKey()+String.valueOf(true))){
+            markerMap.get(gameObject.getKey()+String.valueOf(false)).remove();
+        }
     }
 
 

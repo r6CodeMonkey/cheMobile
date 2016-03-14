@@ -93,7 +93,11 @@ public class CheMessageHandler extends MessageHandler {
     }
 
     public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
-        return playerHandler.createNewPlayer();
+        return messageFactory.createNewPlayer();
+    }
+
+    public CheMessage reConnectMessage() throws NoSuchAlgorithmException{
+        return messageFactory.createPlayerReconnect();
     }
 
 

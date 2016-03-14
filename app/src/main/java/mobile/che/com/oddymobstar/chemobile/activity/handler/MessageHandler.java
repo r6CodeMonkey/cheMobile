@@ -112,6 +112,11 @@ public class MessageHandler extends Handler {
         }
 
         if(hasStopped){
+
+            Log.d("add game object", "object has stopped");
+
+
+            controller.mapHandler.removeDestination(gameObject);
             //we need to tell server to stop it.
             new Thread(new Runnable() {
                 @Override

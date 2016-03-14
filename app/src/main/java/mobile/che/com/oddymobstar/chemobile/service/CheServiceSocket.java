@@ -20,6 +20,7 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface
 import mobile.che.com.oddymobstar.chemobile.service.util.CheMessageQueue;
 import mobile.che.com.oddymobstar.chemobile.service.util.CheReconnectListener;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import util.Tags;
 
 /**
@@ -182,6 +183,10 @@ public class CheServiceSocket {
                                 if (cheMessageHandler.isNewPlayer()) {
                                     Log.d("socket listen", "create message to get che id");
                                     cheMessageQueue.addMessage(cheMessageHandler.createNewPlayer());
+                                }else{
+                                    //we need to confirm we have reconnected....
+                                    Log.d("socket listen", "reconnect active");
+                                    cheMessageQueue.addMessage(cheMessageHandler.reConnectMessage()); //need Player key and thats it.  add to player value / state.  simples.
                                 }
 
                                 if (write != null) {
