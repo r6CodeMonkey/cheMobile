@@ -71,11 +71,17 @@ public class LocationListener implements android.location.LocationListener {
         Log.d("location changed", "location changed");
         LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
-        try {
-            controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(location));
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("security exception", "security exception " + e.toString());
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(currentLocation), currentLocation);
+                } catch (NoSuchAlgorithmException e) {
+                    Log.d("security exception", "security exception " + e.toString());
+                }
+            }
+        }).start();
+
 
 
         if (controller.mapHandler.getMarkerMap().containsKey("Me")) {

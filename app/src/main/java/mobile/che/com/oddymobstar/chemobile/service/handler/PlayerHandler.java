@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -38,6 +39,8 @@ public class PlayerHandler extends MessageHandler {
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
         //null
     }
+
+
 
     public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {
 

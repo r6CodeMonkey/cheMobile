@@ -3,6 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.service;
 import android.app.IntentService;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -120,6 +121,10 @@ public class CheService extends IntentService {
         });
 
         cheServiceSocket.connect.start();
+    }
+
+    public void writeToSocket(CheMessage cheMessage,Location location) {
+        cheServiceSocket.addToQueue(cheMessage, location);
     }
 
     public void writeToSocket(CheMessage cheMessage) {

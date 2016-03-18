@@ -1,8 +1,11 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONException;
+
+import java.security.NoSuchAlgorithmException;
 
 import message.CheMessage;
 import message.GameObject;
@@ -124,6 +127,8 @@ public class GameObjectHandler extends MessageHandler {
 
         }
     }
+
+
 
     private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, GameObject gameObject){
         model.setLatitude(gameObject.getUtmLocation().getLatitude());

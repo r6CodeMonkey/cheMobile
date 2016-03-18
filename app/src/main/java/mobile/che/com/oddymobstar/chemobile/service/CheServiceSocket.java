@@ -1,6 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -42,6 +43,8 @@ public class CheServiceSocket {
     public Socket socket;
     public DataOutputStream dOut = null;
     public DataInputStream dIn = null;
+
+    private Location location;
 
     private Thread cheReconnectThread;
     private CheReconnectListener cheReconnectListener = new CheReconnectListener(new Runnable() {
@@ -186,7 +189,7 @@ public class CheServiceSocket {
                                 }else{
                                     //we need to confirm we have reconnected....
                                     Log.d("socket listen", "reconnect active");
-                                    cheMessageQueue.addMessage(cheMessageHandler.reConnectMessage()); //need Player key and thats it.  add to player value / state.  simples.
+                                    cheMessageQueue.addMessage(cheMessageHandler.reConnectMessage(location)); //need Player key and thats it.  add to player value / state.  simples.
                                 }
 
                                 if (write != null) {
@@ -354,6 +357,11 @@ public class CheServiceSocket {
 
             connect.start();
         }
+    }
+
+    public void addToQueue(CheMessage cheMessage, Location location) {
+        this.location = location;
+        cheMessageQueue.addMessage(cheMessage);
     }
 
     public void addToQueue(CheMessage cheMessage) {

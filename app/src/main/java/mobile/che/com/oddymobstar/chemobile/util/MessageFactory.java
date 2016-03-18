@@ -167,6 +167,23 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
+    private message.GameObject createGameObjectStop(GameObject gameObject) {
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.GAME_OBJECT_STOP);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+      //double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong
+        gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(), gameObject.getUtmLat(),
+                gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));  //we need latest location.
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
+
+
+        return gameObjectMessage;
+    }
+
     private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
@@ -215,14 +232,6 @@ public class MessageFactory {
     }
 
 
-
-    private Player createPlayer() {
-        Player player = getPlayer();
-        player.setUTMLocation(createUTMLocation());  ///the bug is that we dont use our current lat and long
-
-        return player;
-    }
-
     private Acknowledge createCheAcknowledge(String key) {
         Acknowledge acknowledge = new Acknowledge(true);
         acknowledge.create();
@@ -253,6 +262,14 @@ public class MessageFactory {
         return player;
     }
 
+    private Player createPlayer() {
+        Player player = getPlayer();
+        player.setUTMLocation(createUTMLocation());
+
+
+        return player;
+    }
+
     public CheMessage createNewPlayer() throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
 
@@ -263,10 +280,10 @@ public class MessageFactory {
 
     }
 
-    public CheMessage createPlayerReconnect() throws NoSuchAlgorithmException{
+    public CheMessage createPlayerReconnect(Location location) throws NoSuchAlgorithmException{
         CheMessage cheMessage = createCheMessage();
 
-        Player player = createPlayer();
+        Player player = location == null ? createPlayer() : createPlayer(location);
         player.setState(Tags.CONNECT);
         player.setValue(Tags.SUCCESS);
 
@@ -289,7 +306,7 @@ public class MessageFactory {
         return cheMessage;
     }
 
-    public Alliance createAlliance(String name, String key) throws NoSuchAlgorithmException {
+    public Alliance createAlliance(String name, String key, Location location) throws NoSuchAlgorithmException {
         Alliance alliance = new Alliance();
         alliance.create();
 
@@ -297,7 +314,7 @@ public class MessageFactory {
         alliance.setName(name);
 
         List<Player> allianceMembers = new ArrayList<>();
-        allianceMembers.add(createPlayer());
+        allianceMembers.add(createPlayer(location));
 
         alliance.setMembers(allianceMembers);
 
@@ -317,7 +334,7 @@ public class MessageFactory {
     public CheMessage newAllianceMessage(String name, Location location) throws NoSuchAlgorithmException, JSONException {
 
         CheMessage cheMessage = createCheMessage();
-        Alliance alliance = createAlliance(name, "");
+        Alliance alliance = createAlliance(name, "", location);
         alliance.setState(Tags.ALLIANCE_CREATE);
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -331,7 +348,7 @@ public class MessageFactory {
 
     public CheMessage allianceChatPostMessage(mobile.che.com.oddymobstar.chemobile.model.Alliance alliance, String message, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
-        Alliance allianceMessage = createAlliance(alliance.getName(), alliance.getKey());
+        Alliance allianceMessage = createAlliance(alliance.getName(), alliance.getKey(), location);
         allianceMessage.setState(Tags.ALLIANCE_POST);
         allianceMessage.setValue(message);
         Player player = createPlayer(location);
@@ -416,7 +433,7 @@ public class MessageFactory {
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
 
-        message.GameObject gameObjectMessage = createGameObject(gameObject, location);
+        message.GameObject gameObjectMessage = createGameObjectStop(gameObject);
 
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);

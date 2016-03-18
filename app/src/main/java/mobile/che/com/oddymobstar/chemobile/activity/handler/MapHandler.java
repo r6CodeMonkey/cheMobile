@@ -241,10 +241,15 @@ public class MapHandler {
 
     }
 
-    public void removeDestination(GameObject gameObject){
-        if(markerMap.containsKey(gameObject.getKey()+String.valueOf(true))){
-            markerMap.get(gameObject.getKey()+String.valueOf(false)).remove();
-        }
+    public void removeDestination(final GameObject gameObject){
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (markerMap.containsKey(gameObject.getKey() + String.valueOf(true))) {
+                    markerMap.get(gameObject.getKey() + String.valueOf(false)).remove();
+                }
+            }
+            });
     }
 
 

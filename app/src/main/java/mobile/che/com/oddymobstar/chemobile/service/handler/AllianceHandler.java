@@ -1,6 +1,10 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.location.Location;
+
 import org.json.JSONException;
+
+import java.security.NoSuchAlgorithmException;
 
 import message.Alliance;
 import message.CheMessage;
@@ -65,4 +69,6 @@ public class AllianceHandler extends MessageHandler {
          need to make this work...simples.
          */
     }
+
+
 }

@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.location.Location;
+
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -26,11 +28,13 @@ public class AcknowledgeHandler extends MessageHandler {
         this.cheCallback = cheCallback;
     }
 
+
     @Override
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
-
         cheCallback.send(messageFactory.createCheAcknowledge(cheMessage));
     }
+
+
 
 
 }

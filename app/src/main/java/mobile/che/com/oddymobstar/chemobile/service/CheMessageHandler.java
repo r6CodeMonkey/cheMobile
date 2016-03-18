@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.service;
 
+import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -61,6 +62,8 @@ public class CheMessageHandler extends MessageHandler {
         playerHandler.handleNewPlayer(acknowledge);
     }
 
+
+
     public synchronized void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
           Log.d("handle", "handle object");
         //we always handle this.  we need to send the response back as well.
@@ -96,8 +99,8 @@ public class CheMessageHandler extends MessageHandler {
         return messageFactory.createNewPlayer();
     }
 
-    public CheMessage reConnectMessage() throws NoSuchAlgorithmException{
-        return messageFactory.createPlayerReconnect();
+    public CheMessage reConnectMessage(Location location) throws NoSuchAlgorithmException{
+        return messageFactory.createPlayerReconnect(location);
     }
 
 

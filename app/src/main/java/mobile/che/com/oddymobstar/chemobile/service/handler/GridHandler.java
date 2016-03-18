@@ -1,6 +1,10 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
+import android.location.Location;
+
 import org.json.JSONException;
+
+import java.security.NoSuchAlgorithmException;
 
 import message.CheMessage;
 import message.UTMLocation;
@@ -50,4 +54,6 @@ public class GridHandler extends MessageHandler {
                 utmLocation.getSubUTM().getUTMLatGrid() + utmLocation.getSubUTM().getUTMLongGrid());
 
     }
+
+
 }

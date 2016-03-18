@@ -107,29 +107,18 @@ public class MessageHandler extends Handler {
     }
 
     public void addGameObject(final GameObject gameObject, boolean hasStopped) {
-        if (controller != null) {
-            controller.mapHandler.addGameObject(gameObject, false);
-        }
 
-        if(hasStopped){
+            if (controller != null) {
+                controller.mapHandler.addGameObject(gameObject, false);
 
-            Log.d("add game object", "object has stopped");
+                if (hasStopped) {
 
+                    Log.d("add game object", "object has stopped");
+                    controller.mapHandler.removeDestination(gameObject);
 
-            controller.mapHandler.removeDestination(gameObject);
-            //we need to tell server to stop it.
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        controller.cheService.writeToSocket(controller.messageFactory.stopGameObject(gameObject, controller.locationListener.getCurrentLocation()));
-
-                    } catch (NoSuchAlgorithmException e) {
-
-                    }
                 }
-            }).start();
-        }
+            }
+
     }
 
     public void moveGameObject(GameObject gameObject) {
