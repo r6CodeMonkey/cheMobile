@@ -178,6 +178,10 @@ public class MapHandler {
             @Override
             public void run() {
 
+                if(markerMap.containsKey(gameObject.getKey()+String.valueOf(destination))){
+                    markerMap.get(gameObject.getKey()+String.valueOf(destination)).remove();
+                }
+
 
                 float hue = BitmapDescriptorFactory.HUE_AZURE;
 
@@ -245,8 +249,11 @@ public class MapHandler {
         main.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(polylineMap.containsKey(gameObject.getKey())){
+                    polylineMap.get(gameObject.getKey()).remove();
+                }
                 if (markerMap.containsKey(gameObject.getKey() + String.valueOf(true))) {
-                    markerMap.get(gameObject.getKey() + String.valueOf(false)).remove();
+                    markerMap.get(gameObject.getKey() + String.valueOf(true)).remove();
                 }
             }
             });
