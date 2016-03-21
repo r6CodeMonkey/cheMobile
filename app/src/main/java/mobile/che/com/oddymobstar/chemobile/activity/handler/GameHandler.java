@@ -253,7 +253,9 @@ public class GameHandler {
         final GameObject missileObject = controller.dbHelper.getGameObject(missile.getString(missile.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
         controller.mapHandler.addSphere(gameObject, missileObject.getRange());
 
-        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+        //scale this.  ie if missile range < 5000 needs to be more like 11....ie  .. ie per metre 10 works better.  so
+
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, (float)(missileObject.getRange() / 500.0f));
 
         //now we need to delay slightly, and then start timer and dialog.
         final Handler handler = new Handler();
