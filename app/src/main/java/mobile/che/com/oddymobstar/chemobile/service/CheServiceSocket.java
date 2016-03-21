@@ -131,7 +131,7 @@ public class CheServiceSocket {
 
                         object = object + lineRead[i];
 
-                        if (openBracket == closeBracket) {
+                        if (openBracket == closeBracket && openBracket != 0) {
                             objectFound = true;
                             charPos = i + 1;
                         }
@@ -149,7 +149,13 @@ public class CheServiceSocket {
                     }
 
                     if (objectFound) {
-                        processJSON(object);
+                        try {
+                            processJSON(object);
+                        }catch (NoSuchAlgorithmException e) {
+                            Log.d("security exception", "security exception " + e.toString());
+                        } catch (JSONException e) {
+                            Log.d("json exception", "json exception at a bad point!!! " + e.toString());
+                        }
                     }
 
                 }
@@ -161,8 +167,8 @@ public class CheServiceSocket {
 
     }
 
-    private void processJSON(final String object) {
-        try {
+    private void processJSON(final String object) throws JSONException, NoSuchAlgorithmException {
+
 
             stopCheSocketListener();
 
@@ -254,11 +260,7 @@ public class CheServiceSocket {
 
             }
 
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("security exception", "security exception " + e.toString());
-        } catch (JSONException e) {
-            Log.d("json exception", "json exception at a bad point!!! " + e.toString());
-        }
+
     }
 
 
