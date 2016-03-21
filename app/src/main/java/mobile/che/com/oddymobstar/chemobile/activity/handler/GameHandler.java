@@ -5,10 +5,13 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +20,8 @@ import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
+import mobile.che.com.oddymobstar.chemobile.adapter.MissileAdapter;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
@@ -25,6 +30,7 @@ import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
 import util.map.GridCreator;
 import util.map.SubUTM;
 import util.map.UTM;
@@ -37,6 +43,9 @@ public class GameHandler {
 
     private final ProjectCheController controller;
     private final ProjectCheActivity main;
+
+    //need to keep track of our game object added grids, and remove them once move carried out.
+    public final List<Polygon> validatorGrids = new ArrayList<>();
 
     public GameHandler(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
@@ -198,7 +207,7 @@ public class GameHandler {
                 controller.gameController.currentValidators.add(subUTM);
                 //
                 PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(subUTM, utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
-                controller.mapHelper.getMap().addPolygon(subUtmOptions);
+                validatorGrids.add(controller.mapHelper.getMap().addPolygon(subUtmOptions));
             }
 
         }
@@ -215,8 +224,45 @@ public class GameHandler {
 
     }
 
-    public void handleGameObjectTarget(String key) {
+    public void handleGameObjectTarget(final String key) {
+        //if no missiles, basically cant do anything.  can review if we need to capture it in future.
+        controller.gameController.missileArmDialog =
+                MissileArmDialog.newInstance(new MissileAdapter(main, controller.dbHelper.getAvailableMissiles(key), true),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, final int which) {
+                                handleMissileLoad(key, controller.gameController.missileArmDialog.getSelectItem());
+                            }
+                        }
+                        , new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                //
+                                dialog.dismiss();
+                            }
+                        });
+        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
+        controller.gameController.missileArmDialog.show(transaction, "dialog");
+
+    }
+
+    public void handleMissileLoad(String key, Cursor missile){
+
+        final GameObject gameObject = controller.dbHelper.getGameObject(key);
+        final GameObject missileObject = controller.dbHelper.getGameObject(missile.getString(missile.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
+        controller.mapHandler.addSphere(gameObject, missileObject.getRange());
+
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+
+        //now we need to delay slightly, and then start timer and dialog.
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.gameHelper.getMissileTargetDialog(gameObject, missileObject).show();
+            }
+        }, 3000);
     }
 
     public void handleRepair(String key) {
@@ -232,7 +278,19 @@ public class GameHandler {
 
     }
 
-    public void handleStop(String key) {
+    public void handleStop(final String key) {
+
+        //send a message to the server to tell it to stop.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.stopGameObject(controller.dbHelper.getGameObject(key), controller.locationListener.getCurrentLocation()));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+            }
+        }).start();
 
     }
 

@@ -33,15 +33,10 @@ public class MessageHandler extends Handler {
     public void handleGameObject() {
         if (controller != null) {
 
-            Log.d("adapter", "handler is not null so adding object, getting bored fixing shit that worked when i havent touched it  2");
-
-
             if (controller.fragmentHandler.gameFrag != null) {
                 main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("adapter", "handler is not null so adding object, getting bored fixing shit that worked when i havent touched it 3");
-
                         controller.fragmentHandler.gameFrag.refreshAdapter();
                     }
                 });
@@ -124,7 +119,7 @@ public class MessageHandler extends Handler {
     public void moveGameObject(GameObject gameObject) {
         if (controller != null) {
             controller.mapHandler.addPath(gameObject);
-            controller.gameController.gameTimer.stopTimer();
+            controller.gameController.gameTimer.stopTimer(true);
         }
 
     }

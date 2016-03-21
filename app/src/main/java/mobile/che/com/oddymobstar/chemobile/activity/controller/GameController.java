@@ -3,6 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.activity.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import factory.GameObjectRulesFactory;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.GameHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
@@ -12,6 +13,7 @@ import mobile.che.com.oddymobstar.chemobile.util.game.GameTimer;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
 import util.map.SubUTM;
 
 /**
@@ -32,19 +34,17 @@ public class GameController {
 
     public final GameTimer gameTimer;
 
-    private final ProjectCheController controller;
-    private final ProjectCheActivity main;
 
     public GameObject currentGameObject; //tracked for states etc.
+    public GameObject currentMissileObject;
     public List<SubUTM> currentValidators = new ArrayList<>(); //track whats valid too.
 
     public DeployDialog deployDialog;
     public ArmDialog armDialog;
     public GameObjectActionsDialog actionsDialog;
+    public MissileArmDialog missileArmDialog;
 
     public GameController(ProjectCheActivity main, ProjectCheController controller) {
-        this.main = main;
-        this.controller = controller;
         gameHandler = new GameHandler(main, controller);
         gameHelper = new GameHelper(main, controller);
         gameListener = new GameListener(main, controller);

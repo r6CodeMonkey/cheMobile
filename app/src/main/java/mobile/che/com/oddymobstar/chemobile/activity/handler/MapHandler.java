@@ -5,6 +5,8 @@ import android.view.View;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -13,7 +15,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
@@ -54,6 +58,9 @@ public class MapHandler {
     public Polygon lastLocateSubUTM;
     private Map<String, Marker> markerMap = new HashMap<>();
     private Map<String, Polyline> polylineMap = new HashMap<>();
+
+    public final List<Circle> circleList = new ArrayList<>();
+
     private String selectedGrid;
 
     public MapHandler(ProjectCheActivity main, ProjectCheController controller) {
@@ -257,6 +264,23 @@ public class MapHandler {
                 }
             }
             });
+    }
+
+    public void addSphere(final GameObject gameObject, final double radius){
+
+
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                CircleOptions circleOptions = new CircleOptions();
+                circleOptions.center(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()));
+                circleOptions.radius(radius);
+                circleOptions.fillColor(0x1AFF0000);
+
+                circleList.add(controller.mapHelper.getMap().addCircle(circleOptions));
+            }
+        });
     }
 
 

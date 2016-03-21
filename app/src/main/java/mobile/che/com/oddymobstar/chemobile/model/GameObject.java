@@ -11,7 +11,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 public class GameObject implements CheModelInterface {
 
     private String utmLat, utmLong, subUtmLat, subUtmLong, key, status;
-    private double latitude, longitude, destLat, destLong;
+    private double latitude, longitude, destLat, destLong, mass, force, range, impactRadius, maxSpeed, strength;
     private int type, subType;
 
 
@@ -33,6 +33,12 @@ public class GameObject implements CheModelInterface {
         setUtmLong(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)));
         setSubUtmLat(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)));
         setSubUtmLong(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)));
+        setMass(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MASS)));
+        setMaxSpeed(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MAX_SPEED)));
+        setImpactRadius(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_IMPACT_RADIUS)));
+        setRange(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_RANGE)));
+        setForce(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_FORCE)));
+        setStrength(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STRENGTH)));
 
     }
 
@@ -143,5 +149,28 @@ public class GameObject implements CheModelInterface {
         this.subType = subType;
     }
 
+    public double getMass() { return mass;}
+
+    public void setMass(double mass){this.mass = mass;}
+
+    public double getRange() { return range;}
+
+    public void setRange(double range){this.range = range;}
+
+    public double getImpactRadius() { return impactRadius;}
+
+    public void setImpactRadius(double impactRadius){this.impactRadius = impactRadius;}
+
+    public double getForce() { return force;}
+
+    public void setForce(double force){this.force = force;}
+
+    public double getStrength() { return strength;}
+
+    public void setStrength(double strength){this.strength = strength;}
+
+    public double getMaxSpeed() { return maxSpeed;}
+
+    public void setMaxSpeed(double maxSpeed){this.maxSpeed = maxSpeed;}
 
 }

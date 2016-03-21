@@ -47,6 +47,14 @@ public class GameObjectHandler extends MessageHandler {
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
                 model.setStatus("");
+
+                model.setForce(gameObject.getForce());
+                model.setStrength(gameObject.getStrength());
+                model.setRange(gameObject.getRange());
+                model.setImpactRadius(gameObject.getImpactRadius());
+                model.setMass(gameObject.getMass());
+                model.setMaxSpeed(gameObject.getMaxSpeed());
+
                 dbHelper.addGameObject(model);
 
                 Log.d("purchase", "have purchased " + model.getType() + " " + model.getSubType());

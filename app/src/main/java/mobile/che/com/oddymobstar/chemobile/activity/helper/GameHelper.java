@@ -219,4 +219,39 @@ public class GameHelper {
         return dialog;
     }
 
+    public AlertDialog getMissileTargetDialog(final GameObject gameObject, final GameObject missileObject){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        controller.gameController.currentGameObject = gameObject;
+        controller.gameController.currentMissileObject = missileObject;
+
+        builder.setTitle("Missile Range");
+        builder.setMessage("The range is within the red circle\nPress on the map to set target\nYou have 20 seconds to complete it!");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                controller.gameController.GAME_STATE = GameController.GAME_OBJECT_TARGET_STATE;
+                controller.gameController.gameTimer.startTimer(1000 * 20);
+            }
+        });
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
 }
