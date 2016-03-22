@@ -209,7 +209,7 @@ public class MapHandler {
                 }
 
                 if (destination) {
-                    hue = BitmapDescriptorFactory.HUE_YELLOW;
+                    hue = BitmapDescriptorFactory.HUE_RED;  //red is better.  ie green to red.
                 }
 
                 markerMap.put(gameObject.getKey()+String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(

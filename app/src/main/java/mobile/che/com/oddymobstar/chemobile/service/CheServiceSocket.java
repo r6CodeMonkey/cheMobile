@@ -323,7 +323,7 @@ public class CheServiceSocket {
             }
 
             cheMessageQueue.reConnect();
-            //write.interrupt();  //this may not be required anymore...
+            //write.interrupt();  //this may not be required anymore..
 
         }
 

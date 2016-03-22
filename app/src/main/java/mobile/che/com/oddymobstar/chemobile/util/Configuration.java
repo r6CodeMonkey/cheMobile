@@ -31,6 +31,9 @@ public class Configuration implements Serializable {
     public final static String CURRENT_SUBUTM_LONG = "CURRENT_SUBUTM_LONG";
     public final static String CURRENT_UTM_LAT = "CURRENT_UTM_LAT";
     public final static String CURRENT_SUBUTM_LAT = "CURRENT_SUBUTM_LAT";
+    public final static String CURRENT_LATITUTDE = "CURRENT_LATITUDE";
+    public final static String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
+
 
     //need to actuall glamourize this so its in minutes, not milliseconds.
     public final static String GPS_UPDATE_INTERVAL = "GPS_UPDATE_INTERVAL";

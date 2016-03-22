@@ -204,6 +204,10 @@ public class DBHelper extends SQLiteOpenHelper {
         addConfig(config);
         config = new Config(Configuration.PLAYER_NAME, "", "Player Name", Config.BASE, true);
         addConfig(config);
+        config = new Config(Configuration.CURRENT_LATITUTDE, "0.0", "Current Latitude", Config.SYSTEM, false);
+        addConfig(config);
+        config = new Config(Configuration.CURRENT_LONGITUDE, "0.0", "Current Longitude", Config.SYSTEM, false);
+        addConfig(config);
         config = new Config(Configuration.CURRENT_UTM_LAT, "", "Universal Transverse Mercator LatCode", Config.BASE, true);
         addConfig(config);
         config = new Config(Configuration.CURRENT_SUBUTM_LAT, "", "Custom SubUTM grid LatCode", Config.BASE, true);

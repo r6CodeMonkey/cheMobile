@@ -64,6 +64,7 @@ public class CheMessageQueue {
 
     public void reConnect() {
         try {
+            Log.d("reconnect", "reconnect writing");
             cheServiceSocket.write(messageQueue.get(messageQueue.keySet().iterator().next()));
         } catch (Exception e) {
             Log.d("Queue exception", "queue error is " + e.getMessage());

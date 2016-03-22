@@ -18,6 +18,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.SharedPreferencesHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
+import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
@@ -78,8 +79,12 @@ public class MapHelper {
         tilt = sharedPreferences.getFloat(SharedPreferencesHandler.TILT, 0.0f);
         bearing = sharedPreferences.getFloat(SharedPreferencesHandler.BEARING, 0.0f);
 
-        LatLng currentLatLng = new LatLng(Double.parseDouble(sharedPreferences.getString(SharedPreferencesHandler.LATITUTE, "0.0")),
-                Double.parseDouble(sharedPreferences.getString(SharedPreferencesHandler.LONGITUDE, "0.0")));
+        Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
+        Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
+
+
+        LatLng currentLatLng = new LatLng(Double.parseDouble(currentLat.getValue()),
+                Double.parseDouble(currentLong.getValue()));
 
         //need to manage map markers too.  as per old code ie remove and re add.  do this now....joy
         controller.mapHandler.addUser(currentLatLng);

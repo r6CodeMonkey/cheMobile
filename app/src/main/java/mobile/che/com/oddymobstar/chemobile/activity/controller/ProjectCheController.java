@@ -218,12 +218,6 @@ public class ProjectCheController {
     public void onResume() {
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
 
-        if (locationListener.getCurrentLocation() == null) {
-            locationListener.setCurrentLocation(new Location(sharedPreferences.getString(SharedPreferencesHandler.PROVIDER, "")));
-        }
-
-        locationListener.getCurrentLocation().setLatitude(Double.parseDouble(sharedPreferences.getString(SharedPreferencesHandler.LATITUTE, "0.0")));
-        locationListener.getCurrentLocation().setLongitude(Double.parseDouble(sharedPreferences.getString(SharedPreferencesHandler.LONGITUDE, "0.0")));
 
         mapHelper.setUpMapIfNeeded();
 

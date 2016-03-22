@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 
@@ -38,7 +39,15 @@ public class LocationListener implements android.location.LocationListener {
     }
 
     public LatLng getCurrentLocationLatLng() {
-        return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+        if(currentLocation != null) {
+            return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        }else{
+            Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
+            Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
+
+            return new LatLng(Double.parseDouble(currentLat.getValue()), Double.parseDouble(currentLong.getValue()));
+        }
     }
 
     @Override
@@ -46,54 +55,64 @@ public class LocationListener implements android.location.LocationListener {
         //this is our only location listener now...
         currentLocation = location;
 
-        Message message = new Message();
-        message.setMessage("this is a test on location change and now we force a line break");
-        message.setTime(System.currentTimeMillis());
-        controller.dbHelper.addVidiNews(message);
+        if(controller != null) {
+            Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
+            Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
 
-        if (controller.progressDialog != null) {
-            controller.progressDialog.dismiss();
+            currentLat.setValue(String.valueOf(location.getLatitude()));
+            currentLong.setValue(String.valueOf(location.getLongitude()));
 
-            //its enough for time being.
-            if (controller.runNewUserAnimation) {
-                controller.runNewUserAnimation = false;
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
-                    }
-                }, 1500);
+            controller.dbHelper.updateConfig(currentLat);
+            controller.dbHelper.updateConfig(currentLong);
 
-            }
-        }
+            Message message = new Message();
+            message.setMessage("this is a test on location change and now we force a line break");
+            message.setTime(System.currentTimeMillis());
+            controller.dbHelper.addVidiNews(message);
 
-        Log.d("location changed", "location changed");
-        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            if (controller.progressDialog != null) {
+                controller.progressDialog.dismiss();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(currentLocation), currentLocation);
-                } catch (NoSuchAlgorithmException e) {
-                    Log.d("security exception", "security exception " + e.toString());
+                //its enough for time being.
+                if (controller.runNewUserAnimation) {
+                    controller.runNewUserAnimation = false;
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
+                        }
+                    }, 1500);
+
                 }
             }
-        }).start();
+
+            Log.d("location changed", "location changed");
+            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(currentLocation), currentLocation);
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.d("security exception", "security exception " + e.toString());
+                    }
+                }
+            }).start();
 
 
+            if (controller.mapHandler.getMarkerMap().containsKey("Me")) {
+                controller.mapHandler.getMarkerMap().get("Me").remove();
+            }
 
-        if (controller.mapHandler.getMarkerMap().containsKey("Me")) {
-            controller.mapHandler.getMarkerMap().get("Me").remove();
+            controller.mapHandler.addUser(currentLatLng);
+
+            controller.mapHandler.handleCamera(currentLatLng,
+                    controller.mapHelper.getMap().getCameraPosition().tilt,
+                    controller.mapHelper.getMap().getCameraPosition().bearing,
+                    controller.mapHelper.getMap().getCameraPosition().zoom);
         }
-
-        controller.mapHandler.addUser(currentLatLng);
-
-        controller.mapHandler.handleCamera(currentLatLng,
-                controller.mapHelper.getMap().getCameraPosition().tilt,
-                controller.mapHelper.getMap().getCameraPosition().bearing,
-                controller.mapHelper.getMap().getCameraPosition().zoom);
     }
 
     @Override
