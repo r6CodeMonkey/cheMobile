@@ -1,5 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +12,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.security.NoSuchAlgorithmException;
 
+import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.SharedPreferencesHandler;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
@@ -22,15 +26,27 @@ import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 public class LocationListener implements android.location.LocationListener {
 
 
+    private final ProjectCheActivity main;
     private final ProjectCheController controller;
     private Location currentLocation;
 
-    public LocationListener(ProjectCheController controller) {
+    public LocationListener(ProjectCheActivity main, ProjectCheController controller) {
+        this.main = main;
         this.controller = controller;
     }
 
 
     public Location getCurrentLocation() {
+        //need to fix this.
+        if(currentLocation == null){
+            SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
+            currentLocation = new Location(sharedPreferences.getString(SharedPreferencesHandler.PROVIDER, ""));
+            Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
+            Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
+            currentLocation.setLatitude(Double.parseDouble(currentLat.getValue()));
+            currentLocation.setLongitude(Double.parseDouble(currentLong.getValue()));
+
+        }
         return currentLocation;
     }
 

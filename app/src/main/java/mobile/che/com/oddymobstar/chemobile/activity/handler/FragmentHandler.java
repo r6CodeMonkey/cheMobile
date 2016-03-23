@@ -40,8 +40,8 @@ public class FragmentHandler {
         vidiPrintFragment.addFragmentCallback(new Runnable() {
             @Override
             public void run() {
-                vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
-                vidiPrintFragment.clearNewText();
+                 vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
+                 vidiPrintFragment.clearNewText();
             }
         });
 

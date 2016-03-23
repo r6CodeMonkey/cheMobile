@@ -69,7 +69,7 @@ public class MapHelper {
     private void setUpMap() {
         map.getUiSettings().setZoomControlsEnabled(false);
         //now dd our last known location.
-        controller.locationListener = new LocationListener(controller);
+        controller.locationListener = new LocationListener(main, controller);
         controller.locationHelper.initLocationUpdates();
 
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
