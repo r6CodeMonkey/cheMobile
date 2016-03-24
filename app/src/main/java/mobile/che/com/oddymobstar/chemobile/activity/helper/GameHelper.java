@@ -157,7 +157,33 @@ public class GameHelper {
         }, 1000);
     }
 
-    public AlertDialog getDestinationDialog(LatLng latLng, DialogInterface.OnClickListener moveListener) {
+    public AlertDialog getTargetDialog(DialogInterface.OnClickListener targetListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+
+        builder.setTitle("Target Confirmation");
+        builder.setMessage("Target set for " + GameObjectTypes.getTypeName(controller.gameController.currentGameObject.getSubType()) + " - " + controller.gameController.currentGameObject.getKey());
+        builder.setCancelable(true);
+
+        builder.setPositiveButton("Take Aim", targetListener);
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
+    public AlertDialog getDestinationDialog(DialogInterface.OnClickListener moveListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
 

@@ -264,7 +264,17 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(GAME_OBJECT_KEY, gameObjectKey);
         values.put(MISSILE_KEY, missileKey);
 
+        Log.d("adding missile", "missile " + missileKey + " added to " + gameObjectKey);
+
         db.insert(MISSILES_BY_GAME_OBJECT, null, values);
+
+        GameObject missile = getGameObject(missileKey);
+        GameObject gameObject = getGameObject(gameObjectKey);
+
+        missile.setLatitude(gameObject.getLatitude());
+        missile.setLongitude(gameObject.getLongitude());
+
+        updateGameObject(missile, false, false);
 
     }
 
@@ -433,6 +443,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void deleteMissileFromGameObject(String missileKey) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(MISSILES_BY_GAME_OBJECT, MISSILE_KEY + " =?", new String[]{missileKey});
+
+    }
+
     public void deleteMessages(String key) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -459,6 +476,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.delete(GAME_OBJECTS_TABLE, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
 
+    }
+
+    public void missileTargetReached(GameObject gameObject){
+
+        deleteGameObject(gameObject);
+        deleteMissileFromGameObject(gameObject.getKey());
+
+        //now need to call message handler
+        if(messageHandler != null){
+            messageHandler.missileTargetReached(gameObject);
+        }
     }
 
 
@@ -515,8 +543,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public void updateMissiles(GameObject gameObject){
+        Cursor missiles = getAvailableMissiles(gameObject.getKey());
 
-    public void updateGameObject(GameObject gameObject, boolean hasStopped) {
+        GameObject missile;
+        while(missiles.moveToNext()){
+            missile = getGameObject(missiles.getString(missiles.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
+            missile.setLatitude(gameObject.getLatitude());
+            missile.setLongitude(gameObject.getLongitude());
+            updateGameObject(missile, false, false);
+        }
+
+        missiles.close();
+    }
+
+
+    public void updateGameObject(GameObject gameObject, boolean hasStopped, boolean messageHandler) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -540,18 +582,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         db.update(GAME_OBJECTS_TABLE, values, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
-        if (gameObject.getType() != GameObjectGridFragment.MISSILE) {  //we dont add missiles at this point.
-            handleGameObjectAdded(gameObject,hasStopped);
+        if(messageHandler) {
+            handleGameObjectAdded(gameObject, hasStopped);
         }
 
     }
 
     public void handleGameObjectAdded(GameObject gameObject, boolean hasStopped) {
         if (messageHandler != null) {
-            if (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_FIXED) || gameObject.getStatus().trim().isEmpty()) {
-                messageHandler.addGameObject(gameObject,hasStopped);
-            } else if (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
+
+             if (gameObject.getType() != GameObjectGridFragment.MISSILE && (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_FIXED) || gameObject.getStatus().trim().isEmpty())) {
+                messageHandler.addGameObject(gameObject, hasStopped);
+            } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
                 messageHandler.moveGameObject(gameObject);
+            }else if(gameObject.getStatus().equals(Tags.MISSILE_TARGET)){
+                messageHandler.confirmTarget(gameObject);
             }
         }
     }
@@ -627,6 +672,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG +","+GAME_OBJECT_MASS+","+GAME_OBJECT_STRENGTH+","+GAME_OBJECT_MAX_SPEED+","+GAME_OBJECT_IMPACT_RADIUS+","+GAME_OBJECT_RANGE+","+GAME_OBJECT_FORCE+ " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " != " + GameObjectGridFragment.MISSILE + " AND " + GAME_OBJECT_STATUS + "='" + Tags.GAME_OBJECT_IS_MOVING + "' ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
     }
 
+    public Cursor getTargets(){
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG +","+GAME_OBJECT_MASS+","+GAME_OBJECT_STRENGTH+","+GAME_OBJECT_MAX_SPEED+","+GAME_OBJECT_IMPACT_RADIUS+","+GAME_OBJECT_RANGE+","+GAME_OBJECT_FORCE+ " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " = " + GameObjectGridFragment.MISSILE + " AND " + GAME_OBJECT_STATUS + "='" + Tags.MISSILE_TARGET + "' ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+    }
+
     public Cursor getAvailableObjectsToArm(int type) {
 
         switch (type) {
@@ -660,6 +709,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableMissiles(String key){
         return this.getReadableDatabase().rawQuery("SELECT "+MISSILE_KEY+" as _id, "+MISSILE_KEY+","+GAME_OBJECT_TYPE+","+GAME_OBJECT_SUBTYPE+" FROM "+MISSILES_BY_GAME_OBJECT+" JOIN "+GAME_OBJECTS_TABLE+" ON "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_KEY+"="+MISSILES_BY_GAME_OBJECT+"."+MISSILE_KEY+"  WHERE "+MISSILES_BY_GAME_OBJECT+"."+GAME_OBJECT_KEY+ "= ?  ORDER BY "+GAME_OBJECT_SUBTYPE+" DESC", new String[]{key});
+    }
+
+    public Cursor getLaunchMissiles(String key){
+        return this.getReadableDatabase().rawQuery("SELECT "+MISSILE_KEY+" as _id, "+MISSILE_KEY+","+GAME_OBJECT_TYPE+","+GAME_OBJECT_SUBTYPE+" FROM "+MISSILES_BY_GAME_OBJECT+" JOIN "+GAME_OBJECTS_TABLE+" ON "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_KEY+"="+MISSILES_BY_GAME_OBJECT+"."+MISSILE_KEY+"  WHERE "+MISSILES_BY_GAME_OBJECT+"."+GAME_OBJECT_KEY+ "= ? AND "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_STATUS+"=? ORDER BY "+GAME_OBJECT_SUBTYPE+" DESC", new String[]{key, Tags.MISSILE_TARGET});
     }
 
     public Cursor getGameObjectTypes(int type) {
@@ -765,6 +818,19 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return gameObject;
+    }
+
+    public boolean hasTargetSet(String key){
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT "+MISSILE_KEY+" as _id,"+MISSILE_KEY+" FROM "+MISSILES_BY_GAME_OBJECT+" JOIN "+GAME_OBJECTS_TABLE+" ON "+MISSILES_BY_GAME_OBJECT+"."+MISSILE_KEY+" = "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_KEY+" WHERE "+MISSILES_BY_GAME_OBJECT+"."+GAME_OBJECT_KEY+"=? AND "+GAME_OBJECTS_TABLE+"."+GAME_OBJECT_STATUS+"=?", new String[]{key,Tags.MISSILE_TARGET});
+
+        boolean res = false;
+        while(cursor.moveToNext()){
+            res = true;
+        }
+
+        cursor.close();
+        return res;
+
     }
 
 

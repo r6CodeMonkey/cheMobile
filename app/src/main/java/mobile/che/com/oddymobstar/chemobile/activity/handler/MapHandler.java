@@ -54,12 +54,13 @@ public class MapHandler {
     private final ProjectCheActivity main;
     public boolean CLEAR_GRIDS = false;
     public PolygonOptions lastUTMOptions;
-    public Map<String, Polygon> lastLocateUTMs = new HashMap<>();
+    public final Map<String, Polygon> lastLocateUTMs = new HashMap<>();
     public Polygon lastLocateSubUTM;
-    private Map<String, Marker> markerMap = new HashMap<>();
-    private Map<String, Polyline> polylineMap = new HashMap<>();
+    private final Map<String, Marker> markerMap = new HashMap<>();
+    private final Map<String, Polyline> polylineMap = new HashMap<>();
 
     public final List<Circle> circleList = new ArrayList<>();
+    public final Map<String, Circle> targets = new HashMap<>();
 
     private String selectedGrid;
 
@@ -266,7 +267,18 @@ public class MapHandler {
             });
     }
 
-    public void addSphere(final GameObject gameObject, final double radius){
+    public void removeSphere(final  GameObject gameObject){
+        main.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if(targets.containsKey(gameObject.getKey())){
+                    targets.get(gameObject.getKey()).remove();
+                }
+            }});
+    }
+
+    public void addSphere(final GameObject gameObject,final double radius, final boolean target){
 
 
         main.runOnUiThread(new Runnable() {
@@ -274,11 +286,15 @@ public class MapHandler {
             public void run() {
 
                 CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()));
+                circleOptions.center(target ? new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()): new LatLng(gameObject.getLatitude(), gameObject.getLongitude()));
                 circleOptions.radius(radius);
                 circleOptions.fillColor(0x1AFF0000);
 
-                circleList.add(controller.mapHelper.getMap().addCircle(circleOptions));
+               if(target){
+                   targets.put(gameObject.getKey(), controller.mapHelper.getMap().addCircle(circleOptions));
+               }else{
+                   circleList.add(controller.mapHelper.getMap().addCircle(circleOptions));
+               }
             }
         });
     }

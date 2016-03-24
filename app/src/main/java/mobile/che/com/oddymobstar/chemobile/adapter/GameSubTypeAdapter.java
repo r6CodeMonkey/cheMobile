@@ -20,6 +20,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import util.GameObjectTypes;
+import util.Tags;
 
 /**
  * Created by timmytime on 16/02/16.
@@ -110,6 +111,9 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
     }
 
     public static String getStatus(Cursor cursor) {
+
+        String status = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STATUS));
+
         switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
             //need to beef this up....once have more tables and data.
             case GameObjectGridFragment.INFASTRUCTURE:
@@ -127,7 +131,9 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
                     case GameObjectTypes.WATER_MINE:
                         return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" : "Armed";
                     default:
-                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" : "Armed";
+                        return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Arm" :
+                                status.equals(Tags.MISSILE_TARGET) ? "Locked" :
+                                        status.equals(Tags.MISSILE_LAUNCHED) ? "Launched" : "Armed";
 
                 }
 

@@ -2,8 +2,10 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,6 +33,7 @@ import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
+import util.Tags;
 import util.map.GridCreator;
 import util.map.SubUTM;
 import util.map.UTM;
@@ -105,50 +108,121 @@ public class GameHandler {
 
     public void actionsDialog(String key, final int type) {
 
+        GameObject gameObject = controller.dbHelper.getGameObject(key);
+
+        boolean targetSet = controller.dbHelper.hasTargetSet(key);
+
+
+        String title = "";
+        String title2 = "";
+        String title3 = "";
+
+        DialogInterface.OnClickListener listener = null;
+        DialogInterface.OnClickListener listener2 = null;
+        DialogInterface.OnClickListener listener3 = null;
+
+        switch (type){
+
+            case GameObjectGridFragment.INFASTRUCTURE:
+                title = GameObjectActionsDialog.REPAIR;  //could have a reinforce too.  same thing i guess.
+                listener = controller.gameController.gameListener.getRepairListener();
+                break;
+            case GameObjectGridFragment.LAND:
+                //rules.  what is our status?
+                switch (gameObject.getStatus()){
+                    case Tags.GAME_OBJECT_IS_MOVING:
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+                        break;
+                    case Tags.GAME_OBJECT_IS_FIXED:
+                        title3 = GameObjectActionsDialog.MOVE;
+                        listener3 = controller.gameController.gameListener.getMoveListener(type);
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+                        break;
+                }
+                break;
+            case GameObjectGridFragment.SEA:
+                switch (gameObject.getStatus()){
+                    case Tags.GAME_OBJECT_IS_MOVING:
+
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+
+                        break;
+                    case Tags.GAME_OBJECT_IS_FIXED:
+                        title3 = GameObjectActionsDialog.MOVE;
+                        listener3 = controller.gameController.gameListener.getMoveListener(type);
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+                    break;
+                }
+                break;
+            case GameObjectGridFragment.AIR:  //really need a takeoff too.  ie move, take off, land etc....anyway.  this can go later.
+                switch (gameObject.getStatus()){
+                    case Tags.GAME_OBJECT_IS_MOVING:
+                        title3 = GameObjectActionsDialog.LAND;
+                        listener3 = controller.gameController.gameListener.getLandingListener();
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+                        break;
+                    case Tags.GAME_OBJECT_IS_FIXED:
+                        title3 = GameObjectActionsDialog.MOVE;
+                        listener3 = controller.gameController.gameListener.getMoveListener(type);
+                        if(targetSet){
+                            title = GameObjectActionsDialog.LAUNCH;
+                            listener = controller.gameController.gameListener.getLaunchListener();
+                            title2 = GameObjectActionsDialog.CANCEL;
+                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                        }else{
+                            title = GameObjectActionsDialog.TARGET;
+                            listener = controller.gameController.gameListener.getTargetListener();
+                        }
+                        break;
+                }
+                break;
+
+        }
+
+
         controller.gameController.actionsDialog =
-                GameObjectActionsDialog.newInstance(type, key,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                //positive action9
-                                dialog.dismiss();
-                                switch (type) {
-                                    case GameObjectGridFragment.INFASTRUCTURE: //repair
-                                        handleRepair(controller.gameController.actionsDialog.getGameObjectKey());
-                                        break;
-                                    case GameObjectGridFragment.AIR: //take off .. does it really need airport....ie cant deploy unless at a nase
-                                        handleGameObjectMove(controller.gameController.actionsDialog.getGameObjectKey());
-                                        break;
-                                    default: //land and sea move
-                                        Log.d("actions", "actions handler");
-                                        handleGameObjectMove(controller.gameController.actionsDialog.getGameObjectKey());
-                                        break;
-                                }
-                            }
-                        }
-                        , new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                //negative action
-                                dialog.dismiss();
-                                switch (type) {
-                                    case GameObjectGridFragment.AIR:  //its land.
-                                        handleLanding(controller.gameController.actionsDialog.getGameObjectKey());
-                                        break;
-                                    default: //land and sea stop
-                                        handleStop(controller.gameController.actionsDialog.getGameObjectKey());
-                                        break;
-                                }
-                            }
-                        }
-                        , new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                //neutral action
-                                dialog.dismiss();
-                                handleGameObjectTarget(controller.gameController.actionsDialog.getGameObjectKey());
-                            }
-                        }
+                GameObjectActionsDialog.newInstance(key,title, title2, title3, listener, listener2, listener3
+
                         , new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
@@ -251,7 +325,7 @@ public class GameHandler {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
         final GameObject missileObject = controller.dbHelper.getGameObject(missile.getString(missile.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
-        controller.mapHandler.addSphere(gameObject, missileObject.getRange());
+        controller.mapHandler.addSphere(gameObject, missileObject.getRange(), false);
 
         //scale this.  ie if missile range < 5000 needs to be more like 11....ie  .. ie per metre 10 works better.  so
 
@@ -296,11 +370,92 @@ public class GameHandler {
 
     }
 
+    public void handleCancelTarget(final String key){
+
+        //to do.
+
+    }
+
+    //we are assuming we can only target one thing at a time.  makes sense at present.
+    public void handleLaunch(final String key){
+
+        GameObject gameObject = null;  //really we want to have more than one target set....well means changing buttons so leave at present.  enough other things to do.
+
+        Cursor missiles = controller.dbHelper.getLaunchMissiles(key);
+
+        while (missiles.moveToNext()){
+            gameObject = controller.dbHelper.getGameObject(missiles.getString(missiles.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
+        }
+
+        missiles.close();
+
+        controller.mapHandler.removeSphere(gameObject);
+
+        final GameObject missile = gameObject;
+        //we need to send a missile message now.  do we allow multiple targets?  we could.   if so, we need a listener.  for moment launch 1.  then refactor.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.getMissileLaunch(missile, controller.locationListener.getCurrentLocation()));
+
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+            }
+        }).start();
+
+    }
+
+    public void handleTarget(final LatLng latLng){
+
+        final GameObject gameObject = controller.gameController.currentGameObject;
+        final GameObject explosive = controller.gameController.currentMissileObject;
+        //validate it here.
+
+        Location start = new Location("");
+        start.setLatitude(explosive.getLatitude());
+        start.setLongitude(explosive.getLongitude());
+        Location target = new Location("");
+        target.setLatitude(latLng.latitude);
+        target.setLongitude(latLng.longitude);
+
+
+        if(start.distanceTo(target) > explosive.getRange()){
+            Toast.makeText(main, "Target Outside Range!", Toast.LENGTH_SHORT).show();
+        }else {
+
+            //as the other.  set a target Dialog
+            controller.gameController.gameHelper.getTargetDialog(
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                            ;
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        controller.cheService.writeToSocket(controller.messageFactory.setTarget(gameObject, explosive, latLng, controller.locationListener.getCurrentLocation()));
+
+                                    } catch (NoSuchAlgorithmException e) {
+
+                                    }
+                                }
+                            }).start();
+
+                        }
+                    }
+            ).show();
+        }
+    }
+
 
     public void handleMoveDestination(final LatLng latLng) {
         //1: popup to say this is the chosen location....then send message.
         controller.gameController.gameHelper.getDestinationDialog(
-                latLng, new DialogInterface.OnClickListener() {
+                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

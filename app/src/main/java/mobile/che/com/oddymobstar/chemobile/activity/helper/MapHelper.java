@@ -109,6 +109,7 @@ public class MapHelper {
         controller.mapHandler.addOthers();
         addGameMarkers();
         addPaths();
+        addTargets();
 
         map.setOnMarkerClickListener(controller.mapListener.getMarkerListener());
         map.setOnMapLongClickListener(controller.gameController.gameListener.getGameLongClickListener());
@@ -188,4 +189,15 @@ public class MapHelper {
         }
         cursor.close();
     }
+
+    private void addTargets(){
+        Cursor cursor = controller.dbHelper.getTargets();
+
+        while(cursor.moveToNext()){
+
+            GameObject gameObject = new GameObject(cursor);
+            controller.mapHandler.addSphere(gameObject, gameObject.getImpactRadius(), true);
+        }
+    }
+
 }

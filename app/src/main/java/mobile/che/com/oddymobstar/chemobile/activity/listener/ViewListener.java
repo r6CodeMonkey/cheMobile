@@ -16,6 +16,7 @@ import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameSubTypeAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.AllianceGridFragment;
+import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import util.GameObjectTypes;
 
@@ -64,11 +65,33 @@ public class ViewListener {
                 } else {
 
                     //zoom to wherever we are headed.
-                    controller.mapHandler.handleCamera(latLng, 45, 0, 20);
+                    controller.mapHandler.handleCamera(latLng, 45, 0, 19);
                     Marker marker = controller.mapHandler.getMarkerMap().get(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
 
                     if (marker != null) {
                         marker.showInfoWindow();
+                    }
+
+                    //if we are locked..we delay a camera animation to target and then back
+                    if (action.equals("Locked")){
+
+                        final LatLng host = latLng;
+                        final GameObject missile = controller.dbHelper.getGameObject(key);
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.mapHandler.handleCamera(new LatLng(missile.getDestLatitude(), missile.getDestLongitude()), 45, 0, 17);
+                            }
+                        }, 3000);
+
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.mapHandler.handleCamera(host, 45, 0, 19);
+                            }
+                        }, 6000);
                     }
 
                     //ideally need to wait a little bit.

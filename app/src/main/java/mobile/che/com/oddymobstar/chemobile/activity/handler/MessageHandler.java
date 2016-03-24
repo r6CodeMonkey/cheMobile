@@ -1,12 +1,13 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
-
-import java.security.NoSuchAlgorithmException;
 
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
@@ -103,16 +104,16 @@ public class MessageHandler extends Handler {
 
     public void addGameObject(final GameObject gameObject, boolean hasStopped) {
 
-            if (controller != null) {
-                controller.mapHandler.addGameObject(gameObject, false);
+        if (controller != null) {
+            controller.mapHandler.addGameObject(gameObject, false);
 
-                if (hasStopped) {
+            if (hasStopped) {
 
-                    Log.d("add game object", "object has stopped");
-                    controller.mapHandler.removeDestination(gameObject);
+                Log.d("add game object", "object has stopped");
+                controller.mapHandler.removeDestination(gameObject);
 
-                }
             }
+        }
 
     }
 
@@ -123,6 +124,62 @@ public class MessageHandler extends Handler {
         }
 
     }
+
+    public void confirmTarget(GameObject gameObject) {
+        if (controller != null) {
+            //simples...we add a target circle on the map showing kill radius...yes.
+            controller.mapHandler.addSphere(gameObject, gameObject.getImpactRadius(), true);
+            controller.gameController.gameTimer.stopTimer(true);
+
+            Log.d("have confirmed target", "so timer should of stopped!");
+        }
+    }
+
+    public void missileTargetReached(final GameObject gameObject) {
+
+
+        if (controller != null) {
+
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("target reached", "target has been reached by missile " + gameObject.getKey());
+
+            /*
+               so 1: we need to animate from our parent destination (which we probably dont have?  yes we do).
+             */
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 19);
+                        }
+                    }, 3000);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.mapHandler.handleCamera(new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), 45, 0, 17);
+                        }
+                    }, 6000);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.gameController.mapExplosionTimer.startTimer(gameObject, 4000);
+                            Vibrator vibrator = (Vibrator) main.getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(1000);
+                        }
+                    }, 7000);
+                }
+
+
+            });
+        }
+
+
+    }
+
 
     public void handleUTMChange(String utm) {
 

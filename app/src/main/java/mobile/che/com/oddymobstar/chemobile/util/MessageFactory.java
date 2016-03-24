@@ -124,14 +124,14 @@ public class MessageFactory {
         return player;
     }
 
-    private Missile createMissile(GameObject missile, UTMLocation utmLocation) {
+    private Missile createMissile(GameObject missile, UTMLocation utmLocation, LatLng latLng) {
         Missile missileMessage = new Missile();
         missileMessage.create();
 
         missileMessage.setKey(missile.getKey());
         missileMessage.setCurrentUTMLocation(utmLocation);
         missileMessage.setStartUTMLocation(utmLocation);
-        missileMessage.setTargetUTMLocation(createUTMLocation());
+        missileMessage.setTargetUTMLocation(latLng == null ? createUTMLocation() : createUTMLocation(latLng.latitude, latLng.longitude, "", "", "", ""));
 
         return missileMessage;
     }
@@ -184,11 +184,11 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
-    private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive) {
+    private message.GameObject createGameObjectWithExplosive(GameObject gameObject, GameObject explosive, LatLng latLng, String state) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
 
-        gameObjectMessage.setState(Tags.MISSILE_ADDED);
+        gameObjectMessage.setState(state);
         gameObjectMessage.setKey(gameObject.getKey());
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
@@ -198,11 +198,13 @@ public class MessageFactory {
                 gameObject.getUtmLong(), gameObject.getSubUtmLat(),
                 gameObject.getSubUtmLong());
         gameObjectMessage.setUtmLocation(utmLocation);
-        gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
+        gameObjectMessage.setDestinationUtmLocation(latLng == null ?
+                createUTMLocation() :
+        createUTMLocation(latLng.latitude, latLng.longitude, "","","",""));
 
         //we only set the one we are adding...or do we send all of them?  just add
         List<Missile> missiles = new ArrayList<>();
-        missiles.add(createMissile(explosive, utmLocation));
+        missiles.add(createMissile(explosive, utmLocation, latLng));
         gameObjectMessage.setMissiles(missiles);
 
         return gameObjectMessage;
@@ -401,7 +403,22 @@ public class MessageFactory {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
-        message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, explosive);
+        message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, explosive, null, Tags.MISSILE_ADDED);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        return cheMessage;
+
+    }
+
+    public CheMessage setTarget(GameObject gameObject, GameObject explosive, LatLng target,  Location location) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, explosive, target, Tags.MISSILE_TARGET);
 
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);
@@ -440,6 +457,26 @@ public class MessageFactory {
         cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
 
         Log.d("move", "stop msg " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
+    public CheMessage getMissileLaunch(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+
+
+        Log.d("move", "key is "+gameObject.getKey());
+
+
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+        message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, gameObject, new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), Tags.MISSILE_FIRE);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "launch message " + cheMessage.toString());
 
         return cheMessage;
     }

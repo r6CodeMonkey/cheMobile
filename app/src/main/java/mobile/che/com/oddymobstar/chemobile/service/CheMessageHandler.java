@@ -16,7 +16,6 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface
 import mobile.che.com.oddymobstar.chemobile.service.handler.GameObjectHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.GridHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.MessageHandler;
-import mobile.che.com.oddymobstar.chemobile.service.handler.MissileHandler;
 import mobile.che.com.oddymobstar.chemobile.service.handler.PlayerHandler;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
@@ -32,10 +31,8 @@ public class CheMessageHandler extends MessageHandler {
     private final AllianceHandler allianceHandler;
     private final GameObjectHandler gameObjectHandler;
     private final GridHandler gridHandler;
-    private final MissileHandler missileHandler;
     private MessageFactory messageFactory;
 
-    // private List<CheMessage> buffer = new ArrayList<>();
 
     public CheMessageHandler(DBHelper dbHelper) {
         super(dbHelper);
@@ -47,7 +44,6 @@ public class CheMessageHandler extends MessageHandler {
         allianceHandler = new AllianceHandler(dbHelper);
         gameObjectHandler = new GameObjectHandler(dbHelper, messageFactory);
         gridHandler = new GridHandler(dbHelper);
-        missileHandler = new MissileHandler(dbHelper);
 
     }
 
@@ -74,10 +70,6 @@ public class CheMessageHandler extends MessageHandler {
             gameObjectHandler.handle(cheMessage);
         }
 
-        if (cheMessage.containsMessage(Tags.MISSILE)) {
-                    Log.d("handle", "handle missile");
-            missileHandler.handle(cheMessage);
-        }
 
         if (cheMessage.containsMessage(Tags.ALLIANCE)) {
             allianceHandler.handle(cheMessage);

@@ -10,6 +10,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.GameListener;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.game.GameTimer;
+import mobile.che.com.oddymobstar.chemobile.util.game.MapExplosionTimer;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
@@ -33,6 +34,7 @@ public class GameController {
     public final GameListener gameListener;
 
     public final GameTimer gameTimer;
+    public final MapExplosionTimer mapExplosionTimer;
 
 
     public GameObject currentGameObject; //tracked for states etc.
@@ -49,6 +51,7 @@ public class GameController {
         gameHelper = new GameHelper(main, controller);
         gameListener = new GameListener(main, controller);
         gameTimer = new GameTimer(main, controller);
+        mapExplosionTimer = new MapExplosionTimer(main, controller);
     }
 
 
