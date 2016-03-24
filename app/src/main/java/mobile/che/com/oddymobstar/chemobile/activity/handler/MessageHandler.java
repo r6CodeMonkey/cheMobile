@@ -160,15 +160,15 @@ public class MessageHandler extends Handler {
                         @Override
                         public void run() {
                             controller.mapHandler.handleCamera(new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), 45, 0, 17);
+                            controller.gameController.mapExplosionTimer.startTimer(gameObject, 4000);
                         }
                     }, 6000);
 
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            controller.gameController.mapExplosionTimer.startTimer(gameObject, 4000);
                             Vibrator vibrator = (Vibrator) main.getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(1000);
+                            vibrator.vibrate(3000);
                         }
                     }, 7000);
                 }

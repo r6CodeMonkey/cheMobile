@@ -40,7 +40,9 @@ public class MapExplosionTimer {
                     @Override
                     public void run() {
 
-                        controller.mapHandler.circleList.clear();
+                        if(controller.mapHandler.targets.containsKey(gameObject.getKey())){
+                            controller.mapHandler.targets.get(gameObject.getKey()).remove();
+                        }
                         controller.mapHandler.addSphere(gameObject, radius, true);
 
                         radius += factor;

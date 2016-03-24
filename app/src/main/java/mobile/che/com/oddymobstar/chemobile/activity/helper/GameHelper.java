@@ -259,6 +259,7 @@ public class GameHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 14);
                 controller.gameController.GAME_STATE = GameController.GAME_OBJECT_TARGET_STATE;
                 controller.gameController.gameTimer.startTimer(1000 * 20);
             }
