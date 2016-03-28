@@ -19,6 +19,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheContro
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.UserImage;
 import mobile.che.com.oddymobstar.chemobile.util.graphics.RoundedImageView;
+import mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView;
 
 
 /**
@@ -61,7 +62,11 @@ public class MaterialsHelper {
     public String playerKeyString = "";
     public TextView gameTimer;
     public Animation blinkAnimation;
+    public VidiPrintView vidiPrintView;
+
     private Context context;
+
+
 
 
     public MaterialsHelper(ProjectCheActivity main, ProjectCheController controller) {
@@ -201,11 +206,13 @@ public class MaterialsHelper {
 
         blinkAnimation = AnimationUtils.loadAnimation(main, R.anim.blink);
 
+        vidiPrintView = (VidiPrintView) main.findViewById(R.id.vidi_print_new_item);
 
-        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+    /*    android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.vidiprint_fragment, controller.fragmentHandler.vidiPrintFragment);
         transaction.commit();
-
+*/
 
     }
 

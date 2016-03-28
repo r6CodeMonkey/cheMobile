@@ -19,7 +19,6 @@ public class VidiPrintView extends TextView{
     private int index;
     private long delay = 100;
 
-    private Runnable callbackRunnable;
 
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM HH:mm");
 
@@ -32,10 +31,7 @@ public class VidiPrintView extends TextView{
         super(context, attrs);
     }
 
-    public void addFragmentCallback(Runnable callbackRunnable){
-        this.callbackRunnable = callbackRunnable;
 
-    }
 
     private Handler mHandler = new Handler();
     private Runnable characterAdder = new Runnable() {
@@ -45,9 +41,6 @@ public class VidiPrintView extends TextView{
             setText(text.subSequence(0, index++));
             if(index <= text.length()) {
                 mHandler.postDelayed(characterAdder, delay);
-            }else{
-                //its completed so we need to update cursor and clear...
-                mHandler.postDelayed(callbackRunnable, 2000);
             }
         }
     };
@@ -58,7 +51,6 @@ public class VidiPrintView extends TextView{
 
         setText("");
         mHandler.removeCallbacks(characterAdder);
-        mHandler.removeCallbacks(callbackRunnable);
         mHandler.postDelayed(characterAdder, delay);
     }
 

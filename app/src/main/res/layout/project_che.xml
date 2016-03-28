@@ -8,18 +8,20 @@
     tools:showIn="@layout/activity_project_che">
 
 
-    <FrameLayout
+    <mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:id="@+id/vidiprint_fragment"/>
-
+        android:background="@android:color/black"
+        android:textSize="16dp"
+        android:id="@+id/vidi_print_new_item"
+        android:textColor="@android:color/holo_green_dark"/>
 
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_below="@+id/vidiprint_fragment"
+        android:layout_below="@+id/vidi_print_new_item"
         android:layout_height="match_parent">
 
         <FrameLayout
@@ -37,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:layout_below="@+id/vidiprint_fragment"
+        android:layout_below="@+id/vidi_print_new_item"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="36dp"

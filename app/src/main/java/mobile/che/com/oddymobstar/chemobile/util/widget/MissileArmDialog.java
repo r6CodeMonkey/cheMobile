@@ -42,6 +42,8 @@ public class MissileArmDialog extends DialogFragment {
 
         builder.setTitle("Select Missile");
 
+        selectedObject = (Cursor)missiles.getItem(0);
+
         builder.setSingleChoiceItems(missiles, 0, new DialogInterface.OnClickListener() {
 
             @Override

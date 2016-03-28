@@ -37,18 +37,6 @@ public class FragmentHandler {
 
         vidiPrintFragment.setVidi(controller.dbHelper.getVidiNews());
 
-        vidiPrintFragment.addFragmentCallback(new Runnable() {
-            @Override
-            public void run() {
-               try {
-                   vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
-               }catch (Exception e){
-
-               }
-                 //vidiPrintFragment.clearNewText();
-            }
-        });
-
     }
 
 
@@ -85,6 +73,12 @@ public class FragmentHandler {
         try {
             gameFrag.clearAdapter();
             transaction.remove(gameFrag);
+        } catch (Exception e) {
+
+        }
+
+        try {
+            transaction.remove(vidiPrintFragment);
         } catch (Exception e) {
 
         }

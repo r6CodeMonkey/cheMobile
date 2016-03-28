@@ -22,8 +22,6 @@ public class VidiPrintFragment extends Fragment {
 
     private CursorAdapter adapter = null;
     private Cursor vidi;
-    private VidiPrintView vidiPrintView;
-    private  Runnable callbackRunnable;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.vidiprint_layout, container, false);
@@ -35,28 +33,14 @@ public class VidiPrintFragment extends Fragment {
 
         lv.setAdapter(adapter);
 
-        vidiPrintView = (VidiPrintView) view.findViewById(R.id.vidi_print_new_item);
-        vidiPrintView.addFragmentCallback(callbackRunnable);
 
         return view;
     }
 
-    public void addFragmentCallback(Runnable callbackRunnable){
-        this.callbackRunnable = callbackRunnable;
-
-    }
 
 
     public void setVidi(Cursor vidi) {
         this.vidi = vidi;
-    }
-
-    public void setNewText(String newText){
-        vidiPrintView.animateText(newText);
-    }
-
-    public void clearNewText(){
-        vidiPrintView.setText("");
     }
 
 

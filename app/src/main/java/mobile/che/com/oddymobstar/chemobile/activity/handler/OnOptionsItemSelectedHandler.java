@@ -183,7 +183,7 @@ public class OnOptionsItemSelectedHandler {
     }
 
     private void handleAlerts(){
-     /*   android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
 
@@ -191,7 +191,7 @@ public class OnOptionsItemSelectedHandler {
 
        // controller.fragmentHandler.vidiPrintFragment.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.vidiPrintFragment);
-        transaction.commit(); */
+        transaction.commit();
     }
 
     private void handleGame(int type, String title) {

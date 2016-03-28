@@ -51,6 +51,8 @@ public class ArmDialog extends DialogFragment {
 
         builder.setTitle("Arm " + gameObjectName);
 
+        selectedObject = (Cursor)gameObjects.getItem(0);
+
         builder.setSingleChoiceItems(gameObjects, 0, new DialogInterface.OnClickListener() {
 
             @Override

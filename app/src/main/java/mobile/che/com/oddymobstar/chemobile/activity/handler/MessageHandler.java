@@ -67,7 +67,7 @@ public class MessageHandler extends Handler {
                 main.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        controller.fragmentHandler.vidiPrintFragment.setNewText(message);
+                        controller.materialsHelper.vidiPrintView.animateText(message);
                         // controller.fragmentHandler.vidiPrintFragment.refreshAdapter(controller.dbHelper.getVidiNews());
                     }
                 });
