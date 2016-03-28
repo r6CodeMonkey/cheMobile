@@ -476,6 +476,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.delete(GAME_OBJECTS_TABLE, GAME_OBJECT_KEY + " = ?", new String[]{gameObject.getKey()});
 
+        //delete on destroy only
+        if(messageHandler != null){
+            messageHandler.handleGameObjectDestroyed(gameObject);
+        }
+
     }
 
     public void missileTargetReached(GameObject gameObject){
@@ -595,7 +600,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 messageHandler.addGameObject(gameObject, hasStopped);
             } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
                 messageHandler.moveGameObject(gameObject);
-            }else if(gameObject.getStatus().equals(Tags.MISSILE_TARGET)){
+            } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_HIT)) {
+                 messageHandler.gameObjectHit(gameObject);
+             } else if(gameObject.getStatus().equals(Tags.MISSILE_TARGET)){
                 messageHandler.confirmTarget(gameObject);
             }
         }

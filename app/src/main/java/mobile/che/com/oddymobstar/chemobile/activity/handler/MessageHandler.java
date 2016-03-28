@@ -117,6 +117,31 @@ public class MessageHandler extends Handler {
 
     }
 
+    public void handleGameObjectDestroyed(final GameObject gameObject){
+        if(controller != null){
+            //1 navigate to our
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+            controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),45, 0, 17);
+                }});
+            //need to add an impact to it and confirm points lost...actually remove from map as well, and then send confirmation to server to say we are dead.
+        }
+    }
+
+    public void gameObjectHit(final GameObject gameObject){
+        if(controller != null){
+            //1 navigate to our
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 17);
+                }});
+            //need to add an impact to it and confirm points lost...
+            //send confirmation to server of new points total for player.
+        }
+    }
+
     public void moveGameObject(GameObject gameObject) {
         if (controller != null) {
             controller.mapHandler.addPath(gameObject);

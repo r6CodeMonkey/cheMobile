@@ -38,7 +38,7 @@ public class GameObjectHandler extends MessageHandler {
     public void handle(CheMessage cheMessage) throws JSONException {
 
         GameObject gameObject = (GameObject) cheMessage.getMessage(Tags.GAME_OBJECT);
-
+        Message message = null;
         Log.d("game object", "message state is "+gameObject.getState()+" value is "+gameObject.getValue());
 
         mobile.che.com.oddymobstar.chemobile.model.GameObject model = null;
@@ -77,8 +77,6 @@ public class GameObjectHandler extends MessageHandler {
                 Log.d("add", "have added game object " + gameObject.toString());
 
                 break;
-            case Tags.GAME_OBJECT_HIT:
-                break;
             case Tags.GAME_OBJECT_MOVE:
                 if (gameObject.getValue().equals(Tags.SUCCESS)) {
                     model = dbHelper.getGameObject(gameObject.getKey());
@@ -102,44 +100,98 @@ public class GameObjectHandler extends MessageHandler {
                 dbHelper.updateGameObject(model, true, true);
                 break;
             case Tags.MESSAGE:  //these come from engine, not user actions.
+
                 switch( gameObject.getValue()) {  //sorted...
                     case Tags.GAME_OBJECT_IS_MOVING:
 
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object "+gameObject.getKey()+" Moving in Sector "+
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
                         //so now we need to update the models current position.
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        model.setLatitude(gameObject.getUtmLocation().getLatitude());
-                        model.setLongitude(gameObject.getUtmLocation().getLongitude());
+                        if(model != null) {
+                            model.setLatitude(gameObject.getUtmLocation().getLatitude());
+                            model.setLongitude(gameObject.getUtmLocation().getLongitude());
 
-                        dbHelper.updateGameObject(model, false, true);
-                        dbHelper.updateMissiles(model);
+                            dbHelper.updateGameObject(model, false, true);
+                            dbHelper.updateMissiles(model);
+                        }
 
                         break;
                     case Tags.GAME_OBJECT_IS_FIXED:
                         //actually...we just need to send a message to sever, to tell it to stop as we have ack,  but if it calls twice not a huge issue.
                         //really need to add a dont bother to reply to me tag.
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Stopped in Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        model = updateLocation(model, gameObject);
-                        model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
-                        dbHelper.updateGameObject(model, true, true);
-                        dbHelper.updateMissiles(model);
+                        if(model != null) {
+                            model = updateLocation(model, gameObject);
+                            model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
+                            dbHelper.updateGameObject(model, true, true);
+                            dbHelper.updateMissiles(model);
+                        }
+                        break;
+                    case Tags.GAME_OBJECT_LEFT:
+                        Log.d("game object moving", "game object has left sector"); //possible send a message only...
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Left Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
                         break;
                     case Tags.MISSILE_LAUNCHED:
                         //do nothing...
                         Log.d("missile moving", "missile is moving!"); //possible send a message only...
-                        Message message = new Message();
+                        message = new Message();
                         message.setTime(System.currentTimeMillis());
                         message.setMessage("Missile " + gameObject.getKey() + " Travelling");
                         dbHelper.addVidiNews(message);
                         break;
                     case Tags.MISSILE_DESTROYED:
                         //new method. also need to capture information in alert if user not on game.
-                        Log.d("missile moving", "missile has detonated! "+gameObject.getKey());
+                        Log.d("missile moving", "missile has detonated! " + gameObject.getKey());
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        dbHelper.missileTargetReached(model);
+                        if(model != null) {
+                            dbHelper.missileTargetReached(model);
+                        }
+                        break;
+                    case Tags.GAME_OBJECT_DESTROYED:
+                        //remove object and tell server
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object "+gameObject.getKey()+" Destroyed in Sector "+
+                         gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
+                        gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
+                        model = dbHelper.getGameObject(gameObject.getKey());
+                        if(model != null) {
+                            dbHelper.deleteGameObject(model);
+                        }
+                        break;
+                    case Tags.GAME_OBJECT_HIT:
+                        //we simply indicate we have lost some strength to database.
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object "+gameObject.getKey()+" Destroyed in Sector "+
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
+                        model = dbHelper.getGameObject(gameObject.getKey());
+                        if(model != null) {
+                            model.setStrength(gameObject.getStrength());
+                            model.setStatus(Tags.GAME_OBJECT_HIT);
+                            dbHelper.updateGameObject(model, true, true);
+                        }
                         break;
                 }
-                break;
-            case Tags.GAME_OBJECT_DESTROYED:
                 break;
             case Tags.MISSILE_ADDED:
                 ///so basically we just need to update the missile object...and save its data.  the server knows its active.
@@ -168,7 +220,7 @@ public class GameObjectHandler extends MessageHandler {
                 //we will receive updates that its launched.  so update the
                 model.setStatus(Tags.MISSILE_LAUNCHED);
                 dbHelper.updateGameObject(model, false, false); //no update yet.
-                Message message = new Message();
+                message = new Message();
                 message.setTime(System.currentTimeMillis());
                 message.setMessage("Missile " + gameObject.getKey() + " Launched");
                 dbHelper.addVidiNews(message);
@@ -176,7 +228,6 @@ public class GameObjectHandler extends MessageHandler {
 
         }
     }
-
 
 
     private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, GameObject gameObject){
