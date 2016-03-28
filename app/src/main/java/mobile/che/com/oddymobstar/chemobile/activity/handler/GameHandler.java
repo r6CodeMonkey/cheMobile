@@ -82,28 +82,34 @@ public class GameHandler {
     }
 
     public void armDialog(String object, String key, ArmExplosiveAdapter adapter) {
-        controller.gameController.armDialog =
-                ArmDialog.newInstance(object, key, adapter,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                try {
-                                    handleArm(controller.gameController.armDialog.getGameObjectKey(), controller.gameController.armDialog.getSelectItem());
-                                } catch (NoSuchAlgorithmException e) {
 
+        if(adapter.getCount() > 0) {
+
+            controller.gameController.armDialog =
+                    ArmDialog.newInstance(object, key, adapter,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                                    try {
+                                        handleArm(controller.gameController.armDialog.getGameObjectKey(), controller.gameController.armDialog.getSelectItem());
+                                    } catch (NoSuchAlgorithmException e) {
+
+                                    }
                                 }
                             }
-                        }
-                        , new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                //
-                                dialog.dismiss();
-                            }
-                        });
-        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+                            , new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    //
+                                    dialog.dismiss();
+                                }
+                            });
+            android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
-        controller.gameController.armDialog.show(transaction, "dialog");
+            controller.gameController.armDialog.show(transaction, "dialog");
+        }else{
+            Toast.makeText(main, "No Hosts Deployed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void actionsDialog(String key, final int type) {
@@ -300,24 +306,29 @@ public class GameHandler {
 
     public void handleGameObjectTarget(final String key) {
         //if no missiles, basically cant do anything.  can review if we need to capture it in future.
-        controller.gameController.missileArmDialog =
-                MissileArmDialog.newInstance(new MissileAdapter(main, controller.dbHelper.getAvailableMissiles(key), true),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                handleMissileLoad(key, controller.gameController.missileArmDialog.getSelectItem());
+        Cursor availableMissiles = controller.dbHelper.getAvailableMissiles(key);
+        if(availableMissiles.getCount() > 0) {
+            controller.gameController.missileArmDialog =
+                    MissileArmDialog.newInstance(new MissileAdapter(main, availableMissiles, true),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                                        handleMissileLoad(key, controller.gameController.missileArmDialog.getSelectItem());
+                                }
                             }
-                        }
-                        , new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                //
-                                dialog.dismiss();
-                            }
-                        });
-        android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+                            , new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    //
+                                    dialog.dismiss();
+                                }
+                            });
+            android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
-        controller.gameController.missileArmDialog.show(transaction, "dialog");
+            controller.gameController.missileArmDialog.show(transaction, "dialog");
+        }else{
+            Toast.makeText(main, "No Missiles Available", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

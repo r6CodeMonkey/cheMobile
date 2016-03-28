@@ -20,6 +20,7 @@
     <string name="menu_land">Land</string>
     <string name="menu_sea">Sea</string>
     <string name="menu_airborne">Airborne</string>
+    <string name="menu_alerts">Notifications</string>
 
 
 </resources>

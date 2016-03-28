@@ -20,6 +20,10 @@
             android:title="Game">
             <menu>
                 <item
+                    android:id="@+id/game_alerts"
+                    android:icon="@drawable/ic_notifications_black_24dp"
+                    android:title="@string/menu_alerts" />
+                <item
                     android:id="@+id/game_land"
                     android:icon="@drawable/ic_directions_car_black_24dp"
                     android:title="@string/menu_land" />

@@ -42,7 +42,7 @@ public class MissileArmDialog extends DialogFragment {
 
         builder.setTitle("Select Missile");
 
-        builder.setSingleChoiceItems(missiles, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(missiles, 0, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -51,6 +51,7 @@ public class MissileArmDialog extends DialogFragment {
         });
 
         builder.setPositiveButton("Load", missileListener);
+
 
         builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override

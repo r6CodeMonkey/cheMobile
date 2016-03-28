@@ -60,6 +60,9 @@ public class OnOptionsItemSelectedHandler {
                 controller.fragmentHandler.removeFragments(false);
                 handleAlliance();
                 break;
+            case R.id.game_alerts:
+                handleAlerts();
+                break;
           /*  case R.id.bluetooth_receive:
                 //same mechanism for discovery.
                 controller.viewHandler.allianceInvite(true);
@@ -177,6 +180,18 @@ public class OnOptionsItemSelectedHandler {
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gridFrag);
         transaction.commit();
 
+    }
+
+    private void handleAlerts(){
+     /*   android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+        controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
+
+        controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_green_dark), main.getResources().getString(R.string.menu_alerts));
+
+       // controller.fragmentHandler.vidiPrintFragment.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
+        transaction.replace(R.id.chat_fragment, controller.fragmentHandler.vidiPrintFragment);
+        transaction.commit(); */
     }
 
     private void handleGame(int type, String title) {
