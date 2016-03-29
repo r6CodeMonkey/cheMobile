@@ -64,7 +64,7 @@ public class GameObjectHandler extends MessageHandler {
                 break;
             case Tags.GAME_OBJECT_ADD:
                 //if we receive an ad
-                model = new mobile.che.com.oddymobstar.chemobile.model.GameObject();
+                model = dbHelper.getGameObject(gameObject.getKey());
                 //really this should be in object / model.  well perhaps not who knows its only in this point...
                 model.setKey(gameObject.getKey());
                 model.setType(gameObject.getType());
@@ -102,6 +102,23 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.MESSAGE:  //these come from engine, not user actions.
 
                 switch( gameObject.getValue()) {  //sorted...
+                    case Tags.GAME_OBJECT_REPAIR:
+                        model = dbHelper.getGameObject(gameObject.getKey());
+
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object "+gameObject.getKey()+" Repaired");
+                        dbHelper.addVidiNews(message);
+
+                        if(model != null){
+                            model.setStrength(gameObject.getStrength());
+                            model.setStatus(""); //it would of been repair previously.
+                            dbHelper.updateGameObject(model, true, false);
+                        }
+
+                        break;
+                    case Tags.GAME_OBJECT_REINFORCE:  //this probably will not go in here. and not doing it yet.
+                        break;
                     case Tags.GAME_OBJECT_IS_MOVING:
 
                         message = new Message();

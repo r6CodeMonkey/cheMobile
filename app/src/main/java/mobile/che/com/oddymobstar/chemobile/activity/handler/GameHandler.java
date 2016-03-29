@@ -33,6 +33,7 @@ import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
+import util.GameObjectTypes;
 import util.Tags;
 import util.map.GridCreator;
 import util.map.SubUTM;
@@ -119,6 +120,7 @@ public class GameHandler {
         boolean targetSet = controller.dbHelper.hasTargetSet(key);
 
 
+
         String title = "";
         String title2 = "";
         String title3 = "";
@@ -130,8 +132,22 @@ public class GameHandler {
         switch (type){
 
             case GameObjectGridFragment.INFASTRUCTURE:
-                title = GameObjectActionsDialog.REPAIR;  //could have a reinforce too.  same thing i guess.
-                listener = controller.gameController.gameListener.getRepairListener();
+                 if(!gameObject.getStatus().equals(Tags.GAME_OBJECT_REPAIR) && gameObject.getStrength() < gameObject.getMaxStrength()) {
+                    title3 = GameObjectActionsDialog.REPAIR;  //could have a reinforce too.  same thing i guess.
+                    listener3 = controller.gameController.gameListener.getRepairListener();
+                }
+                //as long as we are not a satellite
+                if(gameObject.getSubType() != GameObjectTypes.SATELLITE) {
+                    if (targetSet) {
+                        title = GameObjectActionsDialog.LAUNCH;
+                        listener = controller.gameController.gameListener.getLaunchListener();
+                        title2 = GameObjectActionsDialog.CANCEL;
+                        listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                    } else {
+                        title = GameObjectActionsDialog.TARGET;
+                        listener = controller.gameController.gameListener.getTargetListener();
+                    }
+                }
                 break;
             case GameObjectGridFragment.LAND:
                 //rules.  what is our status?
@@ -352,7 +368,18 @@ public class GameHandler {
         }, 3000);
     }
 
-    public void handleRepair(String key) {
+    public void handleRepair(final String key) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.createRepairMessage(controller.dbHelper.getGameObject(key), controller.locationListener.getCurrentLocation()));
+                } catch (NoSuchAlgorithmException e) {
+
+                }
+            }
+        }).start();
 
     }
 
@@ -383,7 +410,7 @@ public class GameHandler {
 
     public void handleCancelTarget(final String key){
 
-        //to do.
+        //to do....lol.  yes need to fix this as well.
 
     }
 

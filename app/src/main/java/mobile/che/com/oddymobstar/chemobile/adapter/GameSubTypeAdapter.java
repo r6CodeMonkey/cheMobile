@@ -167,11 +167,12 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
             tv.setText(detail);
 
         } else {
-            String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s\nExplosives:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
+            String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s\nExplosives:%s\nLife:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LONG)),
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
                     getStatus(cursor),
-                    cursor.getString(cursor.getColumnIndexOrThrow("explosives_count")));
+                    cursor.getString(cursor.getColumnIndexOrThrow("explosives_count")),
+                    (Math.round((cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STRENGTH)) / cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MAX_STRENGTH))) * 100)+"%"));
             tv.setText(detail);
         }
     }

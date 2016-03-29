@@ -11,7 +11,7 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 public class GameObject implements CheModelInterface {
 
     private String utmLat, utmLong, subUtmLat, subUtmLong, key, status;
-    private double latitude, longitude, destLat, destLong, mass, force, range, impactRadius, maxSpeed, strength;
+    private double latitude, longitude, destLat, destLong, mass, force, range, impactRadius, maxSpeed, strength, maxStrength;
     private int type, subType;
 
 
@@ -39,6 +39,7 @@ public class GameObject implements CheModelInterface {
         setRange(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_RANGE)));
         setForce(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_FORCE)));
         setStrength(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STRENGTH)));
+        setMaxStrength(cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MAX_STRENGTH)));
 
     }
 
@@ -168,6 +169,10 @@ public class GameObject implements CheModelInterface {
     public double getStrength() { return strength;}
 
     public void setStrength(double strength){this.strength = strength;}
+
+    public double getMaxStrength() { return maxStrength;}
+
+    public void setMaxStrength(double maxStrength){this.maxStrength = maxStrength;}
 
     public double getMaxSpeed() { return maxSpeed;}
 

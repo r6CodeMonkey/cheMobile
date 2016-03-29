@@ -500,5 +500,22 @@ public class MessageFactory {
         return cheMessage;
     }
 
+    public CheMessage createRepairMessage(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObject(gameObject, location);
+        gameObjectMessage.setState(Tags.GAME_OBJECT_REPAIR);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("repair", "repair message " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
 
 }

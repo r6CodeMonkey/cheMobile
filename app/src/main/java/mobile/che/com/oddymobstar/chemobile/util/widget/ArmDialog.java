@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
@@ -51,12 +52,19 @@ public class ArmDialog extends DialogFragment {
 
         builder.setTitle("Arm " + gameObjectName);
 
+        Log.d("arm", "cursor count " + gameObjects.getCount());
+
         selectedObject = (Cursor)gameObjects.getItem(0);
+
+        Log.d("arm", "cursor count "+gameObjects.getCount());
 
         builder.setSingleChoiceItems(gameObjects, 0, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                Log.d("arm", "selected item "+which);
+
                 selectedObject = (Cursor) gameObjects.getItem(which);
             }
         });
