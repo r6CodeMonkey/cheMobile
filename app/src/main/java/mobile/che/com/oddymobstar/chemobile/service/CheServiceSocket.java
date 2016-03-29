@@ -21,7 +21,6 @@ import mobile.che.com.oddymobstar.chemobile.service.handler.CheCallbackInterface
 import mobile.che.com.oddymobstar.chemobile.service.util.CheMessageQueue;
 import mobile.che.com.oddymobstar.chemobile.service.util.CheReconnectListener;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
-import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
 import util.Tags;
 
 /**
@@ -151,7 +150,7 @@ public class CheServiceSocket {
                     if (objectFound) {
                         try {
                             processJSON(object);
-                        }catch (NoSuchAlgorithmException e) {
+                        } catch (NoSuchAlgorithmException e) {
                             Log.d("security exception", "security exception " + e.toString());
                         } catch (JSONException e) {
                             Log.d("json exception", "json exception at a bad point!!! " + e.toString());
@@ -170,95 +169,95 @@ public class CheServiceSocket {
     private void processJSON(final String object) throws JSONException, NoSuchAlgorithmException {
 
 
-            stopCheSocketListener();
+        stopCheSocketListener();
 
-            //each message we receive should be a JSON.  We need to work out the type.
-            JSONObject jsonObject = new JSONObject(object);
+        //each message we receive should be a JSON.  We need to work out the type.
+        JSONObject jsonObject = new JSONObject(object);
 
-            Log.d("socket listen", "we seem to have an object " + jsonObject.toString());
-            //test for ack..
-            if (!jsonObject.isNull(Tags.ACKNOWLEDGE)) {
+        Log.d("socket listen", "we seem to have an object " + jsonObject.toString());
+        //test for ack..
+        if (!jsonObject.isNull(Tags.ACKNOWLEDGE)) {
 
-                Acknowledge acknowledge = new Acknowledge(object);
+            Acknowledge acknowledge = new Acknowledge(object);
 
-                switch (acknowledge.getState()) {
+            switch (acknowledge.getState()) {
 
-                    case Tags.ACCEPT:
-                        switch (acknowledge.getValue()) {
-                            case Tags.ERROR:
-                                break;
-                            case Tags.ACTIVE:
-                                Log.d("active", "we are active");
-                                if (cheMessageHandler.isNewPlayer()) {
-                                    Log.d("socket listen", "create message to get che id");
-                                    cheMessageQueue.addMessage(cheMessageHandler.createNewPlayer());
-                                }else{
-                                    //we need to confirm we have reconnected....
-                                    Log.d("socket listen", "reconnect active");
-                                    cheMessageQueue.addMessage(cheMessageHandler.reConnectMessage(location)); //need Player key and thats it.  add to player value / state.  simples.
+                case Tags.ACCEPT:
+                    switch (acknowledge.getValue()) {
+                        case Tags.ERROR:
+                            break;
+                        case Tags.ACTIVE:
+                            Log.d("active", "we are active");
+                            if (cheMessageHandler.isNewPlayer()) {
+                                Log.d("socket listen", "create message to get che id");
+                                cheMessageQueue.addMessage(cheMessageHandler.createNewPlayer());
+                            } else {
+                                //we need to confirm we have reconnected....
+                                Log.d("socket listen", "reconnect active");
+                                cheMessageQueue.addMessage(cheMessageHandler.reConnectMessage(location)); //need Player key and thats it.  add to player value / state.  simples.
+                            }
+
+                            if (write != null) {
+
+
+                                if (connect != null) {
+                                    connect.interrupt();
                                 }
 
-                                if (write != null) {
-
-
-                                    if (connect != null) {
-                                        connect.interrupt();
-                                    }
-
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            synchronized (write) {
-                                                write.notify();
-                                            }
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        synchronized (write) {
+                                            write.notify();
                                         }
-                                    }).start();
+                                    }
+                                }).start();
 
 
-                                }
-                                break;
-                            default:
-                                //its nothing currently.
-                                break;
-                        }
-                        break;
-                    case Tags.UUID:
-                        Log.d("uuid", "we are uuid");
-                        cheMessageQueue.receiveAck(acknowledge.getKey());
-                        cheMessageHandler.handleNewPlayer(acknowledge);
-                        break;
-                    case Tags.SUCCESS:
-                        switch (acknowledge.getValue()) {
-                            case Tags.RECEIVED:
-                                cheMessageQueue.receiveAck(acknowledge.getKey());
-                                break;
-                            case Tags.CHE_RECEIVED:
-                                cheMessageQueue.receiveAck(acknowledge.getKey());
-                                break;
-                            default:
-                                cheMessageQueue.receiveAck(acknowledge.getKey());
-                                break;
-                        }
-                    default:
-                        break;
-
-                }
-
-            } else {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            cheMessageHandler.handle(new CheMessage(object));
-                        } catch (JSONException e) {
-                            Log.d("json error", e.getMessage());
-                        } catch (NoSuchAlgorithmException e) {
-                            Log.d("algo error", e.getMessage());
-                        }
+                            }
+                            break;
+                        default:
+                            //its nothing currently.
+                            break;
                     }
-                }).start();
+                    break;
+                case Tags.UUID:
+                    Log.d("uuid", "we are uuid");
+                    cheMessageQueue.receiveAck(acknowledge.getKey());
+                    cheMessageHandler.handleNewPlayer(acknowledge);
+                    break;
+                case Tags.SUCCESS:
+                    switch (acknowledge.getValue()) {
+                        case Tags.RECEIVED:
+                            cheMessageQueue.receiveAck(acknowledge.getKey());
+                            break;
+                        case Tags.CHE_RECEIVED:
+                            cheMessageQueue.receiveAck(acknowledge.getKey());
+                            break;
+                        default:
+                            cheMessageQueue.receiveAck(acknowledge.getKey());
+                            break;
+                    }
+                default:
+                    break;
 
             }
+
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        cheMessageHandler.handle(new CheMessage(object));
+                    } catch (JSONException e) {
+                        Log.d("json error", e.getMessage());
+                    } catch (NoSuchAlgorithmException e) {
+                        Log.d("algo error", e.getMessage());
+                    }
+                }
+            }).start();
+
+        }
 
 
     }

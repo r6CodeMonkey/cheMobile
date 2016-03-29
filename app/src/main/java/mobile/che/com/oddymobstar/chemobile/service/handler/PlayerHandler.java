@@ -1,8 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
-import android.location.Location;
-import android.util.Log;
-
 import org.json.JSONException;
 
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +10,6 @@ import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
-import util.Tags;
 
 /**
  * Created by timmytime on 11/02/16.
@@ -34,12 +30,10 @@ public class PlayerHandler extends MessageHandler {
     }
 
 
-
     @Override
     public void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
         //null
     }
-
 
 
     public void handleNewPlayer(Acknowledge acknowledge) throws JSONException, NoSuchAlgorithmException {

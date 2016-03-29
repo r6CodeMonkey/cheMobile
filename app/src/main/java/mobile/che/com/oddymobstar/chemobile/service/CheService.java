@@ -123,7 +123,7 @@ public class CheService extends IntentService {
         cheServiceSocket.connect.start();
     }
 
-    public void writeToSocket(CheMessage cheMessage,Location location) {
+    public void writeToSocket(CheMessage cheMessage, Location location) {
         cheServiceSocket.addToQueue(cheMessage, location);
     }
 

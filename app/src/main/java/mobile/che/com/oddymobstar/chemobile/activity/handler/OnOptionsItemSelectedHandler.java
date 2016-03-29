@@ -106,6 +106,8 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleUTM() {
 
+        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
+
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.UTM_FAB_STATE;
@@ -142,6 +144,8 @@ public class OnOptionsItemSelectedHandler {
     }
 
     private void handleSubUTM() {
+
+        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
 
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
@@ -182,19 +186,22 @@ public class OnOptionsItemSelectedHandler {
 
     }
 
-    private void handleAlerts(){
+    private void handleAlerts() {
+
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
 
         controller.materialsHandler.handleNavToolbar(main.getResources().getColor(android.R.color.holo_green_dark), main.getResources().getString(R.string.menu_alerts));
 
-       // controller.fragmentHandler.vidiPrintFragment.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
+        // controller.fragmentHandler.vidiPrintFragment.init(AllianceGridFragment.MY_ALLIANCES, controller.viewListener.getAllianceListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.vidiPrintFragment);
         transaction.commit();
     }
 
     private void handleGame(int type, String title) {
+
+        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = true;
 
         controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
         controller.fragmentHandler.removeFragments(false);
@@ -208,13 +215,15 @@ public class OnOptionsItemSelectedHandler {
         controller.materialsListener.FAB_MODE = MaterialsListener.GAME_FAB;
         controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameHelper.getGameColor(type)), title);
 
+        controller.fragmentHandler.gameFrag = new GameObjectGridFragment();
         controller.fragmentHandler.gameFrag.init(type, controller.viewListener.getGameObjectTypesListClickListener());
         transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameFrag);
-        transaction.addToBackStack(null); //this is an issue with backstack back press...but it fucks everything else up via nav drawer selection
+        // transaction.addToBackStack(null); //this is an issue with backstack back press...but it fucks everything else up via nav drawer selection
         transaction.commit();
     }
 
     private void handleSettings() {
+
 
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 

@@ -150,32 +150,60 @@ public class GameObject implements CheModelInterface {
         this.subType = subType;
     }
 
-    public double getMass() { return mass;}
+    public double getMass() {
+        return mass;
+    }
 
-    public void setMass(double mass){this.mass = mass;}
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
 
-    public double getRange() { return range;}
+    public double getRange() {
+        return range;
+    }
 
-    public void setRange(double range){this.range = range;}
+    public void setRange(double range) {
+        this.range = range;
+    }
 
-    public double getImpactRadius() { return impactRadius;}
+    public double getImpactRadius() {
+        return impactRadius;
+    }
 
-    public void setImpactRadius(double impactRadius){this.impactRadius = impactRadius;}
+    public void setImpactRadius(double impactRadius) {
+        this.impactRadius = impactRadius;
+    }
 
-    public double getForce() { return force;}
+    public double getForce() {
+        return force;
+    }
 
-    public void setForce(double force){this.force = force;}
+    public void setForce(double force) {
+        this.force = force;
+    }
 
-    public double getStrength() { return strength;}
+    public double getStrength() {
+        return strength;
+    }
 
-    public void setStrength(double strength){this.strength = strength;}
+    public void setStrength(double strength) {
+        this.strength = strength;
+    }
 
-    public double getMaxStrength() { return maxStrength;}
+    public double getMaxStrength() {
+        return maxStrength;
+    }
 
-    public void setMaxStrength(double maxStrength){this.maxStrength = maxStrength;}
+    public void setMaxStrength(double maxStrength) {
+        this.maxStrength = maxStrength;
+    }
 
-    public double getMaxSpeed() { return maxSpeed;}
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
 
-    public void setMaxSpeed(double maxSpeed){this.maxSpeed = maxSpeed;}
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
 
 }

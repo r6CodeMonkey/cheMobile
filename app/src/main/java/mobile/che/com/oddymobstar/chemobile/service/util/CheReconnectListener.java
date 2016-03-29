@@ -1,7 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.service.util;
 
 import android.os.Handler;
-import android.util.Log;
 
 /**
  * Created by timmytime on 24/02/16.
@@ -18,7 +17,7 @@ public class CheReconnectListener implements Runnable {
         this.callback = callback;
     }
 
-    public void stop(){
+    public void stop() {
         handler.removeCallbacks(callback);
     }
 

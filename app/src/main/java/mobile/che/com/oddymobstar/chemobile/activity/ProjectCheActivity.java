@@ -13,6 +13,7 @@ import android.view.View;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.FragmentHandler;
 import util.map.SubUTM;
 import util.map.UTM;
 
@@ -66,8 +67,12 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         controller.onBackPressed();
+        if (!FragmentHandler.IS_GAME_OBJECTS_FRAGMENT) {
+            super.onBackPressed();
+        } else {
+            FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
+        }
     }
 
     @Override

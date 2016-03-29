@@ -67,8 +67,6 @@ public class MaterialsHelper {
     private Context context;
 
 
-
-
     public MaterialsHelper(ProjectCheActivity main, ProjectCheController controller) {
         this.context = main.getApplicationContext();
         this.main = main;

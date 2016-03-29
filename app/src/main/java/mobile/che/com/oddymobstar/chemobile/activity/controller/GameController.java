@@ -3,7 +3,6 @@ package mobile.che.com.oddymobstar.chemobile.activity.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import factory.GameObjectRulesFactory;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.GameHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;

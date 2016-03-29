@@ -50,18 +50,16 @@ public class MapHandler {
 
 
     public static String UTM_REGION = "";
-    private final ProjectCheController controller;
-    private final ProjectCheActivity main;
-    public boolean CLEAR_GRIDS = false;
-    public PolygonOptions lastUTMOptions;
     public final Map<String, Polygon> lastLocateUTMs = new HashMap<>();
-    public Polygon lastLocateSubUTM;
-    private final Map<String, Marker> markerMap = new HashMap<>();
-    private final Map<String, Polyline> polylineMap = new HashMap<>();
-
     public final List<Circle> circleList = new ArrayList<>();
     public final Map<String, Circle> targets = new HashMap<>();
-
+    private final ProjectCheController controller;
+    private final ProjectCheActivity main;
+    private final Map<String, Marker> markerMap = new HashMap<>();
+    private final Map<String, Polyline> polylineMap = new HashMap<>();
+    public boolean CLEAR_GRIDS = false;
+    public PolygonOptions lastUTMOptions;
+    public Polygon lastLocateSubUTM;
     private String selectedGrid;
 
     public MapHandler(ProjectCheActivity main, ProjectCheController controller) {
@@ -186,8 +184,8 @@ public class MapHandler {
             @Override
             public void run() {
 
-                if(markerMap.containsKey(gameObject.getKey()+String.valueOf(destination))){
-                    markerMap.get(gameObject.getKey()+String.valueOf(destination)).remove();
+                if (markerMap.containsKey(gameObject.getKey() + String.valueOf(destination))) {
+                    markerMap.get(gameObject.getKey() + String.valueOf(destination)).remove();
                 }
 
 
@@ -213,7 +211,7 @@ public class MapHandler {
                     hue = BitmapDescriptorFactory.HUE_RED;  //red is better.  ie green to red.
                 }
 
-                markerMap.put(gameObject.getKey()+String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
+                markerMap.put(gameObject.getKey() + String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
                         new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
                         .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
 
@@ -228,7 +226,7 @@ public class MapHandler {
             public void run() {
 
 
-                if(polylineMap.containsKey(gameObject.getKey())){
+                if (polylineMap.containsKey(gameObject.getKey())) {
                     polylineMap.get(gameObject.getKey()).remove();
                 }
 
@@ -236,10 +234,10 @@ public class MapHandler {
                         new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),
                         new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), gameObject.getType());
 
-                polylineMap.put(gameObject.getKey(),controller.mapHelper.getMap().addPolyline(polyline));
+                polylineMap.put(gameObject.getKey(), controller.mapHelper.getMap().addPolyline(polyline));
 
-                if(markerMap.containsKey(gameObject.getKey()+String.valueOf(false))){
-                    markerMap.get(gameObject.getKey()+String.valueOf(false)).remove();
+                if (markerMap.containsKey(gameObject.getKey() + String.valueOf(false))) {
+                    markerMap.get(gameObject.getKey() + String.valueOf(false)).remove();
                 }
 
                 addGameObject(gameObject, false);
@@ -253,32 +251,33 @@ public class MapHandler {
 
     }
 
-    public void removeDestination(final GameObject gameObject){
+    public void removeDestination(final GameObject gameObject) {
         main.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(polylineMap.containsKey(gameObject.getKey())){
+                if (polylineMap.containsKey(gameObject.getKey())) {
                     polylineMap.get(gameObject.getKey()).remove();
                 }
                 if (markerMap.containsKey(gameObject.getKey() + String.valueOf(true))) {
                     markerMap.get(gameObject.getKey() + String.valueOf(true)).remove();
                 }
             }
-            });
+        });
     }
 
-    public void removeSphere(final  GameObject gameObject){
+    public void removeSphere(final GameObject gameObject) {
         main.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
-                if(targets.containsKey(gameObject.getKey())){
+                if (targets.containsKey(gameObject.getKey())) {
                     targets.get(gameObject.getKey()).remove();
                 }
-            }});
+            }
+        });
     }
 
-    public void addSphere(final GameObject gameObject,final double radius, final boolean target){
+    public void addSphere(final GameObject gameObject, final double radius, final boolean target) {
 
 
         main.runOnUiThread(new Runnable() {
@@ -286,15 +285,15 @@ public class MapHandler {
             public void run() {
 
                 CircleOptions circleOptions = new CircleOptions();
-                circleOptions.center(target ? new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()): new LatLng(gameObject.getLatitude(), gameObject.getLongitude()));
+                circleOptions.center(target ? new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()) : new LatLng(gameObject.getLatitude(), gameObject.getLongitude()));
                 circleOptions.radius(radius);
                 circleOptions.fillColor(0x1AFF0000);
 
-               if(target){
-                   targets.put(gameObject.getKey(), controller.mapHelper.getMap().addCircle(circleOptions));
-               }else{
-                   circleList.add(controller.mapHelper.getMap().addCircle(circleOptions));
-               }
+                if (target) {
+                    targets.put(gameObject.getKey(), controller.mapHelper.getMap().addCircle(circleOptions));
+                } else {
+                    circleList.add(controller.mapHelper.getMap().addCircle(circleOptions));
+                }
             }
         });
     }

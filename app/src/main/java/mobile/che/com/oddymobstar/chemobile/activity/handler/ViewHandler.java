@@ -53,7 +53,7 @@ public class ViewHandler {
                 case AllianceGridFragment.MY_ALLIANCES:
 
                     try {
-                      final CheMessage cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
+                        final CheMessage cheMessage = controller.messageFactory.allianceChatPostMessage(controller.dbHelper.getAlliance(controller.fragmentHandler.chatFrag.getKey()),
                                 controller.fragmentHandler.chatFrag.getHiddenChatPost().getPost(),
                                 controller.locationListener.getCurrentLocation());
                         //need to animate...but
@@ -95,22 +95,21 @@ public class ViewHandler {
 
                 if (!createText.trim().isEmpty()) {
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
-                                } catch (NoSuchAlgorithmException e) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                controller.cheService.writeToSocket(controller.messageFactory.newAllianceMessage(createText, controller.locationListener.getCurrentLocation()));
+                            } catch (NoSuchAlgorithmException e) {
 
-                                } catch (JSONException e) {
+                            } catch (JSONException e) {
 
-                                }
                             }
-                        }).start();
+                        }
+                    }).start();
 
-                        //need to animate...but
-                        controller.materialsHandler.handleAllianceFAB(controller.fragmentHandler.gridFrag, false);
-
+                    //need to animate...but
+                    controller.materialsHandler.handleAllianceFAB(controller.fragmentHandler.gridFrag, false);
 
 
                 }

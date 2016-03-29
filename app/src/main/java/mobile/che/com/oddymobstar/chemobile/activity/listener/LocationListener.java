@@ -38,7 +38,7 @@ public class LocationListener implements android.location.LocationListener {
 
     public Location getCurrentLocation() {
         //need to fix this.
-        if(currentLocation == null){
+        if (currentLocation == null) {
             SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
             currentLocation = new Location(sharedPreferences.getString(SharedPreferencesHandler.PROVIDER, ""));
             Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
@@ -56,9 +56,9 @@ public class LocationListener implements android.location.LocationListener {
 
     public LatLng getCurrentLocationLatLng() {
 
-        if(currentLocation != null) {
+        if (currentLocation != null) {
             return new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        }else{
+        } else {
             Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
             Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
 
@@ -71,63 +71,68 @@ public class LocationListener implements android.location.LocationListener {
         //this is our only location listener now...
         currentLocation = location;
 
-        if(controller != null) {
-            Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
-            Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
+        try {
 
-            currentLat.setValue(String.valueOf(location.getLatitude()));
-            currentLong.setValue(String.valueOf(location.getLongitude()));
+            if (controller != null) {
+                Config currentLat = controller.dbHelper.getConfig(Configuration.CURRENT_LATITUTDE);
+                Config currentLong = controller.dbHelper.getConfig(Configuration.CURRENT_LONGITUDE);
 
-            controller.dbHelper.updateConfig(currentLat);
-            controller.dbHelper.updateConfig(currentLong);
+                currentLat.setValue(String.valueOf(location.getLatitude()));
+                currentLong.setValue(String.valueOf(location.getLongitude()));
 
-            Message message = new Message();
-            message.setMessage("this is a test on location change and now we force a line break");
-            message.setTime(System.currentTimeMillis());
-            controller.dbHelper.addVidiNews(message);
+                controller.dbHelper.updateConfig(currentLat);
+                controller.dbHelper.updateConfig(currentLong);
 
-            if (controller.progressDialog != null) {
-                controller.progressDialog.dismiss();
+                Message message = new Message();
+                message.setMessage("this is a test on location change and now we force a line break");
+                message.setTime(System.currentTimeMillis());
+                controller.dbHelper.addVidiNews(message);
 
-                //its enough for time being.
-                if (controller.runNewUserAnimation) {
-                    controller.runNewUserAnimation = false;
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
-                        }
-                    }, 1500);
+                if (controller.progressDialog != null) {
+                    controller.progressDialog.dismiss();
 
-                }
-            }
+                    //its enough for time being.
+                    if (controller.runNewUserAnimation) {
+                        controller.runNewUserAnimation = false;
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.materialsHelper.navDrawer.openDrawer(Gravity.LEFT);
+                            }
+                        }, 1500);
 
-            Log.d("location changed", "location changed");
-            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(currentLocation), currentLocation);
-                    } catch (NoSuchAlgorithmException e) {
-                        Log.d("security exception", "security exception " + e.toString());
                     }
                 }
-            }).start();
+
+                Log.d("location changed", "location changed");
+                LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            controller.cheService.writeToSocket(controller.messageFactory.locationChangedMessage(currentLocation), currentLocation);
+                        } catch (NoSuchAlgorithmException e) {
+                            Log.d("security exception", "security exception " + e.toString());
+                        }
+                    }
+                }).start();
 
 
-            if (controller.mapHandler.getMarkerMap().containsKey("Me")) {
-                controller.mapHandler.getMarkerMap().get("Me").remove();
+                if (controller.mapHandler.getMarkerMap().containsKey("Me")) {
+                    controller.mapHandler.getMarkerMap().get("Me").remove();
+                }
+
+                controller.mapHandler.addUser(currentLatLng);
+
+                controller.mapHandler.handleCamera(currentLatLng,
+                        controller.mapHelper.getMap().getCameraPosition().tilt,
+                        controller.mapHelper.getMap().getCameraPosition().bearing,
+                        controller.mapHelper.getMap().getCameraPosition().zoom);
             }
-
-            controller.mapHandler.addUser(currentLatLng);
-
-            controller.mapHandler.handleCamera(currentLatLng,
-                    controller.mapHelper.getMap().getCameraPosition().tilt,
-                    controller.mapHelper.getMap().getCameraPosition().bearing,
-                    controller.mapHelper.getMap().getCameraPosition().zoom);
+        } catch (Exception e) {
+            //location listener can act in funny ways.
         }
     }
 

@@ -190,10 +190,10 @@ public class MapHelper {
         cursor.close();
     }
 
-    private void addTargets(){
+    private void addTargets() {
         Cursor cursor = controller.dbHelper.getTargets();
 
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
 
             GameObject gameObject = new GameObject(cursor);
             controller.mapHandler.addSphere(gameObject, gameObject.getImpactRadius(), true);

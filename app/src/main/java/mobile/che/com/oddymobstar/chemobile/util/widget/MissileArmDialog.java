@@ -23,18 +23,16 @@ public class MissileArmDialog extends DialogFragment {
     private Cursor selectedObject;
 
 
-
-    public static MissileArmDialog newInstance(MissileAdapter adapter, DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener dismiss){
+    public static MissileArmDialog newInstance(MissileAdapter adapter, DialogInterface.OnClickListener listener, DialogInterface.OnCancelListener dismiss) {
         missiles = adapter;
         missileListener = listener;
         dismissListener = dismiss;
         return new MissileArmDialog();
     }
 
-     public Cursor getSelectItem() {
+    public Cursor getSelectItem() {
         return selectedObject;
     }
-
 
 
     public Dialog onCreateDialog(Bundle savedInstance) {
@@ -42,7 +40,7 @@ public class MissileArmDialog extends DialogFragment {
 
         builder.setTitle("Select Missile");
 
-        selectedObject = (Cursor)missiles.getItem(0);
+        selectedObject = (Cursor) missiles.getItem(0);
 
         builder.setSingleChoiceItems(missiles, 0, new DialogInterface.OnClickListener() {
 

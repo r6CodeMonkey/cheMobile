@@ -2,8 +2,6 @@ package mobile.che.com.oddymobstar.chemobile.fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.ListView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.adapter.VidiPrintAdapter;
-import mobile.che.com.oddymobstar.chemobile.util.graphics.VidiPrintView;
 
 /**
  * Created by timmytime on 20/02/16.
@@ -36,7 +33,6 @@ public class VidiPrintFragment extends Fragment {
 
         return view;
     }
-
 
 
     public void setVidi(Cursor vidi) {

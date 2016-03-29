@@ -3,8 +3,6 @@ package mobile.che.com.oddymobstar.chemobile.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +45,7 @@ public class VidiPrintAdapter extends CursorAdapter {
         Date date = new Date(cursor.getLong(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_TIME)));
 
         //need to add date time formatted:
-        String formatter = String.format("%s: %s",VidiPrintView.sdf.format(date),  cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
+        String formatter = String.format("%s: %s", VidiPrintView.sdf.format(date), cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.MESSAGE_CONTENT)));
 
         textView.setText(formatter);
 

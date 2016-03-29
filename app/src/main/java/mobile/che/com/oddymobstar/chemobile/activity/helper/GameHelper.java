@@ -157,7 +157,7 @@ public class GameHelper {
         }, 1000);
     }
 
-    public AlertDialog getTargetDialog(DialogInterface.OnClickListener targetListener){
+    public AlertDialog getTargetDialog(DialogInterface.OnClickListener targetListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
 
@@ -245,7 +245,7 @@ public class GameHelper {
         return dialog;
     }
 
-    public AlertDialog getMissileTargetDialog(final GameObject gameObject, final GameObject missileObject){
+    public AlertDialog getMissileTargetDialog(final GameObject gameObject, final GameObject missileObject) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
         controller.gameController.currentGameObject = gameObject;

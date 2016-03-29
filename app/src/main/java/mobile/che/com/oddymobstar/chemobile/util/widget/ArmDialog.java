@@ -54,16 +54,16 @@ public class ArmDialog extends DialogFragment {
 
         Log.d("arm", "cursor count " + gameObjects.getCount());
 
-        selectedObject = (Cursor)gameObjects.getItem(0);
+        selectedObject = (Cursor) gameObjects.getItem(0);
 
-        Log.d("arm", "cursor count "+gameObjects.getCount());
+        Log.d("arm", "cursor count " + gameObjects.getCount());
 
         builder.setSingleChoiceItems(gameObjects, 0, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                Log.d("arm", "selected item "+which);
+                Log.d("arm", "selected item " + which);
 
                 selectedObject = (Cursor) gameObjects.getItem(which);
             }

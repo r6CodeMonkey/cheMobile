@@ -172,7 +172,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
                     cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) == null ? "" : cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LAT)) + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBUTM_LONG)),
                     getStatus(cursor),
                     cursor.getString(cursor.getColumnIndexOrThrow("explosives_count")),
-                    (Math.round((cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STRENGTH)) / cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MAX_STRENGTH))) * 100)+"%"));
+                    (Math.round((cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_STRENGTH)) / cursor.getDouble(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_MAX_STRENGTH))) * 100) + "%"));
             tv.setText(detail);
         }
     }

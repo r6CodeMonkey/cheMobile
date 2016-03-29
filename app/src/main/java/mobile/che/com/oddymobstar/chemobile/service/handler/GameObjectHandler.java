@@ -1,12 +1,8 @@
 package mobile.che.com.oddymobstar.chemobile.service.handler;
 
-import android.database.Cursor;
-import android.location.Location;
 import android.util.Log;
 
 import org.json.JSONException;
-
-import java.security.NoSuchAlgorithmException;
 
 import message.CheMessage;
 import message.GameObject;
@@ -39,7 +35,7 @@ public class GameObjectHandler extends MessageHandler {
 
         GameObject gameObject = (GameObject) cheMessage.getMessage(Tags.GAME_OBJECT);
         Message message = null;
-        Log.d("game object", "message state is "+gameObject.getState()+" value is "+gameObject.getValue());
+        Log.d("game object", "message state is " + gameObject.getState() + " value is " + gameObject.getValue());
 
         mobile.che.com.oddymobstar.chemobile.model.GameObject model = null;
         switch (gameObject.getState()) {
@@ -101,16 +97,16 @@ public class GameObjectHandler extends MessageHandler {
                 break;
             case Tags.MESSAGE:  //these come from engine, not user actions.
 
-                switch( gameObject.getValue()) {  //sorted...
+                switch (gameObject.getValue()) {  //sorted...
                     case Tags.GAME_OBJECT_REPAIR:
                         model = dbHelper.getGameObject(gameObject.getKey());
 
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object "+gameObject.getKey()+" Repaired");
+                        message.setMessage("Game Object " + gameObject.getKey() + " Repaired");
                         dbHelper.addVidiNews(message);
 
-                        if(model != null){
+                        if (model != null) {
                             model.setStrength(gameObject.getStrength());
                             model.setStatus(""); //it would of been repair previously.
                             dbHelper.updateGameObject(model, true, false);
@@ -123,13 +119,13 @@ public class GameObjectHandler extends MessageHandler {
 
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object "+gameObject.getKey()+" Moving in Sector "+
-                                gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
-                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Moving in Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);
                         //so now we need to update the models current position.
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        if(model != null) {
+                        if (model != null) {
                             model.setLatitude(gameObject.getUtmLocation().getLatitude());
                             model.setLongitude(gameObject.getUtmLocation().getLongitude());
 
@@ -148,7 +144,7 @@ public class GameObjectHandler extends MessageHandler {
                                 gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        if(model != null) {
+                        if (model != null) {
                             model = updateLocation(model, gameObject);
                             model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
                             dbHelper.updateGameObject(model, true, true);
@@ -176,7 +172,7 @@ public class GameObjectHandler extends MessageHandler {
                         //new method. also need to capture information in alert if user not on game.
                         Log.d("missile moving", "missile has detonated! " + gameObject.getKey());
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        if(model != null) {
+                        if (model != null) {
                             dbHelper.missileTargetReached(model);
                         }
                         break;
@@ -184,12 +180,12 @@ public class GameObjectHandler extends MessageHandler {
                         //remove object and tell server
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object "+gameObject.getKey()+" Destroyed in Sector "+
-                         gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
-                        gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Destroyed in Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        if(model != null) {
+                        if (model != null) {
                             Log.d("object destroyed", "updating database");
                             dbHelper.deleteGameObject(model);
                         }
@@ -198,13 +194,13 @@ public class GameObjectHandler extends MessageHandler {
                         //we simply indicate we have lost some strength to database.
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object "+gameObject.getKey()+" Hit in Sector "+
-                                gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
-                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Hit in Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
-                        if(model != null) {
-                            Log.d("object hit", "updating database strength is "+gameObject.getStrength());
+                        if (model != null) {
+                            Log.d("object hit", "updating database strength is " + gameObject.getStrength());
                             model.setStrength(gameObject.getStrength());
                             model.setStatus(Tags.GAME_OBJECT_HIT);
                             dbHelper.updateGameObject(model, true, true);
@@ -225,7 +221,7 @@ public class GameObjectHandler extends MessageHandler {
             case Tags.MISSILE_TARGET:
                 //this is really easy. simply confirm that the missile is set on target(need a status for missile)
                 Missile missile = gameObject.getMissiles().get(0);
-                model = dbHelper.getGameObject(missile.getKey()) ;
+                model = dbHelper.getGameObject(missile.getKey());
                 model.setStatus(Tags.MISSILE_TARGET);
                 //we now need to get the actual missile
                 model.setDestLatitude(missile.getTargetUTMLocation().getLatitude());
@@ -249,7 +245,7 @@ public class GameObjectHandler extends MessageHandler {
     }
 
 
-    private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, GameObject gameObject){
+    private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, GameObject gameObject) {
         model.setLatitude(gameObject.getUtmLocation().getLatitude());
         model.setLongitude(gameObject.getUtmLocation().getLongitude());
         model.setUtmLat(gameObject.getUtmLocation().getUTM().getUTMLatGrid());

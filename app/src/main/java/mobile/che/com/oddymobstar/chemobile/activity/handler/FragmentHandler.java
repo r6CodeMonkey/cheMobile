@@ -1,7 +1,5 @@
 package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 
 import mobile.che.com.oddymobstar.chemobile.R;
@@ -13,7 +11,6 @@ import mobile.che.com.oddymobstar.chemobile.fragment.ConfigurationFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameSubTypeGridFragment;
 import mobile.che.com.oddymobstar.chemobile.fragment.VidiPrintFragment;
-import util.GameObjectTypes;
 
 
 /**
@@ -21,12 +18,14 @@ import util.GameObjectTypes;
  */
 public class FragmentHandler {
 
+    //back pressed hack
+    public static boolean IS_GAME_OBJECTS_FRAGMENT = false;
     private final ProjectCheActivity main;
     private final ProjectCheController controller;
     public ChatFragment chatFrag = new ChatFragment();
     public AllianceGridFragment gridFrag = new AllianceGridFragment();
     public ConfigurationFragment confFrag = new ConfigurationFragment();
-    public GameObjectGridFragment gameFrag = new GameObjectGridFragment();
+    public GameObjectGridFragment gameFrag;// = new GameObjectGridFragment();
     public GameSubTypeGridFragment gameSubTypeFrag = new GameSubTypeGridFragment();
     public VidiPrintFragment vidiPrintFragment = new VidiPrintFragment();
 

@@ -27,7 +27,7 @@ public class GameTimer {
 
     public void stopTimer(boolean cancel) {
 
-        if(cancel){
+        if (cancel) {
             countDownTimer.cancel();
         }
 
@@ -38,10 +38,10 @@ public class GameTimer {
                 controller.materialsHelper.gameTimer.setText("");
                 controller.gameController.GAME_STATE = GameController.DEFAULT_STATE;  //timed out basically.
                 controller.gameController.currentValidators.clear();
-                for(Polygon polygon : controller.gameController.gameHandler.validatorGrids){
+                for (Polygon polygon : controller.gameController.gameHandler.validatorGrids) {
                     polygon.remove();
                 }
-                for(Circle circle : controller.mapHandler.circleList){
+                for (Circle circle : controller.mapHandler.circleList) {
                     circle.remove();
                 }
 

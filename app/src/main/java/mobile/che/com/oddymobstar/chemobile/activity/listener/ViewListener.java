@@ -73,7 +73,7 @@ public class ViewListener {
                     }
 
                     //if we are locked..we delay a camera animation to target and then back
-                    if (action.equals("Locked")){
+                    if (action.equals("Locked")) {
 
                         final LatLng host = latLng;
                         final GameObject missile = controller.dbHelper.getGameObject(key);

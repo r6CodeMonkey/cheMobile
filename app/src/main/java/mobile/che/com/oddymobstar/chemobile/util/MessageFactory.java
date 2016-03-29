@@ -177,7 +177,7 @@ public class MessageFactory {
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
         gameObject.setStrength(gameObject.getStrength());
-      //double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong
+        //double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong
         gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(), gameObject.getUtmLat(),
                 gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));  //we need latest location.
         gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
@@ -285,7 +285,7 @@ public class MessageFactory {
 
     }
 
-    public CheMessage createPlayerReconnect(Location location) throws NoSuchAlgorithmException{
+    public CheMessage createPlayerReconnect(Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
 
         Player player = location == null ? createPlayer() : createPlayer(location);
@@ -416,7 +416,7 @@ public class MessageFactory {
 
     }
 
-    public CheMessage setTarget(GameObject gameObject, GameObject explosive, LatLng target,  Location location) throws NoSuchAlgorithmException{
+    public CheMessage setTarget(GameObject gameObject, GameObject explosive, LatLng target, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -448,7 +448,7 @@ public class MessageFactory {
         return cheMessage;
     }
 
-    public CheMessage stopGameObject(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+    public CheMessage stopGameObject(GameObject gameObject, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -464,10 +464,10 @@ public class MessageFactory {
         return cheMessage;
     }
 
-    public CheMessage getMissileLaunch(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+    public CheMessage getMissileLaunch(GameObject gameObject, Location location) throws NoSuchAlgorithmException {
 
 
-        Log.d("move", "key is "+gameObject.getKey());
+        Log.d("move", "key is " + gameObject.getKey());
 
 
         CheMessage cheMessage = createCheMessage();
@@ -484,7 +484,7 @@ public class MessageFactory {
         return cheMessage;
     }
 
-    public CheMessage getMissileHit(GameObject gameObject, Location location, String hitOrDestroyed) throws NoSuchAlgorithmException{
+    public CheMessage getMissileHit(GameObject gameObject, Location location, String hitOrDestroyed) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
@@ -500,7 +500,7 @@ public class MessageFactory {
         return cheMessage;
     }
 
-    public CheMessage createRepairMessage(GameObject gameObject, Location location) throws NoSuchAlgorithmException{
+    public CheMessage createRepairMessage(GameObject gameObject, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();

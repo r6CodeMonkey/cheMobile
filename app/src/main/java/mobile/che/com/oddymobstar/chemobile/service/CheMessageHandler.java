@@ -59,14 +59,13 @@ public class CheMessageHandler extends MessageHandler {
     }
 
 
-
     public synchronized void handle(CheMessage cheMessage) throws JSONException, NoSuchAlgorithmException {
-          Log.d("handle", "handle object");
+        Log.d("handle", "handle object");
         //we always handle this.  we need to send the response back as well.
         acknowledgeHandler.handle(cheMessage);
 
         if (cheMessage.containsMessage(Tags.GAME_OBJECT)) {
-                     Log.d("handle", "handle game object");
+            Log.d("handle", "handle game object");
             gameObjectHandler.handle(cheMessage);
         }
 
@@ -76,7 +75,7 @@ public class CheMessageHandler extends MessageHandler {
         }
 
         if (cheMessage.containsMessage(Tags.UTM_LOCATION)) {
-                   Log.d("handle", "handle utm location " + cheMessage.toString());
+            Log.d("handle", "handle utm location " + cheMessage.toString());
             gridHandler.handle(cheMessage);
         }
 
@@ -91,7 +90,7 @@ public class CheMessageHandler extends MessageHandler {
         return messageFactory.createNewPlayer();
     }
 
-    public CheMessage reConnectMessage(Location location) throws NoSuchAlgorithmException{
+    public CheMessage reConnectMessage(Location location) throws NoSuchAlgorithmException {
         return messageFactory.createPlayerReconnect(location);
     }
 

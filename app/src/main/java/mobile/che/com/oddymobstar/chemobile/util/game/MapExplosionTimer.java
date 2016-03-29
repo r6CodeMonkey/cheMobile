@@ -18,7 +18,7 @@ public class MapExplosionTimer {
 
     private double radius;
 
-    public MapExplosionTimer(ProjectCheActivity main, ProjectCheController controller){
+    public MapExplosionTimer(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
         this.controller = controller;
 
@@ -27,7 +27,7 @@ public class MapExplosionTimer {
 
     public void startTimer(final GameObject gameObject, long duration) {
 
-        radius = gameObject.getImpactRadius() / (duration /1000);
+        radius = gameObject.getImpactRadius() / (duration / 1000);
 
         final double factor = radius;
 
@@ -40,7 +40,7 @@ public class MapExplosionTimer {
                     @Override
                     public void run() {
 
-                        if(controller.mapHandler.targets.containsKey(gameObject.getKey())){
+                        if (controller.mapHandler.targets.containsKey(gameObject.getKey())) {
                             controller.mapHandler.targets.get(gameObject.getKey()).remove();
                         }
                         controller.mapHandler.addSphere(gameObject, radius, true);

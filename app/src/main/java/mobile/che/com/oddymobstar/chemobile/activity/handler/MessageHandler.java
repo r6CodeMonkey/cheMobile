@@ -120,17 +120,30 @@ public class MessageHandler extends Handler {
 
     }
 
-    public void handleGameObjectDestroyed(final GameObject gameObject){
-        if(controller != null){
+    public void handleGameObjectDestroyed(final GameObject gameObject) {
+        if (controller != null) {
 
             Log.d("object hit", "object has been destroyed and controller ok");
+
 
             //1 navigate to our
             main.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-            controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),45, 0, 17);
-                }});
+                    controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 17);
+
+                    if (controller.mapHandler.getMarkerMap().containsKey(gameObject.getKey())) {
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.mapHandler.getMarkerMap().get(gameObject.getKey()).remove();
+                            }
+                        }, 3000);
+                    }
+
+                }
+            });
             //need to add an impact to it and confirm points lost...actually remove from map as well, and then send confirmation to server to say we are dead.
             new Thread(new Runnable() {
                 @Override
@@ -145,8 +158,8 @@ public class MessageHandler extends Handler {
         }
     }
 
-    public void gameObjectHit(final GameObject gameObject){
-        if(controller != null){
+    public void gameObjectHit(final GameObject gameObject) {
+        if (controller != null) {
 
             Log.d("object hit", "object has been hit and controller ok");
 
@@ -155,7 +168,8 @@ public class MessageHandler extends Handler {
                 @Override
                 public void run() {
                     controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 17);
-                }});
+                }
+            });
             //need to add an impact to it and confirm points lost...
             //send confirmation to server of new points total for player.
 

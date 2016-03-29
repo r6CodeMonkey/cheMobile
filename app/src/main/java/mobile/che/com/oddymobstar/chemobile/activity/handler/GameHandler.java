@@ -4,10 +4,8 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -45,11 +43,10 @@ import util.map.UTM;
  */
 public class GameHandler {
 
-    private final ProjectCheController controller;
-    private final ProjectCheActivity main;
-
     //need to keep track of our game object added grids, and remove them once move carried out.
     public final List<Polygon> validatorGrids = new ArrayList<>();
+    private final ProjectCheController controller;
+    private final ProjectCheActivity main;
 
     public GameHandler(ProjectCheActivity main, ProjectCheController controller) {
         this.main = main;
@@ -84,7 +81,7 @@ public class GameHandler {
 
     public void armDialog(String object, String key, ArmExplosiveAdapter adapter) {
 
-        if(adapter.getCount() > 0) {
+        if (adapter.getCount() > 0) {
 
             controller.gameController.armDialog =
                     ArmDialog.newInstance(object, key, adapter,
@@ -108,7 +105,7 @@ public class GameHandler {
             android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
             controller.gameController.armDialog.show(transaction, "dialog");
-        }else{
+        } else {
             Toast.makeText(main, "No Hosts Deployed", Toast.LENGTH_SHORT).show();
         }
     }
@@ -120,7 +117,6 @@ public class GameHandler {
         boolean targetSet = controller.dbHelper.hasTargetSet(key);
 
 
-
         String title = "";
         String title2 = "";
         String title3 = "";
@@ -129,15 +125,15 @@ public class GameHandler {
         DialogInterface.OnClickListener listener2 = null;
         DialogInterface.OnClickListener listener3 = null;
 
-        switch (type){
+        switch (type) {
 
             case GameObjectGridFragment.INFASTRUCTURE:
-                 if(!gameObject.getStatus().equals(Tags.GAME_OBJECT_REPAIR) && gameObject.getStrength() < gameObject.getMaxStrength()) {
+                if (!gameObject.getStatus().equals(Tags.GAME_OBJECT_REPAIR) && gameObject.getStrength() < gameObject.getMaxStrength()) {
                     title3 = GameObjectActionsDialog.REPAIR;  //could have a reinforce too.  same thing i guess.
                     listener3 = controller.gameController.gameListener.getRepairListener();
                 }
                 //as long as we are not a satellite
-                if(gameObject.getSubType() != GameObjectTypes.SATELLITE) {
+                if (gameObject.getSubType() != GameObjectTypes.SATELLITE) {
                     if (targetSet) {
                         title = GameObjectActionsDialog.LAUNCH;
                         listener = controller.gameController.gameListener.getLaunchListener();
@@ -151,14 +147,14 @@ public class GameHandler {
                 break;
             case GameObjectGridFragment.LAND:
                 //rules.  what is our status?
-                switch (gameObject.getStatus()){
+                switch (gameObject.getStatus()) {
                     case Tags.GAME_OBJECT_IS_MOVING:
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
@@ -166,12 +162,12 @@ public class GameHandler {
                     case Tags.GAME_OBJECT_IS_FIXED:
                         title3 = GameObjectActionsDialog.MOVE;
                         listener3 = controller.gameController.gameListener.getMoveListener(type);
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
@@ -179,15 +175,15 @@ public class GameHandler {
                 }
                 break;
             case GameObjectGridFragment.SEA:
-                switch (gameObject.getStatus()){
+                switch (gameObject.getStatus()) {
                     case Tags.GAME_OBJECT_IS_MOVING:
 
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
@@ -196,29 +192,29 @@ public class GameHandler {
                     case Tags.GAME_OBJECT_IS_FIXED:
                         title3 = GameObjectActionsDialog.MOVE;
                         listener3 = controller.gameController.gameListener.getMoveListener(type);
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
-                    break;
+                        break;
                 }
                 break;
             case GameObjectGridFragment.AIR:  //really need a takeoff too.  ie move, take off, land etc....anyway.  this can go later.
-                switch (gameObject.getStatus()){
+                switch (gameObject.getStatus()) {
                     case Tags.GAME_OBJECT_IS_MOVING:
                         title3 = GameObjectActionsDialog.LAND;
                         listener3 = controller.gameController.gameListener.getLandingListener();
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
@@ -226,12 +222,12 @@ public class GameHandler {
                     case Tags.GAME_OBJECT_IS_FIXED:
                         title3 = GameObjectActionsDialog.MOVE;
                         listener3 = controller.gameController.gameListener.getMoveListener(type);
-                        if(targetSet){
+                        if (targetSet) {
                             title = GameObjectActionsDialog.LAUNCH;
                             listener = controller.gameController.gameListener.getLaunchListener();
                             title2 = GameObjectActionsDialog.CANCEL;
                             listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        }else{
+                        } else {
                             title = GameObjectActionsDialog.TARGET;
                             listener = controller.gameController.gameListener.getTargetListener();
                         }
@@ -243,15 +239,15 @@ public class GameHandler {
 
 
         controller.gameController.actionsDialog =
-                GameObjectActionsDialog.newInstance(key,title, title2, title3, listener, listener2, listener3
+                GameObjectActionsDialog.newInstance(key, title, title2, title3, listener, listener2, listener3
 
                         , new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                //
-                                dialog.dismiss();
-                            }
-                        });
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        //
+                        dialog.dismiss();
+                    }
+                });
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.gameController.actionsDialog.show(transaction, "dialog");
@@ -323,13 +319,13 @@ public class GameHandler {
     public void handleGameObjectTarget(final String key) {
         //if no missiles, basically cant do anything.  can review if we need to capture it in future.
         Cursor availableMissiles = controller.dbHelper.getAvailableMissiles(key);
-        if(availableMissiles.getCount() > 0) {
+        if (availableMissiles.getCount() > 0) {
             controller.gameController.missileArmDialog =
                     MissileArmDialog.newInstance(new MissileAdapter(main, availableMissiles, true),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, final int which) {
-                                        handleMissileLoad(key, controller.gameController.missileArmDialog.getSelectItem());
+                                    handleMissileLoad(key, controller.gameController.missileArmDialog.getSelectItem());
                                 }
                             }
                             , new DialogInterface.OnCancelListener() {
@@ -342,13 +338,13 @@ public class GameHandler {
             android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
             controller.gameController.missileArmDialog.show(transaction, "dialog");
-        }else{
+        } else {
             Toast.makeText(main, "No Missiles Available", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void handleMissileLoad(String key, Cursor missile){
+    public void handleMissileLoad(String key, Cursor missile) {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
         final GameObject missileObject = controller.dbHelper.getGameObject(missile.getString(missile.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
@@ -356,7 +352,7 @@ public class GameHandler {
 
         //scale this.  ie if missile range < 5000 needs to be more like 11....ie  .. ie per metre 10 works better.  so
 
-        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, (float)(missileObject.getRange() / 500.0f));
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, (float) (missileObject.getRange() / 500.0f));
 
         //now we need to delay slightly, and then start timer and dialog.
         final Handler handler = new Handler();
@@ -408,20 +404,20 @@ public class GameHandler {
 
     }
 
-    public void handleCancelTarget(final String key){
+    public void handleCancelTarget(final String key) {
 
         //to do....lol.  yes need to fix this as well.
 
     }
 
     //we are assuming we can only target one thing at a time.  makes sense at present.
-    public void handleLaunch(final String key){
+    public void handleLaunch(final String key) {
 
         GameObject gameObject = null;  //really we want to have more than one target set....well means changing buttons so leave at present.  enough other things to do.
 
         Cursor missiles = controller.dbHelper.getLaunchMissiles(key);
 
-        while (missiles.moveToNext()){
+        while (missiles.moveToNext()) {
             gameObject = controller.dbHelper.getGameObject(missiles.getString(missiles.getColumnIndexOrThrow(DBHelper.MISSILE_KEY)));
         }
 
@@ -445,7 +441,7 @@ public class GameHandler {
 
     }
 
-    public void handleTarget(final LatLng latLng){
+    public void handleTarget(final LatLng latLng) {
 
         final GameObject gameObject = controller.gameController.currentGameObject;
         final GameObject explosive = controller.gameController.currentMissileObject;
@@ -459,9 +455,9 @@ public class GameHandler {
         target.setLongitude(latLng.longitude);
 
 
-        if(start.distanceTo(target) > explosive.getRange()){
+        if (start.distanceTo(target) > explosive.getRange()) {
             Toast.makeText(main, "Target Outside Range!", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
 
             //as the other.  set a target Dialog
             controller.gameController.gameHelper.getTargetDialog(
@@ -493,7 +489,7 @@ public class GameHandler {
     public void handleMoveDestination(final LatLng latLng) {
         //1: popup to say this is the chosen location....then send message.
         controller.gameController.gameHelper.getDestinationDialog(
-                 new DialogInterface.OnClickListener() {
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
