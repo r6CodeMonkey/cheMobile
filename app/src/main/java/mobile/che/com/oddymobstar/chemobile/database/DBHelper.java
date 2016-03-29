@@ -478,6 +478,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //delete on destroy only
         if(messageHandler != null){
+            Log.d("object hit", "processing destroy message");
             messageHandler.handleGameObjectDestroyed(gameObject);
         }
 
@@ -601,6 +602,7 @@ public class DBHelper extends SQLiteOpenHelper {
             } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
                 messageHandler.moveGameObject(gameObject);
             } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_HIT)) {
+                 Log.d("object hit", "processing hit message");
                  messageHandler.gameObjectHit(gameObject);
              } else if(gameObject.getStatus().equals(Tags.MISSILE_TARGET)){
                 messageHandler.confirmTarget(gameObject);

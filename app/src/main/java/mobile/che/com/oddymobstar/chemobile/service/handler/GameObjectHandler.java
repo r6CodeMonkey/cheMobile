@@ -173,6 +173,7 @@ public class GameObjectHandler extends MessageHandler {
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
                         if(model != null) {
+                            Log.d("object destroyed", "updating database");
                             dbHelper.deleteGameObject(model);
                         }
                         break;
@@ -180,12 +181,13 @@ public class GameObjectHandler extends MessageHandler {
                         //we simply indicate we have lost some strength to database.
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object "+gameObject.getKey()+" Destroyed in Sector "+
+                        message.setMessage("Game Object "+gameObject.getKey()+" Hit in Sector "+
                                 gameObject.getUtmLocation().getUTM().getUTMLatGrid()+gameObject.getUtmLocation().getUTM().getUTMLongGrid()+" / "+
                                 gameObject.getUtmLocation().getSubUTM().getUTMLatGrid()+gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
                         if(model != null) {
+                            Log.d("object hit", "updating database strength is "+gameObject.getStrength());
                             model.setStrength(gameObject.getStrength());
                             model.setStatus(Tags.GAME_OBJECT_HIT);
                             dbHelper.updateGameObject(model, true, true);

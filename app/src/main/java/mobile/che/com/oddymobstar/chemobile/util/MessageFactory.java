@@ -160,6 +160,7 @@ public class MessageFactory {
         gameObjectMessage.setKey(gameObject.getKey());
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
+        gameObject.setStrength(gameObject.getStrength());
         gameObjectMessage.setUtmLocation(createUTMLocation(location));
         gameObjectMessage.setDestinationUtmLocation(createUTMLocation());
 
@@ -175,6 +176,7 @@ public class MessageFactory {
         gameObjectMessage.setKey(gameObject.getKey());
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
+        gameObject.setStrength(gameObject.getStrength());
       //double latitude, double longitude, String utmLat, String utmLong, String subUtmLat, String subUtmLong
         gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(), gameObject.getUtmLat(),
                 gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));  //we need latest location.
@@ -192,6 +194,7 @@ public class MessageFactory {
         gameObjectMessage.setKey(gameObject.getKey());
         gameObjectMessage.setType(gameObject.getType());
         gameObjectMessage.setSubType(gameObject.getSubType());
+        gameObject.setStrength(gameObject.getStrength());
 
         UTMLocation utmLocation = createUTMLocation(gameObject.getLatitude(),
                 gameObject.getLongitude(), gameObject.getUtmLat(),
@@ -200,7 +203,7 @@ public class MessageFactory {
         gameObjectMessage.setUtmLocation(utmLocation);
         gameObjectMessage.setDestinationUtmLocation(latLng == null ?
                 createUTMLocation() :
-        createUTMLocation(latLng.latitude, latLng.longitude, "","","",""));
+                createUTMLocation(latLng.latitude, latLng.longitude, "", "", "", ""));
 
         //we only set the one we are adding...or do we send all of them?  just add
         List<Missile> missiles = new ArrayList<>();
@@ -471,6 +474,22 @@ public class MessageFactory {
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
         message.GameObject gameObjectMessage = createGameObjectWithExplosive(gameObject, gameObject, new LatLng(gameObject.getDestLatitude(), gameObject.getDestLongitude()), Tags.MISSILE_FIRE);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "launch message " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
+    public CheMessage getMissileHit(GameObject gameObject, Location location, String hitOrDestroyed) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+        message.GameObject gameObjectMessage = createGameObject(gameObject, location);
+        gameObjectMessage.setState(hitOrDestroyed);
 
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);

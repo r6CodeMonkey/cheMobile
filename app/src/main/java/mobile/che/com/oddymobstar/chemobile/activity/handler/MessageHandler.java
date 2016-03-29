@@ -9,11 +9,14 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.security.NoSuchAlgorithmException;
+
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
+import util.Tags;
 import util.map.SubUTM;
 import util.map.UTM;
 
@@ -119,6 +122,9 @@ public class MessageHandler extends Handler {
 
     public void handleGameObjectDestroyed(final GameObject gameObject){
         if(controller != null){
+
+            Log.d("object hit", "object has been destroyed and controller ok");
+
             //1 navigate to our
             main.runOnUiThread(new Runnable() {
                 @Override
@@ -126,11 +132,24 @@ public class MessageHandler extends Handler {
             controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()),45, 0, 17);
                 }});
             //need to add an impact to it and confirm points lost...actually remove from map as well, and then send confirmation to server to say we are dead.
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        controller.cheService.writeToSocket(controller.messageFactory.getMissileHit(gameObject, controller.locationListener.getCurrentLocation(), Tags.GAME_OBJECT_DESTROYED));
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
     public void gameObjectHit(final GameObject gameObject){
         if(controller != null){
+
+            Log.d("object hit", "object has been hit and controller ok");
+
             //1 navigate to our
             main.runOnUiThread(new Runnable() {
                 @Override
@@ -139,6 +158,17 @@ public class MessageHandler extends Handler {
                 }});
             //need to add an impact to it and confirm points lost...
             //send confirmation to server of new points total for player.
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        controller.cheService.writeToSocket(controller.messageFactory.getMissileHit(gameObject, controller.locationListener.getCurrentLocation(), Tags.GAME_OBJECT_HIT));
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
