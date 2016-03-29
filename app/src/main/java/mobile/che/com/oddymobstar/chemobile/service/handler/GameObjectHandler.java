@@ -108,7 +108,7 @@ public class GameObjectHandler extends MessageHandler {
 
                         if (model != null) {
                             model.setStrength(gameObject.getStrength());
-                            model.setStatus(""); //it would of been repair previously.
+                            model.setStatus(Tags.GAME_OBJECT_IS_FIXED); //it would of been repair previously.
                             dbHelper.updateGameObject(model, true, false);
                         }
 

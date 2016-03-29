@@ -130,7 +130,6 @@ public class ViewListener {
                 controller.fragmentHandler.gameSubTypeFrag.init(controller.fragmentHandler.gameFrag.getType(), cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE)), gameObjectSubTypeListClickListener());
                 controller.materialsHandler.handleNavToolbar(main.getResources().getColor(GameHelper.getGameColor(controller.fragmentHandler.gameFrag.getType())), GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))));
                 transaction.replace(R.id.chat_fragment, controller.fragmentHandler.gameSubTypeFrag);
-                transaction.addToBackStack(null);
 
                 transaction.commit();
 
