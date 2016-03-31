@@ -89,18 +89,21 @@ public class MessageHandler extends Handler {
 
                 controller.progressDialog.dismiss();
 
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        controller.progressDialog = new ProgressDialog(main);
-                        controller.progressDialog.setMessage("Locating...");
-                        controller.progressDialog.setIndeterminate(true);
-                        controller.progressDialog.show();
-                    }
-                }, 100);
 
-            }
+
+                final Handler handler = new Handler();
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.progressDialog = new ProgressDialog(main);
+                            controller.progressDialog.setMessage("Locating...");
+                            controller.progressDialog.setIndeterminate(true);
+                            controller.progressDialog.show();
+                        }
+                    }, 100);
+                }
+
         }
 
     }
@@ -139,7 +142,7 @@ public class MessageHandler extends Handler {
                             public void run() {
                                 controller.mapHandler.getMarkerMap().get(gameObject.getKey()).remove();
                             }
-                        }, 3000);
+                        }, 1000);
                     }
 
                 }

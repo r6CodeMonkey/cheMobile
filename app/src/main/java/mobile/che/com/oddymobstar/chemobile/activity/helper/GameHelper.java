@@ -82,9 +82,7 @@ public class GameHelper {
         }).start();
     }
 
-    /*
 
-     */
 
     public void infrastructureInit() {
         //1 garrison
