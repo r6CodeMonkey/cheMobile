@@ -210,6 +210,8 @@ public class ProjectCheController {
             }
         }
 
+        LocalBroadcastManager.getInstance(main).unregisterReceiver(messageReceiver);
+
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
         SharedPreferencesHandler.handle(sharedPreferences, this);
     }
@@ -217,6 +219,7 @@ public class ProjectCheController {
     public void onResume() {
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
 
+        LocalBroadcastManager.getInstance(main).registerReceiver(messageReceiver, new IntentFilter(MESSAGE_INTENT));
 
         mapHelper.setUpMapIfNeeded();
 

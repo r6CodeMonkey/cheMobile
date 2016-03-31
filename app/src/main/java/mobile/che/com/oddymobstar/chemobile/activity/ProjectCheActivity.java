@@ -68,10 +68,10 @@ public class ProjectCheActivity extends AppCompatActivity implements NavigationV
     @Override
     public void onBackPressed() {
         controller.onBackPressed();
-        if (!FragmentHandler.IS_GAME_OBJECTS_FRAGMENT) {
+        if (!FragmentHandler.STOP_BACK_FRAGMENT) {
             super.onBackPressed();
         } else {
-            FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
+            FragmentHandler.STOP_BACK_FRAGMENT = false;
         }
     }
 

@@ -19,7 +19,7 @@ import mobile.che.com.oddymobstar.chemobile.fragment.VidiPrintFragment;
 public class FragmentHandler {
 
     //back pressed hack
-    public static boolean IS_GAME_OBJECTS_FRAGMENT = false;
+    public static boolean STOP_BACK_FRAGMENT = false;
     private final ProjectCheActivity main;
     private final ProjectCheController controller;
     public ChatFragment chatFrag = new ChatFragment();

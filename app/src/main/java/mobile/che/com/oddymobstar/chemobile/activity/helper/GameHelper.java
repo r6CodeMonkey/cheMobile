@@ -138,23 +138,28 @@ public class GameHelper {
     public void missileInit() {
         //20 g2g
         //10 gta
-        //5 landmines
-        purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
-
         final Handler handler = new Handler();
+        //5 landmines
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2G, 20);
+            }
+        }, 1000);
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.GROUND_MINE, 5);
             }
-        }, 1000);
+        }, 3500);
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 purchase(GameObjectGridFragment.MISSILE, GameObjectTypes.G2A, 10);
             }
-        }, 1000);
+        }, 6000);
     }
 
     public AlertDialog getTargetDialog(DialogInterface.OnClickListener targetListener) {

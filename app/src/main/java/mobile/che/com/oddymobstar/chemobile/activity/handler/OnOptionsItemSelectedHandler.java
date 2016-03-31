@@ -106,7 +106,7 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleUTM() {
 
-        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
+        FragmentHandler.STOP_BACK_FRAGMENT = false;
 
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
@@ -145,7 +145,7 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleSubUTM() {
 
-        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = false;
+        FragmentHandler.STOP_BACK_FRAGMENT = false;
 
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
@@ -171,6 +171,8 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleAlliance() {
 
+        FragmentHandler.STOP_BACK_FRAGMENT = true;
+
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
@@ -188,6 +190,8 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleAlerts() {
 
+        FragmentHandler.STOP_BACK_FRAGMENT = true;
+
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.materialsHelper.navDrawer.closeDrawer(controller.materialsHelper.navigationView);
@@ -201,7 +205,7 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleGame(int type, String title) {
 
-        FragmentHandler.IS_GAME_OBJECTS_FRAGMENT = true;
+        FragmentHandler.STOP_BACK_FRAGMENT = true;
 
         controller.mapHandler.CURRENT_GRID_FAB_STATE = MapHandler.OTHER_STATE;
         controller.fragmentHandler.removeFragments(false);
@@ -224,6 +228,7 @@ public class OnOptionsItemSelectedHandler {
 
     private void handleSettings() {
 
+        FragmentHandler.STOP_BACK_FRAGMENT = true;
 
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
