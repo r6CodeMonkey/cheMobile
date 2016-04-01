@@ -149,7 +149,7 @@ public class ViewListener {
             /*
             basically if they select an item we launch chat frag with an ID...
              */
-                FragmentHandler.STOP_BACK_FRAGMENT = true;
+                FragmentHandler.STOP_BACK_FRAGMENT = false;
 
                 Cursor cursor = (Cursor) controller.fragmentHandler.gridFrag.getListAdapter().getItem(position);
                 controller.fragmentHandler.removeFragments(false);
