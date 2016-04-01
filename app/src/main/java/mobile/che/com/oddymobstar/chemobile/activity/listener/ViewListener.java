@@ -11,6 +11,7 @@ import com.google.android.gms.maps.model.Marker;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
+import mobile.che.com.oddymobstar.chemobile.activity.handler.FragmentHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.GameSubTypeAdapter;
@@ -148,6 +149,8 @@ public class ViewListener {
             /*
             basically if they select an item we launch chat frag with an ID...
              */
+                FragmentHandler.STOP_BACK_FRAGMENT = true;
+
                 Cursor cursor = (Cursor) controller.fragmentHandler.gridFrag.getListAdapter().getItem(position);
                 controller.fragmentHandler.removeFragments(false);
 
