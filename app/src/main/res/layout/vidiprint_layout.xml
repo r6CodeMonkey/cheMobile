@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:stackFromBottom="false"
+        android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         android:id="@+id/vidiprint_list">
 
