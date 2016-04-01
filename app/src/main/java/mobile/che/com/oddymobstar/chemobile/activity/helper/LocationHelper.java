@@ -42,7 +42,9 @@ public class LocationHelper {
     }
 
     public void killLocationUpdates() {
+        controller.locationManager.removeUpdates(controller.locationListener);
         locationUpdates = null;
     }
+
 
 }

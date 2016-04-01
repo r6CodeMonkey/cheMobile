@@ -54,7 +54,7 @@ public class ArmDialog extends DialogFragment {
 
         Log.d("arm", "cursor count " + gameObjects.getCount());
 
-        selectedObject = (Cursor) gameObjects.getItem(0);
+        selectedObject = (Cursor) gameObjects.getItem(0);  //this sets wrong item ie the sort is done afterwards....annoying.  so need to think about it.  not now.
 
         Log.d("arm", "cursor count " + gameObjects.getCount());
 

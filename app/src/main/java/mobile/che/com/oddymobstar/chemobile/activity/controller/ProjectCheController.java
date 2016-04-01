@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -210,7 +211,8 @@ public class ProjectCheController {
             }
         }
 
-        LocalBroadcastManager.getInstance(main).unregisterReceiver(messageReceiver);
+        locationHelper.killLocationUpdates();
+
 
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
         SharedPreferencesHandler.handle(sharedPreferences, this);
@@ -219,9 +221,10 @@ public class ProjectCheController {
     public void onResume() {
         SharedPreferences sharedPreferences = main.getPreferences(Context.MODE_PRIVATE);
 
-        LocalBroadcastManager.getInstance(main).registerReceiver(messageReceiver, new IntentFilter(MESSAGE_INTENT));
 
         mapHelper.setUpMapIfNeeded();
+
+        locationHelper.initLocationUpdates();
 
         if (locationHelper.getLocationUpdates() == null) {
             mapHelper.initLocationUpdates();
