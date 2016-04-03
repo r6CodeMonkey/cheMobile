@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -230,6 +232,50 @@ public class GameHelper {
                 controller.gameController.GAME_STATE = GameController.GAME_OBJECT_MOVE_STATE;
                 controller.gameController.gameTimer.startTimer(1000 * 20);
             }
+        });
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
+    public AlertDialog getSatelliteListenerDialog(final GameObject gameObject){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        controller.gameController.currentGameObject = gameObject;
+
+        builder.setTitle("Satellite Range");
+        builder.setMessage("Will be registered in each purple grid.\nCan identify objects moving within");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        controller.gameController.currentValidators.clear();
+                        for (Polygon polygon : controller.gameController.gameHandler.validatorGrids) {
+                            polygon.remove();
+                        }
+
+                        controller.gameController.gameHandler.validatorGrids.clear();
+                    }});
+
+              }
         });
 
 

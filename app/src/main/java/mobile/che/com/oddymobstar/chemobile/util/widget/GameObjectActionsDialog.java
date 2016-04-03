@@ -18,6 +18,9 @@ public class GameObjectActionsDialog extends DialogFragment {
     public static final String CANCEL = "Cancel";
     public static final String LAND = "Land";
     public static final String LAUNCH = "Launch";
+    public static final String STOP_LISTENING = "Stop Listening";
+    public static final String START_LISTENING = "Start Listening";
+
     private static DialogInterface.OnClickListener actionListener;
     private static DialogInterface.OnClickListener actionListener2;
     private static DialogInterface.OnClickListener actionListener3;

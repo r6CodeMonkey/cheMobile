@@ -106,6 +106,28 @@ public class GameListener {
         };
     }
 
+    public DialogInterface.OnClickListener getStopListeningListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, final int which) {
+                //neutral action
+                dialog.dismiss();
+                controller.gameController.gameHandler.handleStopListening(controller.gameController.actionsDialog.getGameObjectKey());
+            }
+        };
+    }
+
+    public DialogInterface.OnClickListener getStartListeningListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, final int which) {
+                //neutral action
+                dialog.dismiss();
+                controller.gameController.gameHandler.handleStartListening(controller.gameController.actionsDialog.getGameObjectKey());
+            }
+        };
+    }
+
 
     public DialogInterface.OnClickListener getMoveListener(final int type) {
         return new DialogInterface.OnClickListener() {

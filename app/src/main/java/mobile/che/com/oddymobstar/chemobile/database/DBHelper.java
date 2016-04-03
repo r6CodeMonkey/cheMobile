@@ -840,6 +840,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean isSatelliteListening(String key){
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + MISSILE_KEY + " as _id," + MISSILE_KEY + " FROM " + MISSILES_BY_GAME_OBJECT + " JOIN " + GAME_OBJECTS_TABLE + " ON " + MISSILES_BY_GAME_OBJECT + "." + MISSILE_KEY + " = " + GAME_OBJECTS_TABLE + "." + GAME_OBJECT_KEY + " WHERE " + MISSILES_BY_GAME_OBJECT + "." + GAME_OBJECT_KEY + "=? AND " + GAME_OBJECTS_TABLE + "." + GAME_OBJECT_STATUS + "=?", new String[]{key, Tags.MISSILE_TARGET});
+
+        //fix above wrong query
+        boolean res = false;
+        while (cursor.moveToNext()) {
+            res = true;
+        }
+
+        cursor.close();
+        return res;
+    }
+
 
     //on shut down.
     public void close() {
