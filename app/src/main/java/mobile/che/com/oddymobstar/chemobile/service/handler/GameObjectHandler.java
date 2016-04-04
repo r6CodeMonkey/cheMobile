@@ -58,6 +58,16 @@ public class GameObjectHandler extends MessageHandler {
 
                 Log.d("purchase", "have purchased " + model.getType() + " " + model.getSubType());
                 break;
+            case Tags.SATELLITE_START_LISTEN:
+                model = dbHelper.getGameObject(gameObject.getKey());
+                model.setStatus(Tags.SATELLITE_START_LISTEN);
+                dbHelper.updateGameObject(model, true, false);
+                break;
+            case Tags.SATELLITE_STOP_LISTEN:
+                model = dbHelper.getGameObject(gameObject.getKey());
+                model.setStatus(Tags.SATELLITE_STOP_LISTEN);
+                dbHelper.updateGameObject(model, true, false);
+                break;
             case Tags.GAME_OBJECT_ADD:
                 //if we receive an ad
                 model = dbHelper.getGameObject(gameObject.getKey());

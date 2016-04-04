@@ -115,7 +115,7 @@ public class GameHandler {
         GameObject gameObject = controller.dbHelper.getGameObject(key);
 
         boolean targetSet = controller.dbHelper.hasTargetSet(key);
-        boolean isListening = controller.dbHelper.isSatelliteListening(key);
+        boolean isListening = controller.dbHelper.isSatelliteListening(key, Tags.SATELLITE_START_LISTEN);
 
 
         String title = "";
@@ -427,16 +427,72 @@ public class GameHandler {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                controller.gameController.gameHelper.getSatelliteListenerDialog(gameObject).show();
+                controller.gameController.gameHelper.getSatelliteListenerDialog(gameObject, false).show();
             }
         }, 3000);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.getSatelliteMessage(gameObject,controller.gameController.currentValidators, controller.locationListener.getCurrentLocation(), Tags.SATELLITE_START_LISTEN));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 
     }
 
     public void handleStopListening(String key){
 
+        final GameObject gameObject = controller.dbHelper.getGameObject(key);
+
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+
+        //now add our grids...like the move one..
+        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
+
+        //we need to grab out each UTM, and its children.
+        Set<UTM> keys = mapGridInfo.keySet();
+
+        for (UTM utm : keys) {
+            //grab our sub utm list...
+            List<SubUTM> subUTMs = mapGridInfo.get(utm);
+
+            PolygonOptions utmOptions = UTMGridCreator.getUTMGrid(utm).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
+
+            for (SubUTM subUTM : subUTMs) {
+                controller.gameController.currentValidators.add(subUTM);
+                //
+                PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(subUTM, utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
+                validatorGrids.add(controller.mapHelper.getMap().addPolygon(subUtmOptions));
+            }
+
+        }
+        //delay a dialog...with got it as usual.
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.gameHelper.getSatelliteListenerDialog(gameObject, true).show();
+            }
+        }, 3000);
+
         //simply de-register from the grids we are listening too.  remove from map as well?  yeah
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    controller.cheService.writeToSocket(controller.messageFactory.getSatelliteMessage(gameObject,controller.gameController.currentValidators, controller.locationListener.getCurrentLocation(), Tags.SATELLITE_STOP_LISTEN));
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
     }
 

@@ -672,7 +672,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAddedGameObjects() {
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + "," + GAME_OBJECT_MASS + "," + GAME_OBJECT_STRENGTH + "," + GAME_OBJECT_MAX_SPEED + "," + GAME_OBJECT_IMPACT_RADIUS + "," + GAME_OBJECT_RANGE + "," + GAME_OBJECT_FORCE + "," + GAME_OBJECT_MAX_STRENGTH + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " != " + GameObjectGridFragment.MISSILE + " AND " + GAME_OBJECT_STATUS + " IN ('" + Tags.GAME_OBJECT_IS_FIXED + "','"+Tags.GAME_OBJECT_HIT+"','"+Tags.GAME_OBJECT_REPAIR+"') ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + "," + GAME_OBJECT_MASS + "," + GAME_OBJECT_STRENGTH + "," + GAME_OBJECT_MAX_SPEED + "," + GAME_OBJECT_IMPACT_RADIUS + "," + GAME_OBJECT_RANGE + "," + GAME_OBJECT_FORCE + "," + GAME_OBJECT_MAX_STRENGTH + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " != " + GameObjectGridFragment.MISSILE + " AND " + GAME_OBJECT_STATUS + " IN ('" + Tags.GAME_OBJECT_IS_FIXED + "','"+Tags.GAME_OBJECT_HIT+"','"+Tags.GAME_OBJECT_REPAIR+"','"+Tags.SATELLITE_STOP_LISTEN+"','"+Tags.SATELLITE_START_LISTEN+"') ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
     }
 
     public Cursor getMovingGameObjects() {
@@ -840,8 +840,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean isSatelliteListening(String key){
-        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + MISSILE_KEY + " as _id," + MISSILE_KEY + " FROM " + MISSILES_BY_GAME_OBJECT + " JOIN " + GAME_OBJECTS_TABLE + " ON " + MISSILES_BY_GAME_OBJECT + "." + MISSILE_KEY + " = " + GAME_OBJECTS_TABLE + "." + GAME_OBJECT_KEY + " WHERE " + MISSILES_BY_GAME_OBJECT + "." + GAME_OBJECT_KEY + "=? AND " + GAME_OBJECTS_TABLE + "." + GAME_OBJECT_STATUS + "=?", new String[]{key, Tags.MISSILE_TARGET});
+    public boolean isSatelliteListening(String key, String status){
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + " FROM " + GAME_OBJECTS_TABLE + " WHERE "  + GAME_OBJECT_KEY + "=? AND "  + GAME_OBJECT_STATUS + "=?", new String[]{key, status});
 
         //fix above wrong query
         boolean res = false;

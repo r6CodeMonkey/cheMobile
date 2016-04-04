@@ -250,13 +250,13 @@ public class GameHelper {
         return dialog;
     }
 
-    public AlertDialog getSatelliteListenerDialog(final GameObject gameObject){
+    public AlertDialog getSatelliteListenerDialog(final GameObject gameObject, boolean stop){
         AlertDialog.Builder builder = new AlertDialog.Builder(main);
 
         controller.gameController.currentGameObject = gameObject;
 
         builder.setTitle("Satellite Range");
-        builder.setMessage("Will be registered in each purple grid.\nCan identify objects moving within");
+        builder.setMessage(stop ? "Unregistering from purple grids" : "Will be registered in each purple grid.\nCan identify objects moving within");
         builder.setCancelable(false);
 
         builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {

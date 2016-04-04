@@ -213,6 +213,32 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
+    private message.GameObject createGameObjectValidator(GameObject gameObject,  List<SubUTM> validators, String tag){
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(tag);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+
+        gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(),
+                gameObject.getUtmLat(), gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));
+
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(),
+                gameObject.getUtmLat(), gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));
+
+
+        List<UTM> utms = new ArrayList<>();
+        for (SubUTM subUTM : validators) {
+            utms.add(createUTM(subUTM.getSubUtmLat(), subUTM.getSubUtmLong()));
+        }
+
+        gameObjectMessage.setDestinationValidator(utms);
+
+        return gameObjectMessage;
+    }
+
     private message.GameObject createGameObjectMove(GameObject gameObject, List<SubUTM> validators, LatLng destination) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
@@ -515,6 +541,25 @@ public class MessageFactory {
         Log.d("repair", "repair message " + cheMessage.toString());
 
         return cheMessage;
+    }
+
+    public CheMessage getSatelliteMessage(GameObject gameObject,List<SubUTM> validators, Location location, String tag) throws NoSuchAlgorithmException{
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObjectValidator(gameObject,validators, tag);
+
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("satellite", "satellite message " + cheMessage.toString());
+
+
+        return cheMessage;
+
     }
 
 

@@ -159,6 +159,12 @@ public class ProjectCheController {
         mapHelper = new MapHelper(main, this);
         locationHelper = new LocationHelper(this);
 
+        locationHelper.initLocationUpdates();
+
+        if (locationHelper.getLocationUpdates() == null) {
+            mapHelper.initLocationUpdates();
+        }
+
 
         serviceConnection = new ServiceConnection() {
             @Override
