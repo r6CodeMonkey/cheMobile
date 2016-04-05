@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -293,7 +294,7 @@ public class GameHandler {
 
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
 
-        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
+        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(5, gameObject.getLatitude(), gameObject.getLongitude());
 
         //we need to grab out each UTM, and its children.
         Set<UTM> keys = mapGridInfo.keySet();
@@ -305,6 +306,7 @@ public class GameHandler {
             PolygonOptions utmOptions = UTMGridCreator.getUTMGrid(utm).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
 
             for (SubUTM subUTM : subUTMs) {
+
                 controller.gameController.currentValidators.add(subUTM);
                 //
                 PolygonOptions subUtmOptions = UTMGridCreator.getSubUTMGrid(subUTM, utmOptions).strokeColor(main.getResources().getColor(android.R.color.holo_orange_dark));
@@ -403,16 +405,18 @@ public class GameHandler {
         controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
 
         //now add our grids...like the move one..
-        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
+        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(5, gameObject.getLatitude(), gameObject.getLongitude());
+
 
         //we need to grab out each UTM, and its children.
         Set<UTM> keys = mapGridInfo.keySet();
 
         for (UTM utm : keys) {
-            //grab our sub utm list...
+             //grab our sub utm list...
             List<SubUTM> subUTMs = mapGridInfo.get(utm);
 
             PolygonOptions utmOptions = UTMGridCreator.getUTMGrid(utm).strokeColor(main.getResources().getColor(android.R.color.holo_purple));
+
 
             for (SubUTM subUTM : subUTMs) {
                 controller.gameController.currentValidators.add(subUTM);
@@ -453,7 +457,7 @@ public class GameHandler {
         controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
 
         //now add our grids...like the move one..
-        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(3, gameObject.getLatitude(), gameObject.getLongitude());
+        Map<UTM, List<SubUTM>> mapGridInfo = new GridCreator().getAndroidGrids(5, gameObject.getLatitude(), gameObject.getLongitude());
 
         //we need to grab out each UTM, and its children.
         Set<UTM> keys = mapGridInfo.keySet();
