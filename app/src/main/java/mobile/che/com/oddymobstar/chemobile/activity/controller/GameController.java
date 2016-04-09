@@ -12,6 +12,7 @@ import mobile.che.com.oddymobstar.chemobile.util.game.GameTimer;
 import mobile.che.com.oddymobstar.chemobile.util.game.MapExplosionTimer;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.DeployToBaseDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
 import util.map.SubUTM;
@@ -44,6 +45,7 @@ public class GameController {
     public ArmDialog armDialog;
     public GameObjectActionsDialog actionsDialog;
     public MissileArmDialog missileArmDialog;
+    public DeployToBaseDialog deployToBaseDialog;
 
     public GameController(ProjectCheActivity main, ProjectCheController controller) {
         gameHandler = new GameHandler(main, controller);

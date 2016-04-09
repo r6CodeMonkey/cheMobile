@@ -59,6 +59,9 @@ public class ViewListener {
                 final String action = GameSubTypeAdapter.getStatus(cursor);
                 final String title = GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))).replace("\n", " ") + "\nKey: " + cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
                 final String key = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
+                final int subType = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE));
+                final int type = cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE));
+
 
                 if (action.equals("Arm")) {
                     controller.gameController.gameHandler.armDialog(title, key,
@@ -98,14 +101,27 @@ public class ViewListener {
                     //ideally need to wait a little bit.
                     if (deploy) {
 
+                        //if we are an aircraft or boats we need to deploy at port / airport
+                        if(subType == GameObjectTypes.CARRIER || subType == GameObjectTypes.FIGHTER || subType == GameObjectTypes.BOMBER ||
+                                subType == GameObjectTypes.SUB || subType == GameObjectTypes.FAC || subType == GameObjectTypes.DESTROYER){
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    controller.gameController.gameHandler.deployToBaseDialog(key, type);
+                                }
+                            }, 3000);
 
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                controller.gameController.gameHandler.deployDialog(action, title, key);
-                            }
-                        }, 3000);
+                        }else {
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    controller.gameController.gameHandler.deployDialog(action, title, key);
+                                }
+                            }, 3000);
+                        }
                     }
 
                 }

@@ -714,6 +714,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor getAvailablePorts() {
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE + " WHERE " +GAME_OBJECT_SUBTYPE + "=" + GameObjectTypes.PORT + " AND "+GAME_OBJECT_STATUS+"='"+Tags.GAME_OBJECT_IS_FIXED+"' ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", null);
+    }
+
+    public Cursor getAvailableAirPorts(){
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE +" WHERE "+GAME_OBJECT_SUBTYPE +"="+GameObjectTypes.AIRPORT+" AND "+GAME_OBJECT_STATUS+"='"+Tags.GAME_OBJECT_IS_FIXED+"' ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC",null);
+    }
+
     public Cursor getAvailableMissiles(String key) {
         return this.getReadableDatabase().rawQuery("SELECT " + MISSILE_KEY + " as _id, " + MISSILE_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + MISSILES_BY_GAME_OBJECT + " JOIN " + GAME_OBJECTS_TABLE + " ON " + GAME_OBJECTS_TABLE + "." + GAME_OBJECT_KEY + "=" + MISSILES_BY_GAME_OBJECT + "." + MISSILE_KEY + "  WHERE " + MISSILES_BY_GAME_OBJECT + "." + GAME_OBJECT_KEY + "= ?  ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", new String[]{key});
     }

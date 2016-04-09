@@ -21,6 +21,7 @@ import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
+import mobile.che.com.oddymobstar.chemobile.adapter.DeployBaseAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.MissileAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
@@ -30,6 +31,7 @@ import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.ArmDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.DeployToBaseDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
 import util.GameObjectTypes;
@@ -215,33 +217,59 @@ public class GameHandler {
                 }
                 break;
             case GameObjectGridFragment.AIR:  //really need a takeoff too.  ie move, take off, land etc....anyway.  this can go later.
-                switch (gameObject.getStatus()) {
-                    case Tags.GAME_OBJECT_IS_MOVING:
-                        title3 = GameObjectActionsDialog.LAND;
-                        listener3 = controller.gameController.gameListener.getLandingListener();
-                        if (targetSet) {
-                            title = GameObjectActionsDialog.LAUNCH;
+                if (gameObject.getSubType() == GameObjectTypes.ARMED_DRONE || gameObject.getSubType() == GameObjectTypes.MINI_DRONE) {
+                    switch (gameObject.getStatus()) {
+                        case Tags.GAME_OBJECT_IS_MOVING:
+                            //drones dont need to land.  yeah simplify it....but they are in the air.
+                            if(gameObject.getSubType() == GameObjectTypes.ARMED_DRONE) {
+                                if (targetSet) {
+                                    title = GameObjectActionsDialog.LAUNCH;
+                                    listener = controller.gameController.gameListener.getLaunchListener();
+                                    title2 = GameObjectActionsDialog.CANCEL;
+                                    listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                                } else {
+                                    title = GameObjectActionsDialog.TARGET;
+                                    listener = controller.gameController.gameListener.getTargetListener();
+                                }
+                            }
+                            break;
+                        case Tags.GAME_OBJECT_IS_FIXED:
+                            title3 = GameObjectActionsDialog.MOVE;
+                            listener3 = controller.gameController.gameListener.getMoveListener(type);
+                            if(gameObject.getSubType() == GameObjectTypes.ARMED_DRONE) {
+                                if (targetSet) {
+                                    title = GameObjectActionsDialog.LAUNCH;
+                                    listener = controller.gameController.gameListener.getLaunchListener();
+                                    title2 = GameObjectActionsDialog.CANCEL;
+                                    listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                                } else {
+                                    title = GameObjectActionsDialog.TARGET;
+                                    listener = controller.gameController.gameListener.getTargetListener();
+                                }
+                            }
+                            break;
+                    }
+                }else{
+                    //we are bombers, fighters etc.  so they are different.  simply have a flight plan and missile routes.
+                    switch (gameObject.getStatus()) {
+                        case Tags.GAME_OBJECT_IS_MOVING:
+                            if (targetSet) {
+                                title = GameObjectActionsDialog.LAUNCH;
+                                listener = controller.gameController.gameListener.getLaunchListener();
+                                title2 = GameObjectActionsDialog.CANCEL;
+                                listener2 = controller.gameController.gameListener.getCancelTargetListener();
+                            } else {
+                                title = GameObjectActionsDialog.TARGET;
+                                listener = controller.gameController.gameListener.getTargetListener();
+                            }
+                            break;
+                        case Tags.GAME_OBJECT_IS_FIXED:
+                            //all we can do is take off....
+                            title = GameObjectActionsDialog.TAKEOFF;
                             listener = controller.gameController.gameListener.getLaunchListener();
-                            title2 = GameObjectActionsDialog.CANCEL;
-                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        } else {
-                            title = GameObjectActionsDialog.TARGET;
-                            listener = controller.gameController.gameListener.getTargetListener();
-                        }
-                        break;
-                    case Tags.GAME_OBJECT_IS_FIXED:
-                        title3 = GameObjectActionsDialog.MOVE;
-                        listener3 = controller.gameController.gameListener.getMoveListener(type);
-                        if (targetSet) {
-                            title = GameObjectActionsDialog.LAUNCH;
-                            listener = controller.gameController.gameListener.getLaunchListener();
-                            title2 = GameObjectActionsDialog.CANCEL;
-                            listener2 = controller.gameController.gameListener.getCancelTargetListener();
-                        } else {
-                            title = GameObjectActionsDialog.TARGET;
-                            listener = controller.gameController.gameListener.getTargetListener();
-                        }
-                        break;
+
+                            break;
+                    }
                 }
                 break;
 
@@ -263,6 +291,50 @@ public class GameHandler {
         controller.gameController.actionsDialog.show(transaction, "dialog");
     }
 
+
+    public void deployToBaseDialog(String key, int type){
+
+
+        Cursor availableBases = null;
+
+        switch(type){
+            case GameObjectGridFragment.AIR:
+                availableBases = controller.dbHelper.getAvailableAirPorts();
+                break;
+            case GameObjectGridFragment.SEA:
+                availableBases = controller.dbHelper.getAvailablePorts();
+                break;
+        }
+
+        if(availableBases.getCount() > 0) {
+            //firstly offer list bases, or say no base built to deploy to.
+            controller.gameController.deployToBaseDialog =
+                    DeployToBaseDialog.newInstance(new DeployBaseAdapter(main, availableBases, true),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                              /*  try {
+                                    handleDeploy(controller.gameController.deployDialog.getGameObjectKey());
+                                } catch (NoSuchAlgorithmException e) {
+
+                                } */
+                                }
+                            }
+                            , new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    //
+                                    dialog.dismiss();
+                                }
+                            });
+            android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+            controller.gameController.deployToBaseDialog.show(transaction, "dialog");
+        }
+        else {
+            Toast.makeText(main, "No Bases Available", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void deployDialog(String action, String title, String key) {
         //add a popup to saying do you wish to deploy here.....

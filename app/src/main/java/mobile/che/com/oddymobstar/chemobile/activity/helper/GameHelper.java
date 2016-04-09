@@ -106,8 +106,14 @@ public class GameHelper {
             public void run() {
                 purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.SATELLITE, 2);
             }
-        }, 1000);
+        }, 2500);
 
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.AIRPORT, 1);
+            }
+        }, 3500);
 
     }
 
@@ -128,11 +134,20 @@ public class GameHelper {
 
     public void seaInit() {
         //1 fac  .. probably should be none in reality.
+        purchase(GameObjectGridFragment.SEA, GameObjectTypes.CARRIER, 1);
     }
 
     public void airInit() {
         //2 mini drones
         purchase(GameObjectGridFragment.AIR, GameObjectTypes.MINI_DRONE, 2);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                purchase(GameObjectGridFragment.AIR, GameObjectTypes.FIGHTER, 1);
+            }
+        }, 1000);
     }
 
     public void missileInit() {
