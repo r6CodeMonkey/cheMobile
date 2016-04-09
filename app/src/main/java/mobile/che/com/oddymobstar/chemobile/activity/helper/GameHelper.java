@@ -288,9 +288,46 @@ public class GameHelper {
                         }
 
                         controller.gameController.gameHandler.validatorGrids.clear();
-                    }});
+                    }
+                });
 
               }
+        });
+
+
+        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    dialog.dismiss();
+                }
+                return true;
+            }
+        });
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+    }
+
+    public AlertDialog getTakeOffDialog(final GameObject gameObject){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        controller.gameController.currentGameObject = gameObject;
+
+        builder.setTitle("Flight Range");
+        builder.setMessage("The range is within the red circle\nSelect a point to fly out to and back to your current base\nThe outer circle is your max range\n" +
+                "for landing at another airport or carrier\nYou have 20 seconds to complete it!");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+                controller.gameController.GAME_STATE = GameController.GAME_OBJECT_FLYING_STATE;
+                controller.gameController.gameTimer.startTimer(1000 * 20);
+            }
         });
 
 

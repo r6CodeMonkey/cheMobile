@@ -23,6 +23,7 @@ import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheContro
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.DeployBaseAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.MissileAdapter;
+import mobile.che.com.oddymobstar.chemobile.adapter.PortAdapter;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
@@ -34,6 +35,7 @@ import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployToBaseDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.PortDialog;
 import util.GameObjectTypes;
 import util.Tags;
 import util.map.GridCreator;
@@ -148,7 +150,7 @@ public class GameHandler {
                     listener3 = controller.gameController.gameListener.getRepairListener();
                 }
                 //as long as we are not a satellite
-                if (gameObject.getSubType() != GameObjectTypes.SATELLITE) {
+                if (gameObject.getSubType() == GameObjectTypes.GARRISON || gameObject.getSubType() == GameObjectTypes.OUTPOST) {
                     if (targetSet) {
                         title = GameObjectActionsDialog.LAUNCH;
                         listener = controller.gameController.gameListener.getLaunchListener();
@@ -158,13 +160,22 @@ public class GameHandler {
                         title = GameObjectActionsDialog.TARGET;
                         listener = controller.gameController.gameListener.getTargetListener();
                     }
-                }else{
+                }else if (gameObject.getSubType() == GameObjectTypes.SATELLITE){
                     if(isListening){
                        title = GameObjectActionsDialog.STOP_LISTENING;
                         listener = controller.gameController.gameListener.getStopListeningListener();
                     }else{
                         title = GameObjectActionsDialog.START_LISTENING;
                         listener = controller.gameController.gameListener.getStartListeningListener();
+                    }
+                }else{
+                    //port or aiport.  basically they can do nothing...but can take off / launch things
+                    if(gameObject.getSubType() == GameObjectTypes.AIRPORT){
+                        title = "Handle Flights";
+                        listener = controller.gameController.gameListener.getFlightListener();
+                    }else{
+                        title = "Handle Launches";
+                        listener = controller.gameController.gameListener.getBoatLaunchListener();
                     }
                 }
                 break;
@@ -277,7 +288,7 @@ public class GameHandler {
                         case Tags.GAME_OBJECT_IS_FIXED:
                             //all we can do is take off....
                             title = GameObjectActionsDialog.TAKEOFF;
-                            listener = controller.gameController.gameListener.getLaunchListener();
+                            listener = controller.gameController.gameListener.getTakeOffListener();
 
                             break;
                     }
@@ -330,7 +341,7 @@ public class GameHandler {
                                     Cursor base = controller.gameController.deployToBaseDialog.getSelectedObject();
                                     GameObject gameObject = controller.dbHelper.getGameObject(base.getString(base.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
 
-                                    controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+                                    controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 20);
 
                                     try {
                                     handleDeployToBase(key, gameObject);
@@ -481,8 +492,24 @@ public class GameHandler {
 
     }
 
-    //think there is nothing to do here
-    public void handleTakeoff(String key) {
+    public void handTakeOff(String key) {
+        final GameObject gameObject = controller.dbHelper.getGameObject(key);
+        //popup / zoom out / show grid that will be listened to and then send message.  as user can simply remove afterwards.
+        controller.mapHandler.addSphere(gameObject, gameObject.getRange(), true);
+        controller.mapHandler.addSphere(gameObject, gameObject.getRange()*2, false);
+
+        //scale this.  ie if missile range < 5000 needs to be more like 11....ie  .. ie per metre 10 works better.  so
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, (float) (gameObject.getRange() / 500.0f));
+
+        //we now show a popup
+        //now we need to delay slightly, and then start timer and dialog.
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.gameHelper.getTakeOffDialog(gameObject).show();
+            }
+        }, 3000);
 
     }
 
@@ -582,7 +609,7 @@ public class GameHandler {
             public void run() {
 
                 try {
-                    controller.cheService.writeToSocket(controller.messageFactory.getSatelliteMessage(gameObject,controller.gameController.currentValidators, controller.locationListener.getCurrentLocation(), Tags.SATELLITE_STOP_LISTEN));
+                    controller.cheService.writeToSocket(controller.messageFactory.getSatelliteMessage(gameObject, controller.gameController.currentValidators, controller.locationListener.getCurrentLocation(), Tags.SATELLITE_STOP_LISTEN));
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
@@ -641,6 +668,80 @@ public class GameHandler {
                 }
             }
         }).start();
+
+    }
+
+    public void handleBoatLaunch(final String key) {
+
+        GameObject gameObject = controller.dbHelper.getGameObject(key);
+
+        Cursor availableBoats = controller.dbHelper.getSeaVesselsAtPort(gameObject.getLatitude(), gameObject.getLongitude());
+
+        if (availableBoats.getCount() > 0) {
+
+
+            controller.gameController.portDialog =
+                    PortDialog.newInstance("Launch", new PortAdapter(main, availableBoats, true),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                       /*         try {
+                                    handleDeploy(controller.gameController.deployDialog.getGameObjectKey());
+                                } catch (NoSuchAlgorithmException e) {
+
+                                } */
+                                }
+                            }
+                            , new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    //
+                                    dialog.dismiss();
+                                }
+                            });
+            android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+            controller.gameController.portDialog.show(transaction, "dialog");
+
+        }else{
+            Toast.makeText(main, "No Boats deployed at Port", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void handleFlightTakeoff(final String key){
+        GameObject gameObject = controller.dbHelper.getGameObject(key);
+
+        Cursor availableAircraft = controller.dbHelper.getAircraftsAtAirport(gameObject.getLatitude(), gameObject.getLongitude());
+
+        if (availableAircraft.getCount() > 0) {
+
+
+            controller.gameController.portDialog =
+                    PortDialog.newInstance("TakeOff", new PortAdapter(main, availableAircraft, true),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                       /*         try {
+                                    handleDeploy(controller.gameController.deployDialog.getGameObjectKey());
+                                } catch (NoSuchAlgorithmException e) {
+
+                                } */
+                                }
+                            }
+                            , new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    //
+                                    dialog.dismiss();
+                                }
+                            });
+            android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
+
+            controller.gameController.portDialog.show(transaction, "dialog");
+
+        }else{
+            Toast.makeText(main, "No Aircraft deployed at Airport", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

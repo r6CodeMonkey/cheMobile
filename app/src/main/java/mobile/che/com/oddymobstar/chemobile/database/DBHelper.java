@@ -672,7 +672,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAddedGameObjects() {
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + "," + GAME_OBJECT_MASS + "," + GAME_OBJECT_STRENGTH + "," + GAME_OBJECT_MAX_SPEED + "," + GAME_OBJECT_IMPACT_RADIUS + "," + GAME_OBJECT_RANGE + "," + GAME_OBJECT_FORCE + "," + GAME_OBJECT_MAX_STRENGTH + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " != " + GameObjectGridFragment.MISSILE + " AND " + GAME_OBJECT_STATUS + " IN ('" + Tags.GAME_OBJECT_IS_FIXED + "','"+Tags.GAME_OBJECT_HIT+"','"+Tags.GAME_OBJECT_REPAIR+"','"+Tags.SATELLITE_STOP_LISTEN+"','"+Tags.SATELLITE_START_LISTEN+"') ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + "," + GAME_OBJECT_MASS + "," + GAME_OBJECT_STRENGTH + "," + GAME_OBJECT_MAX_SPEED + "," + GAME_OBJECT_IMPACT_RADIUS + "," + GAME_OBJECT_RANGE + "," + GAME_OBJECT_FORCE + "," + GAME_OBJECT_MAX_STRENGTH + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_UTM_LAT + " IS NOT NULL AND " + GAME_OBJECT_TYPE + " !=" + GameObjectGridFragment.MISSILE +" AND " + GAME_OBJECT_STATUS + " IN ('" + Tags.GAME_OBJECT_IS_FIXED + "','"+Tags.GAME_OBJECT_HIT+"','"+Tags.GAME_OBJECT_REPAIR+"','"+Tags.SATELLITE_STOP_LISTEN+"','"+Tags.SATELLITE_START_LISTEN+"') ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
     }
 
     public Cursor getMovingGameObjects() {
@@ -712,6 +712,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id," + GAME_OBJECT_KEY + "," + GAME_OBJECT_STATUS + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + "," + GAME_OBJECT_LAT + "," + GAME_OBJECT_LONG + "," + GAME_OBJECT_UTM_LAT + "," + GAME_OBJECT_UTM_LONG + "," + GAME_OBJECT_DEST_LAT + "," + GAME_OBJECT_DEST_LONG + "," + GAME_OBJECT_SUBUTM_LAT + "," + GAME_OBJECT_SUBUTM_LONG + "," + GAME_OBJECT_MASS + "," + GAME_OBJECT_STRENGTH + "," + GAME_OBJECT_MAX_SPEED + "," + GAME_OBJECT_IMPACT_RADIUS + "," + GAME_OBJECT_RANGE + "," + GAME_OBJECT_FORCE + "," + GAME_OBJECT_MAX_STRENGTH + " FROM " + GAME_OBJECTS_TABLE + " WHERE " + GAME_OBJECT_TYPE + " IN (" + GameObjectGridFragment.LAND + "," + GameObjectGridFragment.AIR + "," + GameObjectGridFragment.SEA + ") AND TRIM(" + GAME_OBJECT_UTM_LAT + ") IS NOT NULL ORDER BY " + GAME_OBJECT_SUBTYPE + " ASC", null);
         }
 
+    }
+
+
+    public Cursor getAircraftsAtAirport(double lat, double lng){
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE + " WHERE " +GAME_OBJECT_TYPE + "=" + GameObjectGridFragment.AIR + " AND "+GAME_OBJECT_LAT+"=? AND "+GAME_OBJECT_LONG+"=? ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", new String[]{String.valueOf(lat), String.valueOf(lng)});
+    }
+
+    public Cursor getSeaVesselsAtPort(double lat, double lng){
+        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE + " WHERE " +GAME_OBJECT_TYPE + "=" + GameObjectGridFragment.SEA + " AND "+GAME_OBJECT_LAT+"=? AND "+GAME_OBJECT_LONG+"=?  ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", new String[]{String.valueOf(lat), String.valueOf(lng)});
     }
 
     public Cursor getAvailablePorts() {

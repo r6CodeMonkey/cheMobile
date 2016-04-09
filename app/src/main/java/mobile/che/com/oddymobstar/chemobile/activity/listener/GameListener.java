@@ -38,6 +38,9 @@ public class GameListener {
                     case GameController.GAME_OBJECT_TARGET_STATE:
                         controller.gameController.gameHandler.handleTarget(latLng);
                         break;
+                    case GameController.GAME_OBJECT_FLYING_STATE:
+                        //did we click an icon?
+                        break;
                     case GameController.DEFAULT_STATE: //nothing to do...your too late...
                         break;
                 }
@@ -124,6 +127,39 @@ public class GameListener {
                 //neutral action
                 dialog.dismiss();
                 controller.gameController.gameHandler.handleStartListening(controller.gameController.actionsDialog.getGameObjectKey());
+            }
+        };
+    }
+
+    public DialogInterface.OnClickListener getTakeOffListener(){
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, final int which) {
+                //neutral action
+                dialog.dismiss();
+                controller.gameController.gameHandler.handTakeOff(controller.gameController.actionsDialog.getGameObjectKey());
+            }
+        };
+    }
+
+    public DialogInterface.OnClickListener getBoatLaunchListener(){
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, final int which) {
+                //neutral action
+                dialog.dismiss();
+                controller.gameController.gameHandler.handleBoatLaunch(controller.gameController.actionsDialog.getGameObjectKey());
+            }
+        };
+    }
+
+    public DialogInterface.OnClickListener getFlightListener(){
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, final int which) {
+                //neutral action
+                dialog.dismiss();
+                controller.gameController.gameHandler.handleFlightTakeoff(controller.gameController.actionsDialog.getGameObjectKey());
             }
         };
     }

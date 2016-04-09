@@ -15,6 +15,7 @@ import mobile.che.com.oddymobstar.chemobile.util.widget.DeployDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.DeployToBaseDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GameObjectActionsDialog;
 import mobile.che.com.oddymobstar.chemobile.util.widget.MissileArmDialog;
+import mobile.che.com.oddymobstar.chemobile.util.widget.PortDialog;
 import util.map.SubUTM;
 
 /**
@@ -25,6 +26,9 @@ public class GameController {
     public static final int DEFAULT_STATE = -1;
     public static final int GAME_OBJECT_MOVE_STATE = 0;
     public static final int GAME_OBJECT_TARGET_STATE = 1;
+    public static final int GAME_OBJECT_FLYING_STATE = 2;
+
+
 
     public static int GAME_STATE = DEFAULT_STATE;
 
@@ -46,6 +50,7 @@ public class GameController {
     public GameObjectActionsDialog actionsDialog;
     public MissileArmDialog missileArmDialog;
     public DeployToBaseDialog deployToBaseDialog;
+    public PortDialog portDialog;
 
     public GameController(ProjectCheActivity main, ProjectCheController controller) {
         gameHandler = new GameHandler(main, controller);

@@ -10,6 +10,7 @@ import message.Missile;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
+import util.GameObjectTypes;
 import util.Tags;
 
 /**
@@ -76,7 +77,12 @@ public class GameObjectHandler extends MessageHandler {
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
                 model = updateLocation(model, gameObject);
-                model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
+                if(model.getSubType() != GameObjectTypes.CARRIER || model.getSubType() != GameObjectTypes.BOMBER || model.getSubType() != GameObjectTypes.FAC || model.getSubType() != GameObjectTypes.FIGHTER
+                        || model.getSubType() != GameObjectTypes.DESTROYER || model.getSubType() != GameObjectTypes.SUB) {
+                    model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
+                }else{
+                    model.setStatus(Tags.GAME_OBJECT_DEPLOYED_TO_BASE);
+                }
 
                 dbHelper.updateGameObject(model, false, true);
 
