@@ -69,6 +69,17 @@ public class GameHandler {
 
     }
 
+    public void handleDeployToBase(String gameObjectKey, GameObject baseObject) throws NoSuchAlgorithmException{
+        final CheMessage cheMessage = controller.messageFactory.createDeployToBase(controller.dbHelper.getGameObject(gameObjectKey), baseObject, controller.locationListener.getCurrentLocation());
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                controller.cheService.writeToSocket(cheMessage);
+            }
+        }).start();
+    }
+
     public void handleArm(String gameObjectKey, Cursor gameObject) throws NoSuchAlgorithmException {
 
         final CheMessage cheMessage = controller.messageFactory.armExplosive(new GameObject(gameObject), controller.dbHelper.getGameObject(gameObjectKey), controller.locationListener.getCurrentLocation());
@@ -292,7 +303,7 @@ public class GameHandler {
     }
 
 
-    public void deployToBaseDialog(String key, int type){
+    public void deployToBaseDialog(final String key, int type){
 
 
         Cursor availableBases = null;
@@ -313,11 +324,19 @@ public class GameHandler {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, final int which) {
-                              /*  try {
-                                    handleDeploy(controller.gameController.deployDialog.getGameObjectKey());
-                                } catch (NoSuchAlgorithmException e) {
 
-                                } */
+                                    //need to handle it.  ie zoom to airport...and deploy it...simples.  and also send information to the server with a message.
+                                    //it can then take off!.
+                                    Cursor base = controller.gameController.deployToBaseDialog.getSelectedObject();
+                                    GameObject gameObject = controller.dbHelper.getGameObject(base.getString(base.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+
+                                    controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
+
+                                    try {
+                                    handleDeployToBase(key, gameObject);
+                                     } catch (NoSuchAlgorithmException e) {
+
+                                    }
                                 }
                             }
                             , new DialogInterface.OnCancelListener() {

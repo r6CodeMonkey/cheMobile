@@ -68,5 +68,9 @@ public class DeployToBaseDialog extends DialogFragment {
         return dialog;
     }
 
+    public Cursor getSelectedObject(){
+        return selectedObject;
+    }
+
 
 }

@@ -428,6 +428,27 @@ public class MessageFactory {
 
     }
 
+    public CheMessage createDeployToBase(GameObject gameObject, GameObject baseObject, Location location) throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        Location baseLocation = new Location("");
+        baseLocation.setLatitude(baseObject.getLatitude());
+        baseLocation.setLongitude(baseObject.getLongitude());
+        message.GameObject gameObjectMessage = createGameObject(gameObject, baseLocation);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("deploy", "deploy msg " + cheMessage.toString());
+
+        return cheMessage;
+
+    }
+
+
     public CheMessage armExplosive(GameObject gameObject, GameObject explosive, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
