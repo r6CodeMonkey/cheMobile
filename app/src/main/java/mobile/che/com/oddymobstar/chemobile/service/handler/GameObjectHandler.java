@@ -177,6 +177,21 @@ public class GameObjectHandler extends MessageHandler {
                             dbHelper.updateMissiles(model);
                         }
                         break;
+                    case Tags.GAME_OBJECT_DEPLOYED_TO_BASE:
+                        message = new Message();
+                        message.setTime(System.currentTimeMillis());
+                        message.setMessage("Game Object " + gameObject.getKey() + " Returned to Base in Sector " +
+                                gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
+                                gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+                        dbHelper.addVidiNews(message);
+                        model = dbHelper.getGameObject(gameObject.getKey());
+                        if (model != null) {
+                            model = updateLocation(model, gameObject);
+                            model.setStatus(Tags.GAME_OBJECT_DEPLOYED_TO_BASE);
+                            dbHelper.updateGameObject(model, true, true);
+                            dbHelper.updateMissiles(model);
+                        }
+                        break;
                     case Tags.GAME_OBJECT_LEFT:
                         Log.d("game object moving", "game object has left sector"); //possible send a message only...
                         message = new Message();

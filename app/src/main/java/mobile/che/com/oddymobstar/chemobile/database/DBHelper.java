@@ -597,7 +597,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void handleGameObjectAdded(GameObject gameObject, boolean hasStopped) {
         if (messageHandler != null) {
 
-            if (gameObject.getType() != GameObjectGridFragment.MISSILE && (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_FIXED) || gameObject.getStatus().trim().isEmpty())) {
+            if (gameObject.getType() != GameObjectGridFragment.MISSILE && (gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_FIXED) || gameObject.getStatus().trim().isEmpty()) || gameObject.getStatus().equals(Tags.GAME_OBJECT_DEPLOYED_TO_BASE)) {
                 messageHandler.addGameObject(gameObject, hasStopped);
             } else if (gameObject.getType() != GameObjectGridFragment.MISSILE && gameObject.getStatus().equals(Tags.GAME_OBJECT_IS_MOVING)) {
                 messageHandler.moveGameObject(gameObject);

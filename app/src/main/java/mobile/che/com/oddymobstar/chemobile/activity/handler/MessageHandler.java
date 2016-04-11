@@ -112,10 +112,9 @@ public class MessageHandler extends Handler {
 
 
         if (controller != null) {
-            controller.mapHandler.addGameObject(gameObject, false);
+               controller.mapHandler.addGameObject(gameObject, false);
 
             if (hasStopped) {
-
                 Log.d("add game object", "object has stopped");
                 controller.mapHandler.removeDestination(gameObject);
 
@@ -123,6 +122,7 @@ public class MessageHandler extends Handler {
         }
 
     }
+
 
     public void handleGameObjectDestroyed(final GameObject gameObject) {
         if (controller != null) {

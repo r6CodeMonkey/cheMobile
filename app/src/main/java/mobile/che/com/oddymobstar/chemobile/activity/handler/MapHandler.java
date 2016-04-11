@@ -27,6 +27,7 @@ import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import util.GameObjectTypes;
+import util.Tags;
 import util.map.SubUTM;
 import util.map.UTM;
 
@@ -211,9 +212,12 @@ public class MapHandler {
                     hue = BitmapDescriptorFactory.HUE_RED;  //red is better.  ie green to red.
                 }
 
-                markerMap.put(gameObject.getKey() + String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
-                        new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
-                        .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
+                if(!gameObject.getStatus().equals(Tags.GAME_OBJECT_DEPLOYED_TO_BASE)) {
+
+                    markerMap.put(gameObject.getKey() + String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
+                            new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
+                            .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
+                }
 
             }
         });

@@ -111,7 +111,7 @@ public class GameHelper {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.AIRPORT, 1);
+                purchase(GameObjectGridFragment.INFASTRUCTURE, GameObjectTypes.AIRPORT, 2);
             }
         }, 3500);
 
