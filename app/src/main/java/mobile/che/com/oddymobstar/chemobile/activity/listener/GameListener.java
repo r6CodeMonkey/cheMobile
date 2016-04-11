@@ -39,7 +39,7 @@ public class GameListener {
                         controller.gameController.gameHandler.handleTarget(latLng);
                         break;
                     case GameController.GAME_OBJECT_FLYING_STATE:
-                        //did we click an icon?
+                        controller.gameController.gameHandler.handleFlightRoundTrip(latLng);
                         break;
                     case GameController.DEFAULT_STATE: //nothing to do...your too late...
                         break;
@@ -131,16 +131,6 @@ public class GameListener {
         };
     }
 
-    public DialogInterface.OnClickListener getTakeOffListener(){
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, final int which) {
-                //neutral action
-                dialog.dismiss();
-                controller.gameController.gameHandler.handTakeOff(controller.gameController.actionsDialog.getGameObjectKey());
-            }
-        };
-    }
 
     public DialogInterface.OnClickListener getBoatLaunchListener(){
         return new DialogInterface.OnClickListener() {

@@ -285,12 +285,7 @@ public class GameHandler {
                                 listener = controller.gameController.gameListener.getTargetListener();
                             }
                             break;
-                        case Tags.GAME_OBJECT_IS_FIXED:
-                            //all we can do is take off....
-                            title = GameObjectActionsDialog.TAKEOFF;
-                            listener = controller.gameController.gameListener.getTakeOffListener();
 
-                            break;
                     }
                 }
                 break;
@@ -492,24 +487,27 @@ public class GameHandler {
 
     }
 
-    public void handTakeOff(String key) {
+    public void handleTakeOff(String key) {
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
-        //popup / zoom out / show grid that will be listened to and then send message.  as user can simply remove afterwards.
-        controller.mapHandler.addSphere(gameObject, gameObject.getRange(), true);
-        controller.mapHandler.addSphere(gameObject, gameObject.getRange()*2, false);
 
-        //scale this.  ie if missile range < 5000 needs to be more like 11....ie  .. ie per metre 10 works better.  so
-        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, (float) (gameObject.getRange() / 500.0f));
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 5);
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.mapHandler.addSphere(gameObject, gameObject.getRange(), false);
+            }},1000);
 
         //we now show a popup
         //now we need to delay slightly, and then start timer and dialog.
-        final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 controller.gameController.gameHelper.getTakeOffDialog(gameObject).show();
             }
-        }, 3000);
+        }, 2000);
 
     }
 
@@ -721,11 +719,22 @@ public class GameHandler {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, final int which) {
-                       /*         try {
-                                    handleDeploy(controller.gameController.deployDialog.getGameObjectKey());
-                                } catch (NoSuchAlgorithmException e) {
 
-                                } */
+                                    //need to embed.  round trip or fly to base
+                                    controller.gameController.gameHelper.getFlightTypeDialog(new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Cursor cursor = controller.gameController.portDialog.getSelectedObject();
+                                            handleTakeOff(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+                                        }
+                                    }, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }).show();
+
+
                                 }
                             }
                             , new DialogInterface.OnCancelListener() {
@@ -743,6 +752,35 @@ public class GameHandler {
             Toast.makeText(main, "No Aircraft deployed at Airport", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void handleFlightRoundTrip(final LatLng latLng) {
+        final GameObject gameObject = controller.gameController.currentGameObject;
+
+        Location start = new Location("");
+        start.setLatitude(gameObject.getLatitude());
+        start.setLongitude(gameObject.getLongitude());
+        Location target = new Location("");
+        target.setLatitude(latLng.latitude);
+        target.setLongitude(latLng.longitude);
+
+
+        if (start.distanceTo(target) > gameObject.getRange()) {
+            Toast.makeText(main, "Destination Outside Range!", Toast.LENGTH_SHORT).show();
+        } else {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        controller.cheService.writeToSocket(controller.messageFactory.roundTripMessage(gameObject, latLng, controller.locationListener.getCurrentLocation()));
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+        }
     }
 
     public void handleTarget(final LatLng latLng) {

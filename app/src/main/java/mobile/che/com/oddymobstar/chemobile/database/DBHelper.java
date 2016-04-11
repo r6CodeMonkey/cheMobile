@@ -39,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String MISSILES_BY_GAME_OBJECT = "MISSILES_BY_GAME_OBJECT";
     public static final String VIDIPRINT_TABLE = "VIDIPRINT_TABLE";
 
+
     public static final String UTM = "utm";
     public static final String SUBUTM = "subutm";
     //column tags
@@ -168,7 +169,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MISSILES_BY_GAME_OBJECT);
         db.execSQL(CREATE_VIDIPRINT_TABLE);
 
-
     }
 
     /*
@@ -180,8 +180,8 @@ public class DBHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL("DROP TABLE " + ALLIANCE_MEMBERS_TABLE);
         this.getWritableDatabase().execSQL("DROP TABLE " + ALLIANCES_TABLE);
         this.getWritableDatabase().execSQL("DROP TABLE " + CONFIG_TABLE);
-        this.getWritableDatabase().execSQL("DROP TABLE " + MESSAGE_TABLE); */
-        this.getWritableDatabase().execSQL(CREATE_VIDIPRINT_TABLE);
+        this.getWritableDatabase().execSQL("DROP TABLE " + MESSAGE_TABLE);
+        this.getWritableDatabase().execSQL(CREATE_VIDIPRINT_TABLE); */
     }
 
     @Override
@@ -356,6 +356,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+
     public void addGameObject(GameObject gameObject) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -427,6 +428,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete(VIDIPRINT_TABLE, MESSAGE_TIME + " < ?", new String[]{String.valueOf(time - (((1000 * 60) * 60) * 24))});
 
     }
+
 
     public void deleteMessage(Message message) {
         SQLiteDatabase db = this.getWritableDatabase();

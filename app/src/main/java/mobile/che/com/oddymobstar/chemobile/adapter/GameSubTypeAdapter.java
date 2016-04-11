@@ -117,8 +117,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
         switch (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE))) {
             //need to beef this up....once have more tables and data.
             case GameObjectGridFragment.INFASTRUCTURE:
-                return "Type "+cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE));
-              //  return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Build" : "Installed";
+                return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Build" : "Installed";
             case GameObjectGridFragment.SEA:
                 return cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_UTM_LAT)) == null ? "Deploy" : "Active";
             case GameObjectGridFragment.AIR:

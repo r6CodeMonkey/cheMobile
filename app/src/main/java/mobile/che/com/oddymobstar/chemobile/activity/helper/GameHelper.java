@@ -316,15 +316,13 @@ public class GameHelper {
         controller.gameController.currentGameObject = gameObject;
 
         builder.setTitle("Flight Range");
-        builder.setMessage("The range is within the red circle\nSelect a point to fly out to and back to your current base\nThe outer circle is your max range\n" +
-                "for landing at another airport or carrier\nYou have 20 seconds to complete it!");
+        builder.setMessage("The range is within the red circle\nSelect a point to fly out to\nYou have 20 seconds to complete it!");
         builder.setCancelable(false);
 
         builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 10);
                 controller.gameController.GAME_STATE = GameController.GAME_OBJECT_FLYING_STATE;
                 controller.gameController.gameTimer.startTimer(1000 * 20);
             }
@@ -345,6 +343,23 @@ public class GameHelper {
 
         return dialog;
     }
+
+    public AlertDialog getFlightTypeDialog(DialogInterface.OnClickListener roundTripListener, DialogInterface.OnClickListener transferListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        builder.setTitle("Flight Type");
+        builder.setMessage("You can fly to another base within your maximum range, or carry out a round trip and attack targets along the way");
+
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Transfer Flight", transferListener);
+        builder.setNeutralButton("Round Trip", roundTripListener);
+
+        android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+
+    };
 
     public AlertDialog getMissileTargetDialog(final GameObject gameObject, final GameObject missileObject) {
         AlertDialog.Builder builder = new AlertDialog.Builder(main);

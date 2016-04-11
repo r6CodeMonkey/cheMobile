@@ -77,8 +77,8 @@ public class GameObjectHandler extends MessageHandler {
                 model.setType(gameObject.getType());
                 model.setSubType(gameObject.getSubType());
                 model = updateLocation(model, gameObject);
-                if(model.getSubType() != GameObjectTypes.CARRIER || model.getSubType() != GameObjectTypes.BOMBER || model.getSubType() != GameObjectTypes.FAC || model.getSubType() != GameObjectTypes.FIGHTER
-                        || model.getSubType() != GameObjectTypes.DESTROYER || model.getSubType() != GameObjectTypes.SUB) {
+                if(model.getSubType() != GameObjectTypes.CARRIER && model.getSubType() != GameObjectTypes.BOMBER && model.getSubType() != GameObjectTypes.FAC && model.getSubType() != GameObjectTypes.FIGHTER
+                        && model.getSubType() != GameObjectTypes.DESTROYER && model.getSubType() != GameObjectTypes.SUB) {
                     model.setStatus(Tags.GAME_OBJECT_IS_FIXED);
                 }else{
                     model.setStatus(Tags.GAME_OBJECT_DEPLOYED_TO_BASE);
@@ -104,6 +104,16 @@ public class GameObjectHandler extends MessageHandler {
                     //its invalid we need to send to user...note we need the screen to say so
                     Log.d("invalid move", "invalid move");
                 }
+                break;
+            case Tags.GAME_OBJECT_MOVE_ROUNDTRIP:
+                model = dbHelper.getGameObject(gameObject.getKey());
+                model = updateLocation(model, gameObject);
+                model.setStatus(Tags.GAME_OBJECT_IS_MOVING);
+                //done....talking to myself...
+                model.setDestLatitude(gameObject.getDestinationUtmLocation().getLatitude());
+                model.setDestLongitude(gameObject.getDestinationUtmLocation().getLongitude());
+
+                dbHelper.updateGameObject(model, false, true);
                 break;
             case Tags.GAME_OBJECT_STOP:  //only if we actually tell it to stop.
                 model = dbHelper.getGameObject(gameObject.getKey());

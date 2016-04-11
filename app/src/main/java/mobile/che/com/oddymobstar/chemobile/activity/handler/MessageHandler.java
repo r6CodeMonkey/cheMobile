@@ -110,6 +110,7 @@ public class MessageHandler extends Handler {
 
     public void addGameObject(final GameObject gameObject, boolean hasStopped) {
 
+
         if (controller != null) {
             controller.mapHandler.addGameObject(gameObject, false);
 

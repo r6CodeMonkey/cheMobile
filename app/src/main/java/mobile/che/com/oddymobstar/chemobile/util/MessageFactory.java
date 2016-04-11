@@ -263,6 +263,26 @@ public class MessageFactory {
     }
 
 
+    private message.GameObject createGameObjectRoundTrip(GameObject gameObject,LatLng destination) {
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.GAME_OBJECT_MOVE_ROUNDTRIP);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+
+        gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(),
+                gameObject.getUtmLat(), gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation(destination.latitude, destination.longitude, "", "", "", ""));
+
+        List<UTM> utms = new ArrayList<>();
+
+        gameObjectMessage.setDestinationValidator(utms);
+
+        return gameObjectMessage;
+    }
+
     private Acknowledge createCheAcknowledge(String key) {
         Acknowledge acknowledge = new Acknowledge(true);
         acknowledge.create();
@@ -478,6 +498,22 @@ public class MessageFactory {
 
     }
 
+    public CheMessage roundTripMessage(GameObject gameObject,  LatLng destination, Location location) throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObjectRoundTrip(gameObject, destination);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "move msg " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
     public CheMessage moveGameObject(GameObject gameObject, List<SubUTM> validators, LatLng destination, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
@@ -494,6 +530,10 @@ public class MessageFactory {
 
         return cheMessage;
     }
+
+
+
+
 
     public CheMessage stopGameObject(GameObject gameObject, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
