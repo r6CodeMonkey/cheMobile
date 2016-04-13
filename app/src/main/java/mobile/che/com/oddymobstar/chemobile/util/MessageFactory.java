@@ -263,7 +263,7 @@ public class MessageFactory {
     }
 
 
-    private message.GameObject createGameObjectRoundTrip(GameObject gameObject,LatLng destination) {
+    private message.GameObject createGameObjectRoundTrip(GameObject gameObject, GameObject base, LatLng destination) {
         message.GameObject gameObjectMessage = new message.GameObject();
         gameObjectMessage.create();
 
@@ -279,6 +279,11 @@ public class MessageFactory {
         List<UTM> utms = new ArrayList<>();
 
         gameObjectMessage.setDestinationValidator(utms);
+
+        List<Missile> missiles = new ArrayList<>();
+        missiles.add(createMissile(base, gameObjectMessage.getUtmLocation(), destination));
+        gameObjectMessage.setMissiles(missiles);
+
 
         return gameObjectMessage;
     }
@@ -498,12 +503,12 @@ public class MessageFactory {
 
     }
 
-    public CheMessage roundTripMessage(GameObject gameObject,  LatLng destination, Location location) throws NoSuchAlgorithmException {
+    public CheMessage roundTripMessage(GameObject gameObject, GameObject base,  LatLng destination, Location location) throws NoSuchAlgorithmException {
         CheMessage cheMessage = createCheMessage();
         Player player = createPlayer(location);
         Acknowledge acknowledge = createAcknowledge();
 
-        message.GameObject gameObjectMessage = createGameObjectRoundTrip(gameObject, destination);
+        message.GameObject gameObjectMessage = createGameObjectRoundTrip(gameObject, base, destination);
 
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);

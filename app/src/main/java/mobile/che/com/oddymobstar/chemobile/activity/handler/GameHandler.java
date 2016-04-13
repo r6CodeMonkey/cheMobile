@@ -708,6 +708,7 @@ public class GameHandler {
 
     public void handleFlightTakeoff(final String key){
         GameObject gameObject = controller.dbHelper.getGameObject(key);
+        controller.gameController.currentGameObject = gameObject;
 
         Cursor availableAircraft = controller.dbHelper.getAircraftsAtAirport(gameObject.getLatitude(), gameObject.getLongitude());
 
@@ -773,7 +774,7 @@ public class GameHandler {
                 @Override
                 public void run() {
                     try {
-                        controller.cheService.writeToSocket(controller.messageFactory.roundTripMessage(gameObject, latLng, controller.locationListener.getCurrentLocation()));
+                        controller.cheService.writeToSocket(controller.messageFactory.roundTripMessage(gameObject, controller.gameController.currentGameObject, latLng, controller.locationListener.getCurrentLocation()));
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     }

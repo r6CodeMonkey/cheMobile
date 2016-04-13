@@ -718,7 +718,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public Cursor getAircraftsAtAirport(double lat, double lng){
-        return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE + " WHERE " +GAME_OBJECT_TYPE + "=" + GameObjectGridFragment.AIR + " AND "+GAME_OBJECT_LAT+"=? AND "+GAME_OBJECT_LONG+"=? ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", new String[]{String.valueOf(lat), String.valueOf(lng)});
+         return this.getReadableDatabase().rawQuery("SELECT " + GAME_OBJECT_KEY + " as _id, " + GAME_OBJECT_KEY + "," + GAME_OBJECT_TYPE + "," + GAME_OBJECT_SUBTYPE + " FROM " + GAME_OBJECTS_TABLE + " WHERE " +GAME_OBJECT_TYPE + "=" + GameObjectGridFragment.AIR + " AND "+GAME_OBJECT_LAT+"=? AND "+GAME_OBJECT_LONG+"=? ORDER BY " + GAME_OBJECT_SUBTYPE + " DESC", new String[]{String.valueOf(lat), String.valueOf(lng)});
     }
 
     public Cursor getSeaVesselsAtPort(double lat, double lng){

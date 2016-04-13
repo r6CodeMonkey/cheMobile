@@ -7,6 +7,7 @@ import org.json.JSONException;
 import message.CheMessage;
 import message.GameObject;
 import message.Missile;
+import message.UTMLocation;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Message;
 import mobile.che.com.oddymobstar.chemobile.util.MessageFactory;
@@ -186,7 +187,7 @@ public class GameObjectHandler extends MessageHandler {
                         dbHelper.addVidiNews(message);
                         model = dbHelper.getGameObject(gameObject.getKey());
                         if (model != null) {
-                            model = updateLocation(model, gameObject);
+                            model = updateLocation(model, gameObject.getMissiles().get(0).getStartUTMLocation());
                             model.setStatus(Tags.GAME_OBJECT_DEPLOYED_TO_BASE);
                             dbHelper.updateGameObject(model, true, true);
                             dbHelper.updateMissiles(model);
@@ -293,6 +294,17 @@ public class GameObjectHandler extends MessageHandler {
         model.setUtmLong(gameObject.getUtmLocation().getUTM().getUTMLongGrid());
         model.setSubUtmLat(gameObject.getUtmLocation().getSubUTM().getUTMLatGrid());
         model.setSubUtmLong(gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
+        return model;
+
+    }
+
+    private mobile.che.com.oddymobstar.chemobile.model.GameObject updateLocation(mobile.che.com.oddymobstar.chemobile.model.GameObject model, UTMLocation utmLocation) {
+        model.setLatitude(utmLocation.getLatitude());
+        model.setLongitude(utmLocation.getLongitude());
+        model.setUtmLat(utmLocation.getUTM().getUTMLatGrid());
+        model.setUtmLong(utmLocation.getUTM().getUTMLongGrid());
+        model.setSubUtmLat(utmLocation.getSubUTM().getUTMLatGrid());
+        model.setSubUtmLong(utmLocation.getSubUTM().getUTMLongGrid());
         return model;
 
     }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -158,6 +159,8 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
+   
         TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
         if (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)) == GameObjectGridFragment.MISSILE) {
             String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),
