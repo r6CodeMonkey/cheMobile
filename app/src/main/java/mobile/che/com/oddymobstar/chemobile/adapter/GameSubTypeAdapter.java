@@ -160,7 +160,7 @@ public class GameSubTypeAdapter extends CursorAdapter implements SectionIndexer 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-   
+
         TextView tv = (TextView) view.findViewById(R.id.game_sub_type_key);
         if (cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_TYPE)) == GameObjectGridFragment.MISSILE) {
             String detail = String.format("%s\nUTM:%s\nSubUTM:%s\nStatus:%s", cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)),

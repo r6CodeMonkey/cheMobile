@@ -1,9 +1,13 @@
 package mobile.che.com.oddymobstar.chemobile.activity.helper;
 
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
@@ -343,6 +347,31 @@ public class GameHelper {
 
         return dialog;
     }
+
+
+    public AlertDialog getSelectBaseDestinationListener(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(main);
+
+        builder.setTitle("Flight Instructions");
+        builder.setMessage("Select an existing base to fly to.\nYou have 20 seconds to complete it!");
+
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Got It", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        controller.gameController.GAME_STATE = GameController.GAME_OBJECT_TARGET_STATE;
+                        controller.gameController.gameTimer.startTimer(1000 * 20);
+                    }
+                });
+
+                android.support.v7.app.AlertDialog dialog = builder.create();
+
+        return dialog;
+
+    };
+
 
     public AlertDialog getFlightTypeDialog(DialogInterface.OnClickListener roundTripListener, DialogInterface.OnClickListener transferListener){
         AlertDialog.Builder builder = new AlertDialog.Builder(main);

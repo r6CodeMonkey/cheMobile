@@ -27,6 +27,8 @@ public class GameController {
     public static final int GAME_OBJECT_MOVE_STATE = 0;
     public static final int GAME_OBJECT_TARGET_STATE = 1;
     public static final int GAME_OBJECT_FLYING_STATE = 2;
+    public static final int GAME_OBJECT_FLY_TO_OTHER_BASE_STATE = 3;
+
 
 
 
@@ -44,6 +46,8 @@ public class GameController {
     public GameObject currentGameObject; //tracked for states etc.
     public GameObject currentMissileObject;
     public List<SubUTM> currentValidators = new ArrayList<>(); //track whats valid too.
+
+    public List<String> basesInRange = new ArrayList<>();
 
     public DeployDialog deployDialog;
     public ArmDialog armDialog;

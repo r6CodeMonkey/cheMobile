@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 import message.CheMessage;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
+import mobile.che.com.oddymobstar.chemobile.activity.controller.GameController;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.adapter.ArmExplosiveAdapter;
 import mobile.che.com.oddymobstar.chemobile.adapter.DeployBaseAdapter;
@@ -487,6 +489,49 @@ public class GameHandler {
 
     }
 
+    public void handleBaseTransfer(String key){
+        final GameObject gameObject = controller.dbHelper.getGameObject(key);
+        controller.mapHandler.handleCamera(new LatLng(gameObject.getLatitude(), gameObject.getLongitude()), 45, 0, 5);
+
+
+        Location start = new Location("");
+        start.setLatitude(gameObject.getLatitude());
+        start.setLongitude(gameObject.getLongitude());
+
+        Cursor airports = controller.dbHelper.getAvailableAirPorts();
+        //now what we need to do is find all our airports (or airport type things).  and then add them to map if they in range.
+
+        Location target = new Location("");
+
+
+        controller.gameController.GAME_STATE = GameController.GAME_OBJECT_FLY_TO_OTHER_BASE_STATE;
+
+        while (airports.moveToNext()){
+
+            GameObject airport = controller.dbHelper.getGameObject(airports.getString(airports.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+
+            target.setLatitude(airport.getLatitude());
+            target.setLongitude(airport.getLongitude());
+
+            if(start.distanceTo(target) <= gameObject.getRange()){
+               //add to array list for selection.
+                controller.gameController.basesInRange.add(airport.getKey());
+            }
+
+        }
+
+        airports.close();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                controller.gameController.gameHelper.getSelectBaseDestinationListener().show();
+            }
+        }, 2000);
+
+    }
+
     public void handleTakeOff(String key) {
         final GameObject gameObject = controller.dbHelper.getGameObject(key);
 
@@ -731,6 +776,9 @@ public class GameHandler {
                                     }, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+
+                                            Cursor cursor = controller.gameController.portDialog.getSelectedObject();
+                                            handleBaseTransfer(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
 
                                         }
                                     }).show();

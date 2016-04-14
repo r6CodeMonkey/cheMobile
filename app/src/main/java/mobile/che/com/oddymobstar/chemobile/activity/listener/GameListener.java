@@ -41,6 +41,8 @@ public class GameListener {
                     case GameController.GAME_OBJECT_FLYING_STATE:
                         controller.gameController.gameHandler.handleFlightRoundTrip(latLng);
                         break;
+                    case GameController.GAME_OBJECT_FLY_TO_OTHER_BASE_STATE:
+                        break;
                     case GameController.DEFAULT_STATE: //nothing to do...your too late...
                         break;
                 }
