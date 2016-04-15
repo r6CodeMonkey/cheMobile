@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -18,11 +20,13 @@ import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.activity.handler.SharedPreferencesHandler;
 import mobile.che.com.oddymobstar.chemobile.activity.listener.LocationListener;
+import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
 import mobile.che.com.oddymobstar.chemobile.model.Config;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import mobile.che.com.oddymobstar.chemobile.util.widget.GridDialog;
+import util.GameObjectTypes;
 import util.map.SubUTM;
 import util.map.UTM;
 
@@ -113,6 +117,8 @@ public class MapHelper {
 
         map.setOnMarkerClickListener(controller.mapListener.getMarkerListener());
         map.setOnMapLongClickListener(controller.gameController.gameListener.getGameLongClickListener());
+
+
     }
 
 
@@ -175,7 +181,7 @@ public class MapHelper {
         Cursor cursor = controller.dbHelper.getAddedGameObjects();
 
         while (cursor.moveToNext()) {
-            controller.mapHandler.addGameObject(new GameObject(cursor), false);
+                controller.mapHandler.addGameObject(new GameObject(cursor), false);
         }
         cursor.close();
 

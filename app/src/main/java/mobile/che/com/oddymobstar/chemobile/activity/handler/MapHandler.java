@@ -20,11 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.ProjectCheActivity;
 import mobile.che.com.oddymobstar.chemobile.activity.controller.ProjectCheController;
 import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import mobile.che.com.oddymobstar.chemobile.model.GameObject;
 import mobile.che.com.oddymobstar.chemobile.util.Configuration;
+import mobile.che.com.oddymobstar.chemobile.util.ImageFactory;
 import mobile.che.com.oddymobstar.chemobile.util.map.UTMGridCreator;
 import util.GameObjectTypes;
 import util.Tags;
@@ -190,33 +192,12 @@ public class MapHandler {
                 }
 
 
-                float hue = BitmapDescriptorFactory.HUE_AZURE;
-
-                switch (gameObject.getType()) {
-                    case GameObjectGridFragment.AIR:
-                        hue = BitmapDescriptorFactory.HUE_AZURE;
-                        break;
-                    case GameObjectGridFragment.LAND:
-                        hue = BitmapDescriptorFactory.HUE_GREEN;
-                        break;
-                    case GameObjectGridFragment.SEA:
-                        hue = BitmapDescriptorFactory.HUE_BLUE;
-                        break;
-                    case GameObjectGridFragment.INFASTRUCTURE:
-                        hue = BitmapDescriptorFactory.HUE_RED;
-                        break;
-
-                }
-
-                if (destination) {
-                    hue = BitmapDescriptorFactory.HUE_RED;  //red is better.  ie green to red.
-                }
-
                 if(!gameObject.getStatus().equals(Tags.GAME_OBJECT_DEPLOYED_TO_BASE)) {
 
                     markerMap.put(gameObject.getKey() + String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
                             new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
-                            .icon(BitmapDescriptorFactory.defaultMarker(hue)).snippet(gameObject.getKey())));
+                            .icon(ImageFactory.getImage(gameObject.getSubType(), destination))
+                            .snippet(gameObject.getKey())));
                 }
 
             }
