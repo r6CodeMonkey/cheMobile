@@ -1,6 +1,7 @@
 package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -49,6 +50,8 @@ public class GameListener {
 
             }
         };
+
+
 
     }
 

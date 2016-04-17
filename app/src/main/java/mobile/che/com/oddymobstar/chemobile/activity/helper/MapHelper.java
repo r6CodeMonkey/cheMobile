@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -68,6 +71,7 @@ public class MapHelper {
 
         }
     }
+
 
 
     private void setUpMap() {

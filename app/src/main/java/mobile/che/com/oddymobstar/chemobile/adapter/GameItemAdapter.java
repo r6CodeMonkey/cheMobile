@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 import mobile.che.com.oddymobstar.chemobile.R;
 import mobile.che.com.oddymobstar.chemobile.activity.helper.GameHelper;
 import mobile.che.com.oddymobstar.chemobile.database.DBHelper;
+import mobile.che.com.oddymobstar.chemobile.util.ImageFactory;
 import util.GameObjectTypes;
 
 /**
@@ -58,13 +62,20 @@ public class GameItemAdapter extends CursorAdapter implements SectionIndexer {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView tv = (TextView) view.findViewById(R.id.game_item_name);
+        TextView tv2 = (TextView) view.findViewById(R.id.game_item_total);
 
 
-        String detail = String.format("%s\nTotal:%s", GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))),
+        ImageView iv = (ImageView) view.findViewById(R.id.game_card_view_image);
+
+
+        String detail = String.format("%s", GameObjectTypes.getTypeName(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))));
+
+        String count = String.format("Total:%s",
                 cursor.getString(cursor.getColumnIndexOrThrow("type_total")));
-
         //in reality, its going to be the type name + key....
         tv.setText(detail);
+        tv2.setText(count);
+        iv.setImageResource(ImageFactory.getResource(cursor.getInt(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_SUBTYPE))));
     }
 
     @Override

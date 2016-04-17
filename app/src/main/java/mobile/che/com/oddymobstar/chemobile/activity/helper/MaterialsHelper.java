@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import mobile.che.com.oddymobstar.chemobile.R;
@@ -63,6 +64,7 @@ public class MaterialsHelper {
     public TextView gameTimer;
     public Animation blinkAnimation;
     public VidiPrintView vidiPrintView;
+    public ImageView snapshot;
 
     private Context context;
 
@@ -205,6 +207,8 @@ public class MaterialsHelper {
         blinkAnimation = AnimationUtils.loadAnimation(main, R.anim.blink);
 
         vidiPrintView = (VidiPrintView) main.findViewById(R.id.vidi_print_new_item);
+
+        snapshot = (ImageView) main.findViewById(R.id.snapshot);
 
 
     /*    android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();

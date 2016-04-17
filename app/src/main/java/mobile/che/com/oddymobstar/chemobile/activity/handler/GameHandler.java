@@ -2,12 +2,15 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -504,7 +507,6 @@ public class GameHandler {
         Location target = new Location("");
 
 
-        controller.gameController.GAME_STATE = GameController.GAME_OBJECT_FLY_TO_OTHER_BASE_STATE;
 
         while (airports.moveToNext()){
 
@@ -543,7 +545,8 @@ public class GameHandler {
             @Override
             public void run() {
                 controller.mapHandler.addSphere(gameObject, gameObject.getRange(), false);
-            }},1000);
+            }
+        }, 1000);
 
         //we now show a popup
         //now we need to delay slightly, and then start timer and dialog.
@@ -753,7 +756,6 @@ public class GameHandler {
 
     public void handleFlightTakeoff(final String key){
         GameObject gameObject = controller.dbHelper.getGameObject(key);
-        controller.gameController.currentGameObject = gameObject;
 
         Cursor availableAircraft = controller.dbHelper.getAircraftsAtAirport(gameObject.getLatitude(), gameObject.getLongitude());
 
@@ -766,19 +768,21 @@ public class GameHandler {
                                 @Override
                                 public void onClick(DialogInterface dialog, final int which) {
 
+                                    Cursor cursor = controller.gameController.portDialog.getSelectedObject();
+                                    final String key = cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY));
+                                    controller.gameController.currentGameObject = controller.dbHelper.getGameObject(key);
+
                                     //need to embed.  round trip or fly to base
                                     controller.gameController.gameHelper.getFlightTypeDialog(new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Cursor cursor = controller.gameController.portDialog.getSelectedObject();
-                                            handleTakeOff(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+                                            handleTakeOff(key);
                                         }
                                     }, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            Cursor cursor = controller.gameController.portDialog.getSelectedObject();
-                                            handleBaseTransfer(cursor.getString(cursor.getColumnIndexOrThrow(DBHelper.GAME_OBJECT_KEY)));
+                                            handleBaseTransfer(key);
 
                                         }
                                     }).show();
@@ -876,8 +880,7 @@ public class GameHandler {
         }
     }
 
-
-    public void handleMoveDestination(final LatLng latLng) {
+    private void processMoveDestination(final LatLng latLng){
         //1: popup to say this is the chosen location....then send message.
         controller.gameController.gameHelper.getDestinationDialog(
                 new DialogInterface.OnClickListener() {
@@ -908,6 +911,58 @@ public class GameHandler {
                     }
                 }
         ).show();
+    }
+
+
+    public void handleMoveDestination(final LatLng latLng) {
+
+
+        //1 lets animate to the point...
+        controller.mapHandler.handleCameraWithCallback(latLng, 45, 0, 20, new GoogleMap.CancelableCallback() {
+
+            @Override
+            public void onFinish() {
+
+
+                controller.mapHelper.getMap().snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(final Bitmap bitmap) {
+
+
+                        //
+                        int pixel = bitmap.getPixel(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+
+                        Log.d("pixel color", "red color is " + Color.red(pixel));
+                        Log.d("pixel color", "blue color is " + Color.blue(pixel));
+                        Log.d("pixel color", "green color is " + Color.green(pixel));
+
+                        Log.d("pixel color", "color is " + pixel);
+
+
+                        main.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                controller.materialsHelper.snapshot.setImageBitmap(bitmap);
+                            }
+                        });
+
+                        if (Color.blue(pixel) != 255) {  //need to handle this for water too..ie water is good
+                             processMoveDestination(latLng);
+                        }
+
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+
     }
 
 

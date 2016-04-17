@@ -32,7 +32,15 @@
 
     </fragment>
 
-
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/snapshot"
+        android:layout_marginRight="10dp"
+        android:background="@color/wallet_holo_blue_light"
+        android:layout_below="@+id/vidi_print_new_item"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/nav_timer"

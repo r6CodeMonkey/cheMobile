@@ -3,6 +3,7 @@ package mobile.che.com.oddymobstar.chemobile.activity.handler;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
@@ -226,10 +227,10 @@ public class MapHandler {
                 }
 
                 addGameObject(gameObject, false);
-                GameObject destination = gameObject;
+       /*         GameObject destination = gameObject;
                 destination.setLongitude(gameObject.getDestLongitude());
                 destination.setLatitude(gameObject.getDestLatitude());
-                addGameObject(gameObject, true);
+                addGameObject(gameObject, true); */
 
             }
         });
@@ -300,6 +301,20 @@ public class MapHandler {
 
         allianceMembers.close(); */
     }
+
+
+    public void handleCameraWithCallback(LatLng currentLatLng, float tilt, float bearing, float zoom,  GoogleMap.CancelableCallback cancelableCallback){
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(currentLatLng)
+                .tilt(tilt)
+                .bearing(bearing)
+                .zoom(zoom)
+                .build();
+
+        controller.mapHelper.getMap().animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), cancelableCallback);
+
+    }
+
 
     public void handleCamera(LatLng currentLatLng, float tilt, float bearing, float zoom) {
 

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mobile.che.com.oddymobstar.chemobile.R;
+import mobile.che.com.oddymobstar.chemobile.fragment.GameObjectGridFragment;
 import util.GameObjectTypes;
 
 /**
@@ -18,6 +19,35 @@ public class ImageFactory {
 need to return destination icons as map markers...not icons.  yes.
  */
     private static Map<Integer, BitmapDescriptor> imageMap = new HashMap<>();
+
+
+    public static int getResource(int subType){
+        switch(subType){
+
+            case GameObjectTypes.AIRPORT:
+                return R.drawable.airportlarge;
+            case GameObjectTypes.FIGHTER:
+                return R.drawable.fighterlarge;
+            case GameObjectTypes.TANK:
+                 return R.drawable.tanklarge;
+            case GameObjectTypes.SATELLITE:
+                return R.drawable.satellitelarge;
+            case GameObjectTypes.OUTPOST:
+                return R.drawable.outpostlarge;
+            case GameObjectTypes.RV:
+                return R.drawable.jeeplarge;
+            case GameObjectTypes.MISSILE_LAUNCHER:
+                return R.drawable.missilelauncherlarge;
+            case GameObjectTypes.MINI_DRONE:
+                return R.drawable.dronelarge;
+            case GameObjectTypes.GARRISON:
+                return R.drawable.fortlarge;
+
+
+        }
+
+        return R.drawable.drone;
+    }
 
     public static BitmapDescriptor getImage(int subtype, boolean destination){
 
@@ -54,6 +84,9 @@ need to return destination icons as map markers...not icons.  yes.
                 break;
             case GameObjectTypes.MINI_DRONE:
                 imageMap.put(subtype, BitmapDescriptorFactory.fromResource(R.drawable.drone));
+                break;
+            case GameObjectTypes.GARRISON:
+                imageMap.put(subtype, BitmapDescriptorFactory.fromResource(R.drawable.fort));
                 break;
             default:
                 imageMap.put(subtype, BitmapDescriptorFactory.defaultMarker());
