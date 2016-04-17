@@ -307,7 +307,7 @@ public class GameHandler {
                         //
                         dialog.dismiss();
                     }
-                });
+                });s
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.gameController.actionsDialog.show(transaction, "dialog");
@@ -929,15 +929,11 @@ public class GameHandler {
                     public void onSnapshotReady(final Bitmap bitmap) {
 
 
-                        //
                         int pixel = bitmap.getPixel(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
 
                         Log.d("pixel color", "red color is " + Color.red(pixel));
                         Log.d("pixel color", "blue color is " + Color.blue(pixel));
                         Log.d("pixel color", "green color is " + Color.green(pixel));
-
-                        Log.d("pixel color", "color is " + pixel);
-
 
                         main.runOnUiThread(new Runnable() {
                             @Override
@@ -946,8 +942,18 @@ public class GameHandler {
                             }
                         });
 
-                        if (Color.blue(pixel) != 255) {  //need to handle this for water too..ie water is good
-                             processMoveDestination(latLng);
+                        if(controller.gameController.currentGameObject.getType() == GameObjectGridFragment.LAND ||
+                                controller.gameController.currentGameObject.getType() == GameObjectGridFragment.INFASTRUCTURE ) {
+
+                            if (Color.blue(pixel) != 255) {  //need to handle this for water too..ie water is good
+                                processMoveDestination(latLng);
+                            }
+                        }else if(controller.gameController.currentGameObject.getType() == GameObjectGridFragment.SEA){
+                            if(Color.blue(pixel) == 255){
+                                processMoveDestination(latLng);
+                            }
+                        }else{ //its fine just do it..ie air.
+                            processMoveDestination(latLng);
                         }
 
                     }
