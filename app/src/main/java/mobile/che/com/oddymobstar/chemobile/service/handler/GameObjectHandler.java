@@ -181,7 +181,7 @@ public class GameObjectHandler extends MessageHandler {
                     case Tags.GAME_OBJECT_DEPLOYED_TO_BASE:
                         message = new Message();
                         message.setTime(System.currentTimeMillis());
-                        message.setMessage("Game Object " + gameObject.getKey() + " Returned to Base in Sector " +
+                        message.setMessage("Game Object " + gameObject.getKey() + "  Reached Base in Sector " +
                                 gameObject.getUtmLocation().getUTM().getUTMLatGrid() + gameObject.getUtmLocation().getUTM().getUTMLongGrid() + " / " +
                                 gameObject.getUtmLocation().getSubUTM().getUTMLatGrid() + gameObject.getUtmLocation().getSubUTM().getUTMLongGrid());
                         dbHelper.addVidiNews(message);

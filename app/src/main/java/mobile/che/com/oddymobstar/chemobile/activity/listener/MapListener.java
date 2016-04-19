@@ -1,5 +1,6 @@
 package mobile.che.com.oddymobstar.chemobile.activity.listener;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -55,8 +56,10 @@ public class MapListener {
                                         List<SubUTM> validators = new ArrayList<SubUTM>();
                                         validators.add(new SubUTM(dest.getSubUtmLat(), dest.getSubUtmLong())); //subUtm.getUtmLat() + subUtm.getUtmLong()
 
+                                        Log.d("move to other base", "moving to other base");
+
                                         try {
-                                            controller.cheService.writeToSocket(controller.messageFactory.moveGameObject(controller.gameController.currentGameObject,
+                                            controller.cheService.writeToSocket(controller.messageFactory.moveGameObjectToBase(controller.gameController.currentGameObject,
                                                     validators,
                                                     new LatLng(dest.getLatitude(), dest.getLongitude()), controller.locationListener.getCurrentLocation()));
                                         } catch (NoSuchAlgorithmException e) {

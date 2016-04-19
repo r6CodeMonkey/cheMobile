@@ -307,7 +307,7 @@ public class GameHandler {
                         //
                         dialog.dismiss();
                     }
-                });s
+                });
         android.support.v4.app.FragmentTransaction transaction = main.getSupportFragmentManager().beginTransaction();
 
         controller.gameController.actionsDialog.show(transaction, "dialog");
@@ -979,12 +979,12 @@ public class GameHandler {
         switch (controller.fragmentHandler.gameFrag.getType()) {
             case GameObjectGridFragment.AIR:
                 config = controller.dbHelper.getConfig(Configuration.START_PURCHASE_AIR);
-                if (config.getValue().equals("N")) {
+              //  if (config.getValue().equals("N")) {
                     controller.gameController.gameHelper.airInit();
                     controller.dbHelper.updateConfig(config);
-                } else {
+             /*   } else {
 
-                }
+                } */
                 break;
             case GameObjectGridFragment.SEA:
                 config = controller.dbHelper.getConfig(Configuration.START_PURCHASE_SEA);

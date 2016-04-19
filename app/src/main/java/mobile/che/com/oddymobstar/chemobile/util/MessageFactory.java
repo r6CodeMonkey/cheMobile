@@ -262,6 +262,34 @@ public class MessageFactory {
         return gameObjectMessage;
     }
 
+    private message.GameObject createGameObjectMoveToBase(GameObject gameObject, List<SubUTM> validators, LatLng destination) {
+        message.GameObject gameObjectMessage = new message.GameObject();
+        gameObjectMessage.create();
+
+        gameObjectMessage.setState(Tags.GAME_OBJECT_MOVE);
+        gameObjectMessage.setKey(gameObject.getKey());
+        gameObjectMessage.setType(gameObject.getType());
+        gameObjectMessage.setSubType(gameObject.getSubType());
+
+        gameObjectMessage.setUtmLocation(createUTMLocation(gameObject.getLatitude(), gameObject.getLongitude(),
+                gameObject.getUtmLat(), gameObject.getUtmLong(), gameObject.getSubUtmLat(), gameObject.getSubUtmLong()));
+        gameObjectMessage.setDestinationUtmLocation(createUTMLocation(destination.latitude, destination.longitude, "", "", "", ""));
+
+
+        List<UTM> utms = new ArrayList<>();
+        for (SubUTM subUTM : validators) {
+            utms.add(createUTM(subUTM.getSubUtmLat(), subUTM.getSubUtmLong()));
+        }
+        gameObjectMessage.setDestinationValidator(utms);
+
+        List<Missile> missiles = new ArrayList<>();
+        missiles.add(createMissile(gameObject, gameObjectMessage.getDestinationUtmLocation(), destination));
+        gameObjectMessage.setMissiles(missiles);
+
+
+        return gameObjectMessage;
+    }
+
 
     private message.GameObject createGameObjectRoundTrip(GameObject gameObject, GameObject base, LatLng destination) {
         message.GameObject gameObjectMessage = new message.GameObject();
@@ -525,6 +553,24 @@ public class MessageFactory {
         Acknowledge acknowledge = createAcknowledge();
 
         message.GameObject gameObjectMessage = createGameObjectMove(gameObject, validators, destination);
+
+        cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
+        cheMessage.setMessage(Tags.PLAYER, player);
+        cheMessage.setMessage(Tags.GAME_OBJECT, gameObjectMessage);
+
+        Log.d("move", "move vaidator size " + validators.size());
+        Log.d("move", "move msg " + cheMessage.toString());
+
+        return cheMessage;
+    }
+
+
+    public CheMessage moveGameObjectToBase(GameObject gameObject, List<SubUTM> validators, LatLng destination, Location location) throws NoSuchAlgorithmException {
+        CheMessage cheMessage = createCheMessage();
+        Player player = createPlayer(location);
+        Acknowledge acknowledge = createAcknowledge();
+
+        message.GameObject gameObjectMessage = createGameObjectMoveToBase(gameObject, validators, destination);
 
         cheMessage.setMessage(Tags.ACKNOWLEDGE, acknowledge);
         cheMessage.setMessage(Tags.PLAYER, player);
