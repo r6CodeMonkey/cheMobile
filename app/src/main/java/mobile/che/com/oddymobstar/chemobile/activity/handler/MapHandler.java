@@ -195,6 +195,8 @@ public class MapHandler {
 
                 if(!gameObject.getStatus().equals(Tags.GAME_OBJECT_DEPLOYED_TO_BASE)) {
 
+
+
                     markerMap.put(gameObject.getKey() + String.valueOf(destination), controller.mapHelper.getMap().addMarker(new MarkerOptions().position(
                             new LatLng(gameObject.getLatitude(), gameObject.getLongitude())).title(destination ? "Destination" : GameObjectTypes.getTypeName(gameObject.getSubType()).replace("\n", ""))
                             .icon(ImageFactory.getImage(gameObject.getSubType(), destination))
